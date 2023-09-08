@@ -82,4 +82,4 @@ class Categoria(models.Model):
     class Meta:
         verbose_name = "Categorias"
         verbose_name_plural = "Categorias"
-        db_table = "categporia"
+        db_table = "categoria"

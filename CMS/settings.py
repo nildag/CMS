@@ -130,7 +130,6 @@ WSGI_APPLICATION = "CMS.wsgi.application"
 
 # Configuracion del docker
 # --------------------------------------------------------------------------------------
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -141,16 +140,6 @@ DATABASES = {
         "PORT": 5432,
     }
 }
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',  # Tipo de motor de base de datos
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Ruta a la base de datos SQLite por defecto
-#    }
-# }
-"""
-# Configuracion del docker
-# --------------------------------------------------------------------------------------
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
@@ -177,23 +166,8 @@ SECRET_KEY = "django-insecure-f&$=!6*@^s7rxb*-z5)ajqs=06(j#x5xi$%9uy8x!di@6tpsgd
 DEBUG = True
 ALLOWED_HOSTS = []
 # -------------------------------------------------------------------------------------
-# -------------------------------------------------------------------------------------
-# Configuraciones por defecto
 """
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Tipo de motor de base de datos
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Ruta a la base de datos SQLite por defecto
-    }
- }
 
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-f&$=!6*@^s7rxb*-z5)ajqs=06(j#x5xi$%9uy8x!di@6tpsgd"
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = []
-"""
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
