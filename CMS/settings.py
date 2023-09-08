@@ -129,6 +129,9 @@ WSGI_APPLICATION = "CMS.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
+# Configuracion del docker
+# --------------------------------------------------------------------------------------
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -140,7 +143,6 @@ DATABASES = {
     }
 }
 
-#dabases nueva para la configuracion con docker
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
