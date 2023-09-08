@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 
     "permisos",
     "rol",
+    "categorias",
 ]
 
 #Proveedores para el SSO para Google
@@ -99,6 +100,7 @@ TEMPLATES = [
             BASE_DIR / 'templates',
             os.path.join(BASE_DIR, 'rol', 'templates'),
             os.path.join(BASE_DIR, 'permisos', 'templates'),
+            os.path.join(BASE_DIR, 'categorias', 'templates'),
         ],
 
         "APP_DIRS": True,
@@ -142,7 +144,7 @@ DATABASES = {
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Ruta a la base de datos SQLite por defecto
 #    }
 # }
-
+"""
 # Configuracion del docker
 # --------------------------------------------------------------------------------------
 
@@ -154,7 +156,23 @@ DEBUG = bool(os.environ.get("DEBUG", default=0))
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-
+"""
+# Configuracion para runserver en terminal
+# --------------------------------------------------------------------------------------
+#dabases nueva para la configuracion con docker
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',  # Tipo de motor de base de datos
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Ruta a la base de datos SQLite por defecto
+    }
+}
+# Configuraciones por defecto
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = "django-insecure-f&$=!6*@^s7rxb*-z5)ajqs=06(j#x5xi$%9uy8x!di@6tpsgd"
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+ALLOWED_HOSTS = []
+# -------------------------------------------------------------------------------------
 # -------------------------------------------------------------------------------------
 
 # Configuraciones por defecto

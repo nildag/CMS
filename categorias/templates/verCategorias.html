@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Categorias</title>
+</head>
+<body>
+<h1>Categorias</h1>
+    <ul>
+        {% for rol in roles %}
+            <li>{{ rol.nombre }} : {{ rol.descripcion }}</li>
+            <hr>
+        {% endfor %}
+
+    </ul>
+</body>
+</html>

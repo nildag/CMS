@@ -12,8 +12,8 @@ def crear_rol(request):
             return redirect('rol:ver_rol')
     else:
         form = RolForm()
-    return render(request, 'crear.html', {'form': form})
+    return render(request, 'crearRol.html', {'form': form})
 
 def verRoles(request):
     roles = Rol.obtener_todos()
-    return render(request, 'ver.html', {'roles': roles})
+    return render(request, 'verRol.html', {'roles': roles})
