@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import RolForm
 from permisos.models import Permisos
 
-def crear_rol(request):
+def crearRol(request):
     if request.method == 'POST':
         form = RolForm(request.POST)
         if form.is_valid():

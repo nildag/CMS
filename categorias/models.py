@@ -5,9 +5,10 @@ class Categoria(models.Model):
     """
     Esta clase representa una categoria dentro del sistema.
     Atributos:
-    - nombre: Nombre representativo del rol. Ejemplo: Autor (str)
-    - descripcion: Descripcion de lo que representa el rol. Ejemplo: Rol que se encargara de la creacion de contenidos dentro del sistema (str)
-    - permisos: Atributo correspondiente a los permisos que posee el rol ( diccionario {str:Boolean} )
+    - nombre: Nombre representativo de la categoria.
+    - descripcion: Descripcion de la categoria.
+    Ejemplo:    nombre: Machine Learning
+                descripcion: Artiuclos de machine learning
     """
 
     nombre = models.CharField(max_length=30, unique=True)
@@ -16,7 +17,7 @@ class Categoria(models.Model):
     def __str__(self):
 
         """
-        Este metodo retorna el nombre y la descripcion del rol.
+        Este metodo retorna el nombre y la descripcion de la categotia.
         :return: Se retorna un str
         """
 
@@ -26,11 +27,10 @@ class Categoria(models.Model):
     def crear(cls, nombre, descripcion):
 
         """
-        Este metodo sirve para crear un rol
-        :nombre: Nombre del rol a crear (str)
-        :descripcion: Descripcion del rol a crear (str)
-        :permisos: Los permisos que se le asignaran al nuevo rol creado (diccionario)
-        :return: Retorna un Rol con los permisos predefinidos
+        Este metodo sirve para crear una categoria
+        :nombre: Nombre de la categoria a crear (str)
+        :descripcion: Descripcion de la categoria a crear (str)
+        :return: Retorna la categoria
         """
 
         categoria = Categoria(nombre=nombre, descripcion=descripcion)
@@ -49,8 +49,8 @@ class Categoria(models.Model):
     def eliminar_por_nombre(cls, nombre):
 
         """
-        Esta funcion elimina un rol por el nombre que es recibido como parametro
-        :nombre: Nombre del rol (str)
+        Esta funcion elimina una categoria por el nombre que es recibido como parametro
+        :nombre: Nombre de la categoria (str)
         """
 
         cls.objects.filter(nombre=nombre).delete()
@@ -59,9 +59,9 @@ class Categoria(models.Model):
     def obtener_por_nombre(cls, nombre):
 
         """
-        Obtenemos un rol por el nombre
-        :nombre: El nombre por el cual buscaremos el rol (str)
-        :return: (Rol)
+        Obtenemos una categoria por el nombre
+        :nombre: El nombre por el cual buscaremos la categoria (str)
+        :return: (Categoria)
         """
 
         try:
@@ -73,13 +73,13 @@ class Categoria(models.Model):
     def obtener_todos(cls):
 
         """
-        Obtenemos todos los Roles
-        :return: (Rol-list)
+        Obtenemos todas las categorias
+        :return: (Categorias-list)
         """
 
         return cls.objects.all()
 
     class Meta:
-        verbose_name = "Categorias"
+        verbose_name = "Categoria"
         verbose_name_plural = "Categorias"
-        db_table = "categporia"
+        db_table = "categoria"

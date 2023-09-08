@@ -5,13 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b90db78b-288d-460e-b57d-808b0462dd73" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/categorias/templates/crearCategorias.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/categorias/templates/verCategorias.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMS/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/CMS/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMS/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CMS/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/entrypoint.dev.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker/entrypoint.dev.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rol/templates/crear.html" beforeDir="false" afterPath="$PROJECT_DIR$/rol/templates/crearRol.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rol/templates/ver.html" beforeDir="false" afterPath="$PROJECT_DIR$/rol/templates/verRol.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/categorias/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/categorias/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/categorias/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/categorias/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/categorias/templates/verCategorias.html" beforeDir="false" afterPath="$PROJECT_DIR$/categorias/templates/verCategorias.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/categorias/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/categorias/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/categorias/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/categorias/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rol/templates/verRol.html" beforeDir="false" afterPath="$PROJECT_DIR$/rol/templates/verRol.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rol/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/rol/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rol/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/rol/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,27 +36,52 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/marco/Documents/GitHub/CMS/categorias",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/marco/Documents/GitHub/CMS/categorias&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\marco\Documents\GitHub\CMS\categorias" />
       <recent name="C:\Users\marco\Documents\GitHub\CMS\categorias\migrations" />
       <recent name="C:\Users\marco\Documents\GitHub\CMS\categorias\templates" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="CMS" type="Python.DjangoServer" factoryName="Django server">
+      <module name="CMS" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -65,7 +92,9 @@
       <option name="presentableId" value="Default" />
       <updated>1694143786955</updated>
       <workItem from="1694143789768" duration="2000" />
-      <workItem from="1694143804331" duration="5543000" />
+      <workItem from="1694143804331" duration="6204000" />
+      <workItem from="1694171853236" duration="4308000" />
+      <workItem from="1694176326243" duration="1633000" />
     </task>
     <servers />
   </component>
