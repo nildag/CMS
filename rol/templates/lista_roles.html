@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Roles</title>
+</head>
+<body>
+    <h1>Lista de Roles</h1>
+    <div class="roles-grid">
+        {% for rol in roles %}
+            <div class="rol">
+                <p>{{ rol.nombre }} : {{ rol.descripcion }}</p>
+
+                <form method="post" action="{% url 'rol:borrar_rol' rol.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Borrar</button>
+                </form>
+
+                <form method="post" action="{% url 'rol:modificar_permisos' rol.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Modificar</button>
+                </form>
+
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

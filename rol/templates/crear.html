@@ -1,0 +1,15 @@
+{% load crispy_forms_filters %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Rol</title>
+</head>
+<body>
+    <h1>Crear Rol</h1>
+    <form method="post" >
+        {% csrf_token %}
+        {{ form|crispy}}
+        <button type="submit">Guardar</button>
+    </form>
+</body>
+</html>
