@@ -13,7 +13,7 @@ def crear_rol(request):
             return redirect('rol:lista_roles')
     else:
         form = RolForm()
-    return render(request, 'crear.html', {'form': form})
+    return render(request, 'crearRol.html', {'form': form})
 
 def lista_roles(request):
     roles = Rol.objects.all()

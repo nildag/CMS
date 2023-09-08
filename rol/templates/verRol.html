@@ -45,6 +45,18 @@
               </div>
             </div>
             </td>
+        <td>
+            <form method="post" action="{% url 'rol:borrar_rol' rol.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Borrar</button>
+                </form>
+        </td>
+        <td>
+             <form method="post" action="{% url 'rol:modificar_permisos' rol.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Modificar</button>
+            </form>
+        </td>
         </tr>
         {% endfor %}
    </tbody>
