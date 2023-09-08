@@ -34,7 +34,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,7 +43,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    "crispy_forms",
+    "crispy_bootstrap5",
+
+    "permisos",
+    "rol",
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -61,7 +69,12 @@ ROOT_URLCONF = "CMS.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+
+        "DIRS": [
+            os.path.join(BASE_DIR, 'rol', 'templates'),
+            os.path.join(BASE_DIR, 'permisos', 'templates'),
+        ],
+
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -91,6 +104,13 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',  # Tipo de motor de base de datos
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Ruta a la base de datos SQLite por defecto
+#    }
+# }
+
 # Configuracion del docker
 # --------------------------------------------------------------------------------------
 
@@ -100,9 +120,17 @@ DEBUG = bool(os.environ.get("DEBUG", default=0))
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
+
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # -------------------------------------------------------------------------------------
+
+# Configuraciones por defecto
+# SECURITY WARNING: keep the secret key used in production secret!
+#SECRET_KEY = "django-insecure-f&$=!6*@^s7rxb*-z5)ajqs=06(j#x5xi$%9uy8x!di@6tpsgd"
+# SECURITY WARNING: don't run with debug turned on in production!
+#DEBUG = True
+#ALLOWED_HOSTS = []
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

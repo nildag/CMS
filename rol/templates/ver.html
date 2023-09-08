@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Roles</title>
+</head>
+<body>
+    <ul>
+        {% for rol in roles %}
+            <li>{{ rol.nombre }} : {{ rol.descripcion }}</li>
+            <ul>
+                {% for clave, valor in rol.permisos.items %}
+                <li>{{ clave }} : {{ valor }}}</li>
+                {% endfor %}
+            </ul>
+            <hr>
+        {% endfor %}
+
+    </ul>
+</body>
+</html>
