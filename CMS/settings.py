@@ -124,6 +124,8 @@ AUTHENTICATION_BACKENDS = [
 WSGI_APPLICATION = "CMS.wsgi.application"
 
 
+# Configuracion del docker
+# --------------------------------------------------------------------------------------
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -141,6 +143,7 @@ DATABASES = {
     }
 }
 
+
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 DEBUG = bool(os.environ.get("DEBUG", default=0))
@@ -152,7 +155,6 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 """
 # Configuracion para runserver en terminal
 # --------------------------------------------------------------------------------------
-#dabases nueva para la configuracion con docker
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',  # Tipo de motor de base de datos
@@ -167,6 +169,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 # -------------------------------------------------------------------------------------
 """
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
