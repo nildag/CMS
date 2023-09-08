@@ -6,6 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="b90db78b-288d-460e-b57d-808b0462dd73" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/categorias/templates/crearCategorias.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/categorias/templates/verCategorias.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMS/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/CMS/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMS/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/CMS/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/entrypoint.dev.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker/entrypoint.dev.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rol/templates/crear.html" beforeDir="false" afterPath="$PROJECT_DIR$/rol/templates/crearRol.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rol/templates/ver.html" beforeDir="false" afterPath="$PROJECT_DIR$/rol/templates/verRol.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rol/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/rol/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
