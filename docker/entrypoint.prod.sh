@@ -8,8 +8,11 @@ then
     echo "PostgreSQL started"
 fi
 
-# Ejecutar las migraciones antes de iniciar la aplicación
+# Realizamos las migraciones
 python manage.py makemigrations
 python manage.py migrate
+
+# Creamos el superuser
+DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=admin12345 DJANGO_SUPERUSER_EMAIL=admin@example.com python manage.py createsuperuser --noinput
 
 exec "$@"

@@ -1,38 +1,29 @@
-###########
 # BUILDER #
-###########
 
-# Imagen del host
+# Imagen del HOST
 FROM python:3.11.4-slim-buster as builder
 
 # Directorio de trabajo
 WORKDIR /usr/src/app
 
 # Variables de entorno
-# Impide que python escriba archivos pyc en disco
-ENV PYTHONDONTWRITEBYTECODE 1
-# Impide que python almacene en buffer stdout y stderr
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1	# Impide que python escriba archivos pyc en disco
+ENV PYTHONUNBUFFERED 1	# Impide que python almacene en buffer stdout y stderr
 
-# Instalacion de dependencias
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc
+# Instalacion/Actualizacion de dependencias
+RUN apt-get update && apt-get install -y --no-install-recommends gcc
+RUN pip install --upgrade pip	# Instalacion/Actualizacion de pip
 
-# lint
-RUN pip install --upgrade pip
-RUN pip install flake8==6.0.0
-COPY . /usr/src/app/
-# RUN flake8 --ignore=E501,F401 .
-
-# Instalacion de las dependencias de python
+# Instalacion de los requirements del proyecto
 COPY ../requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
-#########
-# FINAL #
-#########
 
-# Pull official, imagen base
+
+
+# FINAL #
+
+# Imagen base
 FROM python:3.11.4-slim-buster
 
 # Creamos el directorio para el app user
@@ -41,15 +32,16 @@ RUN mkdir -p /home/app
 # Creamos el app user
 RUN addgroup --system app && adduser --system --group app
 
-# Creamos los directorios
+# Establecemos las variables de entorno
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/web
+
+# Creamos los directorios
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
-# Directorio para los archivos estaticos
-RUN mkdir $APP_HOME/staticfiles
+RUN mkdir $APP_HOME/staticfiles		# Directorio para los archivos estaticos
 
-# Instalamos las dependencias
+# Instalamos/Actualizamos las dependencias
 RUN apt-get update && apt-get install -y --no-install-recommends netcat
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
@@ -58,9 +50,8 @@ RUN pip install --no-cache /wheels/*
 
 # Instalamos el servidor
 RUN pip install gunicorn
-#RUN pip install uWSGI
 
-# Copiamos el proyecto al home del contenedor
+# Copiamos el proyecto al HOME del contenedor
 COPY .. $APP_HOME
 
 # Cambiamos todos los archivos del directorio para que sean propietarios del app user
@@ -76,4 +67,3 @@ RUN chmod a+x $APP_HOME/docker/entrypoint.prod.sh
 
 # Ejecutamos el Entrypoint
 ENTRYPOINT ["/home/app/web/docker/entrypoint.prod.sh"]
-#CMD [ "sh", "/home/app/web/entrypoint.prod.sh" ]
