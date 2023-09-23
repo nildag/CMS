@@ -11,6 +11,7 @@ fi
 # Realizamos las migraciones
 python manage.py makemigrations
 python manage.py migrate
+python manage.py loaddata fixtures/permiso.json
 
 # Creamos el superuser
 DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=admin12345 DJANGO_SUPERUSER_EMAIL=admin@example.com python manage.py createsuperuser --noinput

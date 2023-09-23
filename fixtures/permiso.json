@@ -1,0 +1,65 @@
+[
+	{
+		"model": "permiso.Permiso",
+		"pk": 1,
+		"fields": {
+			"nombre": "Visualizar contenido"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 2,
+		"fields": {
+			"nombre": "Crear contenido"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 3,
+		"fields": {
+			"nombre": "Editar contenido"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 4,
+		"fields": {
+			"nombre": "Publicar contenido"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 5,
+		"fields": {
+			"nombre": "Eliminar contenido"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 6,
+		"fields": {
+			"nombre": "Puntuar contenido"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 7,
+		"fields": {
+			"nombre": "Visualizar historial del contenido"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 8,
+		"fields": {
+			"nombre": "Administrar roles"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 9,
+		"fields": {
+			"nombre": "Administrar categorias"
+		}
+	}
+]

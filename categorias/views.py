@@ -4,7 +4,7 @@ from django.shortcuts import render
 from .models import Categoria
 from django.shortcuts import render, redirect
 from .forms import CategoriaForm
-from permisos.models import Permisos
+from permiso.models import Permiso
 
 def crearCategorias(request):
     if request.method == 'POST':
@@ -14,8 +14,8 @@ def crearCategorias(request):
             return redirect('categorias:ver_categorias')
     else:
         form = CategoriaForm()
-    return render(request, 'crearCategorias.html', {'form': form})
+    return render(request, 'categorias/crearCategorias.html', {'form': form})
 
 def verCategorias(request):
     categoria = Categoria.obtener_todos()
-    return render(request, 'verCategorias.html', {'categorias': categoria})
+    return render(request, 'categorias/verCategorias.html', {'categorias': categoria})

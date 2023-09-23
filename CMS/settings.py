@@ -29,6 +29,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = True
 
 # ALLOWED_HOSTS = []
+
+# Docker
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
@@ -53,7 +55,7 @@ INSTALLED_APPS = [
     "home",
     "contenido",
 
-    "permisos",
+    "permiso",
     "rol",
     "categorias",
 ]
@@ -96,8 +98,6 @@ TEMPLATES = [
 
         "DIRS": [
             BASE_DIR / 'templates',
-            os.path.join(BASE_DIR, 'rol', 'templates'),
-            os.path.join(BASE_DIR, 'permisos', 'templates'),
             os.path.join(BASE_DIR, 'categorias', 'templates'),
         ],
 
@@ -120,7 +120,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 WSGI_APPLICATION = "CMS.wsgi.application"
-
 
 # Configuracion del docker
 # --------------------------------------------------------------------------------------
@@ -191,6 +190,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
