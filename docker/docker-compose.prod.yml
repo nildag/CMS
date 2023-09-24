@@ -33,4 +33,5 @@ services:
 
 volumes:
   postgres_data:
+  # nginx y web comparten el volumen para que se le pueda proveer a nginx los archivos estaticos
   static_volume:

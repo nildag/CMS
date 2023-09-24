@@ -37,7 +37,6 @@ ENV APP_HOME=/home/app/web
 # Creamos los directorios
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
-RUN mkdir $APP_HOME/static	# Directorio para los archivos estaticos
 
 # Instalamos/Actualizamos las dependencias
 RUN apt-get update && apt-get install -y --no-install-recommends netcat
@@ -51,6 +50,9 @@ RUN pip install gunicorn
 
 # Copiamos el proyecto al HOME del contenedor
 COPY .. $APP_HOME
+
+# Creamos el directorio de staticfiles
+RUN mkdir $APP_HOME/staticfiles
 
 # Cambiamos todos los archivos del directorio para que sean propietarios del app user
 RUN chown -R app:app $APP_HOME
