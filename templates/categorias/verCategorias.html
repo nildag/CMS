@@ -6,35 +6,67 @@
 
   <!DOCTYPE html>
   <html lang="es">
-  <head>
+
+    <head>
       <meta charset="UTF-8">
       <title>Categorias</title>
-  </head>
-  <body>
-  <h1>Categorias</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Nombre</th>
-        <th scope="col">Descripcion</th>
-      </tr>
-    </thead>
-    <tbody>
-      <ul>
+    </head>
 
-          {% for categoria in categorias %}
+    <body>
+
+      <table style="width: 100%;">
+        <tr>
+            <td style="width: 85%;">
+              <h1>Categorias</h1>
+            </td>
+            <td style="width: 15%;">
+              <form method="get" action="{% url 'categorias:crear_categorias' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary float-right">Crear Categoria</button>
+              </form>
+            </td>
+        </tr>
+      </table>
+
+      <table class="table">
+
+        <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <ul>
+            {% for categoria in categorias %}
               <tr>
                 <td>{{ categoria.nombre }}</td>
                 <td>{{ categoria.descripcion }}</td>
-              </tr>
-              <!--<li>{{ categoria.nombre }} : {{ categoria.descripcion }}</li>
-              <hr> -->
-          {% endfor %}
 
-      </ul>
-      </tbody>
-  </table>
-  </body>
+                <td>
+                  <form method="post" action="{% url 'categorias:borrar_categoria' categoria.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Borrar</button>
+                  </form>
+                </td>
+
+                <td>
+                  <form method="get" action="{% url 'categorias:editar_categoria' categoria.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary">Modificar</button>
+                  </form>
+                </td>
+
+              </tr>
+            {% endfor %}
+          </ul>
+        </tbody>
+
+      </table>
+    </body>
   </html>
 
 {% endblock %}

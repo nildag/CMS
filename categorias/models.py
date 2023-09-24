@@ -78,6 +78,17 @@ class Categoria(models.Model):
         """
 
         return cls.objects.all()
+    
+    @classmethod
+    def getById(cls, id):
+            
+            """
+            Obtenemos una categoria por el id
+            :id: El id por el cual buscaremos la categoria (int)
+            :return: (Categoria)
+            """
+                
+            return cls.objects.get(id=id)
 
     class Meta:
         verbose_name = "Categoria"
