@@ -61,5 +61,12 @@
 		"fields": {
 			"nombre": "Administrar categorias"
 		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 10,
+		"fields": {
+			"nombre": "Asignar roles"
+		}
 	}
 ]

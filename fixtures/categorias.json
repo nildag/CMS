@@ -1,0 +1,26 @@
+[
+    {
+        "model": "categorias.Categoria",
+        "pk": 1,
+        "fields": {
+            "nombre": "Ciencias",
+            "descripcion": "Relacionado con diversas disciplinas cientificas"
+		}
+    },
+	{
+        "model": "categorias.Categoria",
+        "pk": 2,
+        "fields": {
+            "nombre": "Deportes",
+            "descripcion": "Actividades deportivas y eventos competitivos"
+		}
+    },
+    {
+        "model": "categorias.Categoria",
+        "pk": 3,
+        "fields": {
+            "nombre": "Cocina",
+            "descripcion": "Exploracion de la gastronomia y el mundo culinario"
+		}
+    }
+]

@@ -12,6 +12,8 @@ fi
 python manage.py makemigrations
 python manage.py migrate
 python manage.py loaddata fixtures/permiso.json
+python manage.py loaddata fixtures/rol.json
+python manage.py loaddata fixtures/categorias.json
 
 # Recoleta todos los archivos estaticos de todas las app y los agrupa en una carpeta staticfiles
 python manage.py collectstatic
