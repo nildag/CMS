@@ -15,6 +15,7 @@ python manage.py migrate
 python manage.py loaddata fixtures/permiso.json
 python manage.py loaddata fixtures/rol.json
 python manage.py loaddata fixtures/categorias.json
+python manage.py loaddata fixtures/socialaccountapp.json
 
 # Creamos el superuser
 DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=admin12345 DJANGO_SUPERUSER_EMAIL=admin@example.com python manage.py createsuperuser --noinput
