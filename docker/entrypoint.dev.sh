@@ -10,8 +10,13 @@ fi
 
 # Realizamos las migraciones
 python manage.py flush --no-input
-python manage.py makemigrations
+python manage.py makemigrations categorias
+python manage.py makemigrations contenido
+python manage.py makemigrations permiso
+python manage.py makemigrations rol
+python manage.py makemigrations usuario
 python manage.py migrate
+
 python manage.py loaddata fixtures/permiso.json
 
 # Creamos el superuser
