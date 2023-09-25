@@ -31,7 +31,7 @@ DEBUG = False
 # ALLOWED_HOSTS = []
 
 # Docker
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+#ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -52,9 +52,9 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     #-----------
+    "usuario",
     "home",
     "contenido",
-
     "permiso",
     "rol",
     "categorias",
@@ -73,6 +73,9 @@ SOCIALACCOUNT_PROVIDERS = {
         'OAUTH_PKCE_ENABLED': True,
     }
 }
+
+AUTH_USER_MODEL = 'usuario.User'
+
 
 # Estilo bootstrap
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -121,7 +124,7 @@ AUTHENTICATION_BACKENDS = [
 
 WSGI_APPLICATION = "CMS.wsgi.application"
 
-# Configuracion del docker
+"""# Configuracion del docker
 # --------------------------------------------------------------------------------------
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -158,7 +161,6 @@ SECRET_KEY = "django-insecure-f&$=!6*@^s7rxb*-z5)ajqs=06(j#x5xi$%9uy8x!di@6tpsgd
 DEBUG = True
 ALLOWED_HOSTS = []
 # -------------------------------------------------------------------------------------
-"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
