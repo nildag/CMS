@@ -21,6 +21,7 @@
                         <th scope="col">Nombre</th>
                         <th scope="col">Apellido</th>
                         <th scope="col">Email</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,6 +31,12 @@
                             <td>{{ user.first_name }}</td>
                             <td>{{ user.last_name }}</td>
                             <td>{{ user.email }}</td>
+                            <td>
+                                <form method="get" action="{% url 'usuario:listaUserCategoria' user.id %}">
+                                  {% csrf_token %}
+                                  <button type="submit" class="btn btn-secondary">Asignar Rol</button>
+                                </form>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
