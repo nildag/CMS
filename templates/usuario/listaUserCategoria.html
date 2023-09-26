@@ -30,14 +30,16 @@
         <table style="width: 100%;">
           <tr>
               <td style="width: 85%;">
-                <h1>Roles/Categorias</h1>
+                <h1>Rol/Categoria</h1>
               </td>
+              <!--
               <td style="width: 15%;">
                 <form method="get" action="{% url 'usuario:crearUserCategoria' usuario.id  %}">
                   {% csrf_token %}
                   <button type="submit" class="btn btn-primary float-right">Agregar Rol</button>
                 </form>
               </td>
+              -->
           </tr>
         </table>
 
@@ -46,10 +48,10 @@
             <thead>
               <tr>
                 <th scope="col">Usuario</th>
-                <th scope="col">Rol</th>
                 <th scope="col">Categoria</th>
+                <th scope="col">Rol</th>
                 <th scope="col"></th>
-                <th scope="col"></th>
+                <!--<th scope="col"></th>-->
               </tr>
             </thead>
 
@@ -59,16 +61,16 @@
     
                     <tr>
                         <td>{{ userCategoria.user.username }}</td>
-                        <td>{{ userCategoria.rol.nombre }}</td>
                         <td>{{ userCategoria.categoria.nombre }}</td>
-
+                        <td>{{ userCategoria.rol.nombre }}</td>
+                        <!--
                         <td>
                             <form method="post" action="{% url 'usuario:eliminarUserCategoria' userCategoria.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Borrar</button>
                             </form>
                         </td>
-
+                        -->
                         <td>
                             <form method="get" action="{% url 'usuario:editarUserCategoria' userCategoria.id %}">
                                 {% csrf_token %}

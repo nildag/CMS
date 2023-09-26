@@ -8,7 +8,7 @@ class UserCategoriaForm(forms.ModelForm):
 
         model = UserCategoria
         # Excluimos el campo user para que no se muestre en el formulario
-        exclude = ['user']
+        exclude = ['user', 'categoria']
         fields = [
             'user',
             'categoria',

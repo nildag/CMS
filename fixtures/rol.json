@@ -3,6 +3,15 @@
         "model": "rol.Rol",
         "pk": 1,
         "fields": {
+            "nombre": "Suscriptor",
+            "descripcion": "Rol por defecto de un usuario en todas las categorias",
+            "permisos": [1, 6]
+        }
+    },
+    {
+        "model": "rol.Rol",
+        "pk": 2,
+        "fields": {
             "nombre": "Autor",
             "descripcion": "Encargado de la creacion de contenidos",
             "permisos": [1, 2, 5, 6]
@@ -10,7 +19,7 @@
     },
 	{
         "model": "rol.Rol",
-        "pk": 2,
+        "pk": 3,
         "fields": {
             "nombre": "Editor",
             "descripcion": "Encargado de la edicion de contenidos",
@@ -19,7 +28,7 @@
     },
 	    {
         "model": "rol.Rol",
-        "pk": 3,
+        "pk": 4,
         "fields": {
             "nombre": "Publicador",
             "descripcion": "Encargado de la publicacion de contenidos",
@@ -28,7 +37,7 @@
     },
 	{
         "model": "rol.Rol",
-        "pk": 4,
+        "pk": 5,
         "fields": {
             "nombre": "Administrador de categorias",
             "descripcion": "Ecargado de la administracion y asignacion de los roles a los usuario en su categoria",
@@ -37,7 +46,7 @@
     },
     {
         "model": "rol.Rol",
-        "pk": 5,
+        "pk": 6,
         "fields": {
             "nombre": "Administrador",
             "descripcion": "Encargado de las configuraciones generales del sistema",

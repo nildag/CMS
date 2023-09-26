@@ -5,12 +5,28 @@ from .models import Categoria
 from django.shortcuts import render, redirect
 from .forms import CategoriaForm
 from django.shortcuts import render, redirect, get_object_or_404
+from rol.models import Rol
+from usuario.models import User
+from usuario.models import UserCategoria
 
 def crearCategorias(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
         if form.is_valid():
+            
             form.save()
+            categoria = Categoria.obtener_por_nombre(form.cleaned_data['nombre'])
+            rol = Rol.getByNombre('Suscriptor')
+            usuarios = User.getAll()
+
+            for usuario in usuarios:
+                userCategoria = UserCategoria()
+                userCategoria.user = usuario
+                userCategoria.rol = rol
+                userCategoria.categoria = categoria
+                userCategoria.save()
+                
+
             return redirect('categorias:ver_categorias')
     else:
         form = CategoriaForm()

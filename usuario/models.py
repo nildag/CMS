@@ -18,6 +18,14 @@ class User(AbstractUser):
         :return: Se retorna un str
         """
         return f"{self.username} : {self.first_name} : {self.last_name} : {self.email}"
+    
+    @classmethod
+    def getAll(cls):
+        """
+        Este método retorna todos los usuarios que existen en el sistema.
+        :return: Se retorna un QuerySet
+        """
+        return User.objects.all()
 
 class UserCategoria(models.Model):
     

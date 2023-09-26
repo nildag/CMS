@@ -208,5 +208,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # NGINX - ALLAUTH. TRUSTED CONF. REDIRECT CONF
 
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "usuario:usuario"
 CSRF_TRUSTED_ORIGINS = ['http://localhost:1337']

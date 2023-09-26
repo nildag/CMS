@@ -38,3 +38,14 @@ class Rol(models.Model):
         """
 
         return Rol.objects.all()
+    
+    @classmethod
+    def getByNombre(cls, nombre):
+            
+        """
+        Este metodo retorna un rol en especifico.
+        :param nombre: Nombre del rol que se desea obtener (str)
+        :return: Se retorna un Rol
+        """
+    
+        return Rol.objects.get(nombre=nombre)
