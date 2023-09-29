@@ -1,11 +1,20 @@
 from django.db import models
-from django.contrib.auth.models import Permission
+from usuario.models import User
+from categorias.models import Categoria
+
 
 class Contenido (models.Model):
+
+
+    titulo = models.CharField(max_length=30,default="titulo")
+    cuerpo = models.CharField(max_length=500,default="cuerpo")
+    autor=models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    categoria=models.ForeignKey(Categoria, on_delete=models.CASCADE, default=1)
+
+    def __str__(self):
+        return f"{self.autor.first_name} {self.autor.last_name}"
+
     class Meta:
-        default_permissions = ()
-        permissions = (
-                ('crear_contenido', 'Crear contenido'),
-                ('editar_contenido', 'Editar contenido'),
-                ('publicar_contenido', 'Publicar contenido'),
-        )
+        verbose_name = "Contenido"
+        verbose_name_plural = "Contenidos"
+        db_table = "contenido"

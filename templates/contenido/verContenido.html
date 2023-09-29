@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles del Contenido</title>
+</head>
+
+<body>
+
+    <h1>{{ contenido.titulo }}</h1>
+    <p><strong>Autor:</strong> {{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</p>
+    <p><strong>contacto:</strong> {{ contenido.autor.email }}</p>
+    <p><strong>Cuerpo:</strong> {{ contenido.cuerpo | safe }}</p>
+    <p><strong>Categoria:</strong> {{ contenido.categoria }}</p>
+    <!-- <p><strong>Fecha de Creacion:</strong> {{ contenido.fecha_creacion }}</p> -->
+
+    <a href="{% url 'contenido:lista_contenido' %}" class="btn btn-primary">Volver a la Lista</a>
+
+</body>
+
+</html>

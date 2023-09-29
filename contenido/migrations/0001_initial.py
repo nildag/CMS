@@ -15,10 +15,13 @@ class Migration(migrations.Migration):
             name='Contenido',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('titulo', models.CharField(default='titulo', max_length=30)),
+                ('cuerpo', models.CharField(default='cuerpo', max_length=500)),
             ],
             options={
-                'permissions': (('crear_contenido', 'Crear contenido'), ('editar_contenido', 'Editar contenido'), ('publicar_contenido', 'Publicar contenido')),
-                'default_permissions': (),
+                'verbose_name': 'Contenido',
+                'verbose_name_plural': 'Contenidos',
+                'db_table': 'contenido',
             },
         ),
     ]
