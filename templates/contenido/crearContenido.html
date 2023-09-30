@@ -5,13 +5,27 @@
 {% block content %}
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Título de la Página</title>
+    <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+</head>
+
 <div>
     <h1>Crear Contenido</h1>
     <form method="post" class="my-4 form-container">
         {% csrf_token %}
+        {{ form.media }}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 </div>
+
+<script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+<script>
+ CKEDITOR.replace('{{ form.cuerpo.id_for_label }}', {
+        toolbar: 'Full'
+    });
+</script>
 
 {% endblock %}

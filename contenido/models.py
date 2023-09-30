@@ -1,13 +1,14 @@
 from django.db import models
 from usuario.models import User
 from categorias.models import Categoria
-
+from ckeditor.fields import RichTextField
 
 class Contenido (models.Model):
 
 
     titulo = models.CharField(max_length=30,default="titulo")
-    cuerpo = models.CharField(max_length=500,default="cuerpo")
+    #cuerpo = models.CharField(max_length=500,default="cuerpo")
+    cuerpo = RichTextField(default="cuerpo")
     autor=models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     categoria=models.ForeignKey(Categoria, on_delete=models.CASCADE, default=1)
 

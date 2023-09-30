@@ -52,6 +52,10 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     #-----------
+
+    #ckeditor
+    "ckeditor",
+    #--------
     "home",
     "contenido",
     "usuario",
