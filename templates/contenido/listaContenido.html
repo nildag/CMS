@@ -54,7 +54,7 @@
                     {% for contenido in contenidos %}
                         <tr>
                             <td>{{ contenido.titulo }}</td>
-                            <td>{{ contenido.autor }}</td>
+                            <td>{{ contenido.autor.first_name}},{{ contenido.autor.last_name}}</td>
                             <td>{{ contenido.categoria}}</td>
                             <td>
                                 <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info">Ver</a>

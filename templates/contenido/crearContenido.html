@@ -3,21 +3,18 @@
 {% load static %}
 
 {% block content %}
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Contenido</title>
-</head>
-
-<div>
-    <h1>Crear Contenido</h1>
-    <form method="post" class="my-4 form-container">
-        {% csrf_token %}
-        {{ form.media }}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
+<div class="container mt-5">
+    <h1 class="mb-4">Crear Contenido</h1>
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form method="post" class="form-container">
+                {% csrf_token %}
+                {{ form.media }}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
 </div>
 
 <script>
