@@ -10,4 +10,5 @@ urlpatterns = [
     path("categorias/", include('categorias.urls')),
     path("usuario/", include('usuario.urls')),
     path("contenido/", include('contenido.urls')),
+    path("tipoContenido/", include('tipoContenido.urls')),
 ]

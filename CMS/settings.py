@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "permiso",
     "rol",
     "categorias",
+    "tipoContenido",
 ]
 
 AUTH_USER_MODEL = 'usuario.User'
