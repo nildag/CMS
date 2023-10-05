@@ -6,12 +6,14 @@
 <div class="container mt-5">
     <h1 class="mb-4">Crear Contenido</h1>
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-8 offset-md-2">
             <form method="post" class="form-container">
                 {% csrf_token %}
                 {{ form.media }}
                 {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
             </form>
         </div>
     </div>

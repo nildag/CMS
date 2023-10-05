@@ -1,14 +1,41 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
-    <div class="col-md-4 mx-auto">
-        <h1>Perfil de Usuario</h1>
-        <h2 class="text-secondary">Bienvenido al CMS {{ user.username }}</h2>
-        <hr>
-        <p><strong>Nombre de Usuario: </strong>{{ user.username }}</p>
-        <p><strong>Nombre: </strong>{{ user.first_name }}</p>
-        <p><strong>Apellido: </strong>{{ user.last_name }}</p>
-        <p><strong>Correo Electrónico: </strong>{{ user.email }}</p>
-        <hr>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="mb-0">Perfil de Usuario</h1>
+                </div>
+                <div class="card-body">
+                    <h2 class="card-title text-secondary">¡Bienvenido al CMS {{ user.username }}!</h2>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-0"><strong>Nombre de Usuario:</strong></p>
+                            <p>{{ user.username }}</p>
+
+                            <p class="mb-0"><strong>Nombre:</strong></p>
+                            <p>{{ user.first_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-0"><strong>Correo Electrónico:</strong></p>
+                            <p>{{ user.email }}</p>
+
+
+                            <p class="mb-0"><strong>Apellido:</strong></p>
+                            <p>{{ user.last_name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 {% endblock %}
+

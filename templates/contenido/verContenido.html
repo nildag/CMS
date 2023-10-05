@@ -10,15 +10,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalles del Contenido</title>
+    <link rel="stylesheet" href="{% static 'contenido/styles.css' %}">
 </head>
 
 <body>
-    <h1 style="font-weight: bold ;">{{ contenido.titulo }}</h1>
-    <p>Creado por {{ contenido.autor.first_name }},Publicado el {{contenido.fecha_creacion}}</p>
-    <p>{{ contenido.cuerpo | safe }}</p>
-    
+    <div class="content-details">
+        <h1>{{ contenido.titulo }}</h1>
+        <p class="author">Creado por {{ contenido.autor.first_name }}, Publicado el {{ contenido.fecha_creacion }}</p>
+        <div class="content-body">{{ contenido.cuerpo | safe }}</div>
+    </div>
 </body>
 
 </html>
 
 {% endblock %}
+

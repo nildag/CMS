@@ -19,7 +19,7 @@
     <style>
         /* Estilo personalizado para el encabezado */
         header {
-            background-color: #fff; /* Fondo blanco */
+            background-color: #007BFF; /* Cambia el color de fondo */
             color: #ffffff;
             padding: 10px 0;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -30,7 +30,6 @@
         }
 
         header .navbar-brand {
-            color: #ffffff;
             font-size: 1.5rem;
             display: flex;
             align-items: center;
@@ -44,19 +43,19 @@
         /* Cambia el color de fondo y el color de texto de los enlaces */
         header .nav-link,
         header .dropdown-item {
-            background-color: #ffffff; /* Fondo azul */
-            color: #000000; /* Texto blanco */
+            background-color: transparent; /* Fondo transparente */
+            color: #ffffff; /* Texto blanco */
             transition: background-color 0.3s, color 0.3s;
         }
 
         /* Cambia el color de fondo de los enlaces al pasar el mouse */
         header .nav-link:hover,
         header .dropdown-item:hover {
-            background-color: #8c8cea; /* Fondo azul más claro al pasar el mouse */
+            background-color: #0056b3; /* Fondo azul al pasar el mouse */
         }
 
         header .dropdown-menu {
-            background-color: #ffffff;
+            background-color: #007BFF; /* Cambia el color de fondo del menú desplegable */
         }
 
         header .dropdown-item {
@@ -78,31 +77,30 @@
     <main>
         <header class="p-3 mb-3 border-bottom">
             <div class="container">
-                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                    <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                <div class="d-flex flex-wrap align-items-center justify-content-between">
+                    <a href="/" class="navbar-brand d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
                         <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
                             <use xlink:href="#bootstrap" />
                         </svg>
+                        CMS Web
                     </a>
-                    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                        <li><a href="#" class="nav-link px-2 link-secondary">Overview</a></li>
-                        <li><a href="#" class="nav-link px-2 link-body-emphasis">Todos</a></li>
-                        <li><a href="{% url 'contenido:lista_contenido' %}" class="nav-link px-2 link-body-emphasis">Contenido</a></li>
+                    <ul class="nav">
+                        <li class="nav-item"><a href="/" class="nav-link link-secondary">Overview</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link link-body-emphasis">Todos</a></li>
+                        <li class="nav-item"><a href="{% url 'contenido:lista_contenido' %}" class="nav-link link-body-emphasis">Contenido</a></li>
                         <li class="nav-item dropdown">
                             <!-- Mostrar el menú desplegable -->
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administrar</a>
+                            <a class="nav-link dropdown-toggle link-body-emphasis text-decoration-none" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administrar</a>
 
                             <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
                                 <li><a class="dropdown-item" href="{% url 'rol:lista_roles' %}">Roles</a></li>
                                 <li><a class="dropdown-item" href="{% url 'categorias:ver_categorias' %}">Categorias</a></li>
                                 <li><a class="dropdown-item" href="{% url 'usuario:verUsuarios' %}">Usuarios</a></li>
                             </ul>
-                            <!-- Depuración: Mostrar el valor del rol -->
-                            {{ usuario.userCategoria.rol.nombre }}
+                        </li>
                     </ul>
-                    <div class="dropdown text-end">
-                        <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="dropdown">
+                        <a href="#" class="dropdown-toggle link-body-emphasis text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
                             Menu
                         </a>
                         <ul class="dropdown-menu text-small">
@@ -126,3 +124,4 @@
 </body>
 
 </html>
+
