@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Tipos de Contenido</h1>
+        <form method="get" action="{% url 'tipoContenido:crear_tipo_de_contenido' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Crear Tipo de Contenido</button>
+        </form>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for tipoDeContenido in tipoContenido %}
+            <tr>
+                <td>{{ tipoDeContenido.nombre }}</td>
+                <td>{{ tipoDeContenido.descripcion }}</td>
+                <td>
+                    <div class="d-flex">
+                        <form method="post" action="{% url 'tipoContenido:borrar_tipo_de_contenido' tipoDeContenido.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger me-2">Borrar</button>
+                        </form>
+                        <form method="get"
+                            action="{% url 'tipoContenido:editar_tipo_de_contenido' tipoDeContenido.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary">Modificar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

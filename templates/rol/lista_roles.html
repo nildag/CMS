@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Agregamos la hoja de estilos de Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+JEM5VrXnOuBr5zMIj5meU2owXrR5hq5C3M6O5L/Sf/Sgx5W" crossorigin="anonymous">
+
+    <!-- Agregamos la hoja de estilos personalizada -->
+    <link rel="stylesheet" type="text/css" href="{% static 'rol/styles.css' %}">
+
+    <title>Roles</title>
+
+    <!-- Agregamos un script para cerrar automáticamente los acordeones -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const accordions = document.querySelectorAll(".accordion-button");
+
+            accordions.forEach((accordion) => {
+                accordion.addEventListener("click", function () {
+                    const collapse = this.getAttribute("data-bs-target");
+                    const active = document.querySelector(collapse);
+                    accordions.forEach((item) => {
+                        if (item.getAttribute("data-bs-target") !== collapse) {
+                            const other = document.querySelector(item.getAttribute("data-bs-target"));
+                            other.classList.remove("show");
+                        }
+                    });
+                    active.classList.toggle("show");
+                });
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+    <div id="listaRoles" class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0">Roles</h1>
+            <form method="get" action="{% url 'rol:crear_rol' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Crear Rol</button>
+            </form>
+        </div>
+
+        <div class="accordion" id="accordionExample">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Permisos</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rol in roles %}
+                    <tr>
+                        <td>{{ rol.nombre }}</td>
+                        <td>{{ rol.descripcion }}</td>
+                        <td>
+                            <div class="accordion" id="permisos-{{ forloop.counter }}">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="heading-{{ forloop.counter }}">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapse-{{ forloop.counter }}" aria-expanded="false"
+                                            aria-controls="collapse-{{ forloop.counter }}">
+                                            Permisos
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-{{ forloop.counter }}" class="accordion-collapse collapse"
+                                        aria-labelledby="heading-{{ forloop.counter }}"
+                                        data-bs-parent="#permisos-{{ forloop.counter }}">
+                                        <div class="accordion-body">
+                                            <ul>
+                                                {% for permiso in rol.permisos.all %}
+                                                <li>
+                                                    {{ permiso.nombre }}
+                                                </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex">
+                                <form method="post" action="{% url 'rol:borrar_rol' rol.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger me-2">Borrar</button>
+                                </form>
+                                <form method="get" action="{% url 'rol:editar_rol' rol.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-secondary">Modificar</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+
+</html>
+{% endblock %}

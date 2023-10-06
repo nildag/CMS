@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Editar Contenido</h1>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <form method="post" class="form-container">
+                {% csrf_token %}
+                {{ form.media }}
+                {{ form.as_p }}
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    CKEDITOR.editorConfig = function( config ) {
+        // Configuración del editor CKEditor si es necesario
+    };
+    
+    CKEDITOR.replace('{{ form.cuerpo.id_for_label }}');
+</script>
+
+{% endblock %}

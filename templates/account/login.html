@@ -12,12 +12,15 @@
 
     {% get_providers as socialaccount_providers %}
     {% if socialaccount_providers %}
-        <p>{% blocktrans with site.name as site_name %}Please sign in with one of your existing third-party accounts. <a></a>
-        for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+        <p>{% blocktrans with site.name as site_name %} Por favor, inicie sesión con una de sus cuentas existentes. <a></a>
+        para una cuenta del sitio {{ site_name }} e inicie sesión abajo:{% endblocktrans %}</p>
 
         <div class="socialaccount_ballot">
             <ul class="socialaccount_providers">
                 {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+            <!-- El siguiente contenido se incluirá desde "socialaccount/snippets/provider_list.html" -->
+            <!-- El atributo "with process="login"" pasa un parámetro llamado "process" al archivo incluido -->
+            <!-- Puede contener una lista de proveedores de inicio de sesión (por ejemplo, botones de inicio de sesión de Google, Facebook, etc.) -->
             </ul>
         </div>
         {% include "socialaccount/snippets/login_extra.html" %}

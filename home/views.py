@@ -6,3 +6,6 @@ def home(request):
 
 def profile(request):
     return render(request, 'account/profile.html')
+
+def administrar(request):
+    return render(request, 'administrar/administrar.html')

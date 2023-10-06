@@ -11,28 +11,27 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
-# ------------------------------------
-
-# Para la configuracion del docker
 import os
-
-# ------------------------------------
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-2!own6q0e)bc#&_c#+89zx+acd&h-ur7e!$ejc(z&r$mg-2=^a"
+# SECRET_KEY = "django-insecure-2!own6q0e)bc#&_c#+89zx+acd&h-ur7e!$ejc(z&r$mg-2=^a"
+
+# Obtiene el valor de la configuracion del entorno
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+
+# Docker
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 # Application definition
 
@@ -53,13 +52,21 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     #-----------
+
+    #ckeditor
+    "ckeditor",
+    #--------
     "home",
     "contenido",
+    "usuario",
 
-    "permisos",
+    "permiso",
     "rol",
     "categorias",
+    "tipoContenido",
 ]
+
+AUTH_USER_MODEL = 'usuario.User'
 
 #Proveedores para el SSO para Google
 SOCIALACCOUNT_PROVIDERS = {
@@ -75,6 +82,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+# Estilo bootstrap
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
@@ -98,8 +106,6 @@ TEMPLATES = [
 
         "DIRS": [
             BASE_DIR / 'templates',
-            os.path.join(BASE_DIR, 'rol', 'templates'),
-            os.path.join(BASE_DIR, 'permisos', 'templates'),
             os.path.join(BASE_DIR, 'categorias', 'templates'),
         ],
 
@@ -123,15 +129,11 @@ AUTHENTICATION_BACKENDS = [
 
 WSGI_APPLICATION = "CMS.wsgi.application"
 
-
 # Configuracion del docker
 # --------------------------------------------------------------------------------------
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-
-# Configuracion del docker
-# --------------------------------------------------------------------------------------
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -143,15 +145,11 @@ DATABASES = {
     }
 }
 
-
-SECRET_KEY = os.environ.get("SECRET_KEY")
-
 DEBUG = bool(os.environ.get("DEBUG", default=0))
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 """
 # Configuracion para runserver en terminal
 # --------------------------------------------------------------------------------------
@@ -169,7 +167,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 # -------------------------------------------------------------------------------------
 """
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -189,27 +186,32 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = "es-py"
-
 TIME_ZONE = "America/Asuncion"
-
 USE_I18N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+# En este caso como centralizamos todo en un solo directorio static, entonces necesitamos esta configuracion (prod)
+STATIC_URL = "/static/"
+
+# Genera los archivos estaticos de las dependencias de la aplicacion en el directorio staticfiles
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Directorio donde se encuentran los archivos estaticos creados por nosotros (dev)
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = "home"
+# NGINX - ALLAUTH. TRUSTED CONF. REDIRECT CONF
+
+LOGIN_REDIRECT_URL = "usuario:usuario"
+CSRF_TRUSTED_ORIGINS = ['http://localhost:1337']
