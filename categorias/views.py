@@ -8,7 +8,19 @@ from django.shortcuts import render, redirect, get_object_or_404
 from rol.models import Rol
 from usuario.models import User
 from usuario.models import UserCategoria
+from django.contrib.auth.decorators import user_passes_test
 
+def user_admin(user):
+
+    """
+    Funcion que verifica si el usuario es administrador
+    :param user: usuario
+    :return: True si el usuario es administrador, False si no lo es (boolean)
+    """
+
+    return user.is_superuser
+
+@user_passes_test(user_admin)
 def crearCategorias(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
@@ -32,10 +44,12 @@ def crearCategorias(request):
         form = CategoriaForm()
     return render(request, 'categorias/crearCategorias.html', {'form': form})
 
+@user_passes_test(user_admin)
 def verCategorias(request):
     categoria = Categoria.obtener_todos()
     return render(request, 'categorias/verCategorias.html', {'categorias': categoria})
 
+@user_passes_test(user_admin)
 def borrarCategoria(request, categoriaId):
 
     categoria = Categoria.getById(categoriaId)
@@ -46,6 +60,7 @@ def borrarCategoria(request, categoriaId):
 
     return render(request, 'categorias/verCategorias.html', {'categorias': Categoria.obtener_todos()})
 
+@user_passes_test(user_admin)
 def editarCategoria(request, categoriaId):
 
     categoria = Categoria.getById(categoriaId)

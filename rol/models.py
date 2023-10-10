@@ -14,6 +14,7 @@ class Rol(models.Model):
     nombre = models.CharField(max_length=30, unique=True)
     descripcion = models.CharField(max_length=100)
     permisos = models.ManyToManyField(Permiso)
+    last_modification = models.DateTimeField(auto_now=True, null=True)
 
     class Meta:
         verbose_name = "Rol"

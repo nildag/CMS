@@ -6,11 +6,14 @@ from categorias.models import Categoria
 class User(AbstractUser):
 
     """
-    Esta clase representa un usuario dentro del sistema por medio del sso.
+    Esta clase hereda de AbstractUser y se encarga de almacenar los datos de los usuarios.
+    - roles: Atributo correspondiente a los roles que posee el usuario (ManyToManyField)
+    - registrado: Atributo que indica si el usuario se encuentra registrado o no (bool)
     """
 
     # Campos personalizados
     roles = models.ManyToManyField(Rol, related_name='roles', through="UserCategoria", blank=True)
+    registrado = models.BooleanField(default=True)
 
     def __str__(self):
         """
@@ -26,6 +29,16 @@ class User(AbstractUser):
         :return: Se retorna un QuerySet
         """
         return User.objects.all()
+    
+    def user_autor(user):
+
+        """
+        Funcion que verifica si el usuario es autor en alguna categoria
+        :param user: usuario
+        :return: True si el usuario es autor, False si no lo es (boolean)
+        """
+
+        return UserCategoria.objects.filter(user=user, rol__nombre='Autor').values_list('categoria__id', flat=True)
 
 class UserCategoria(models.Model):
     

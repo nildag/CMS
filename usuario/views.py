@@ -7,11 +7,18 @@ from .models import UserCategoria
 from .models import User
 from categorias.models import Categoria
 from rol.models import Rol
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
+def user_admin(user):
+    return user.is_superuser
+
+@user_passes_test(user_admin)
 def verUsuarios(request):
     usuarios = User.objects.all()
     return render(request, 'usuario/verUsuarios.html', {'usuarios': usuarios})
 
+@user_passes_test(user_admin)
 def listaUserCategoria(request, idUsuario):
     usuario = User.objects.get(id=idUsuario)
     userCategoriasRoles = UserCategoria.objects.filter(user=usuario)
@@ -19,6 +26,7 @@ def listaUserCategoria(request, idUsuario):
     userCategoriasRoles = userCategoriasRoles.order_by('categoria__nombre')
     return render(request, 'usuario/listaUserCategoria.html', {'userCategoriasRoles': userCategoriasRoles, 'usuario': usuario})
 
+@user_passes_test(user_admin)
 def crearUserCategoria(request, idUsuario):
     usuario = User.objects.get(id=idUsuario)
     if request.method == 'POST':
@@ -33,12 +41,14 @@ def crearUserCategoria(request, idUsuario):
         form = UserCategoriaForm(initial={'user': usuario})
     return render(request, 'usuario/crearUserCategoria.html', {'form': form, 'usuario': usuario})
 
+@user_passes_test(user_admin)
 def eliminarUserCategoria(request, idUserCategoria):
     userCategoria = UserCategoria.objects.get(id=idUserCategoria)
     usuario = userCategoria.user
     userCategoria.delete()
     return redirect('usuario:listaUserCategoria', idUsuario=usuario.id)
 
+@user_passes_test(user_admin)
 def editarUserCategoria(request, idUserCategoria):
     userCategoria = get_object_or_404(UserCategoria, id=idUserCategoria)
     if request.method == 'POST':
@@ -52,8 +62,8 @@ def editarUserCategoria(request, idUserCategoria):
 
 def index(request):
 
-    # Si la diferencia es mayor a 2 segundos, el usuario se logueo, caso contrario se registro
-    if (request.user.last_login - request.user.date_joined).seconds <= 2:
+    # El usuario recién se registra
+    if request.user.registrado == True:
 
         # Al usuario se le asigna el rol Suscriptor por defecto en todas las categorias
         categorias = Categoria.objects.all()
@@ -67,5 +77,9 @@ def index(request):
             userCategoria.rol = rol
             userCategoria.save()
 
+        # Se cambia el estado del usuario a registrado
+        request.user.registrado = False
+        request.user.save()
+        
     # Redirecciona a la pagina principal
     return redirect('home')

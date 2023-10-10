@@ -4,8 +4,20 @@ from .forms import ContenidoForm
 from usuario.models import UserCategoria
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import user_passes_test
+
+def user_autor(user):
+
+    """
+    Funcion que verifica si el usuario es autor en alguna categoria
+    :param user: usuario
+    :return: True si el usuario es autor, False si no lo es (boolean)
+    """
+
+    return UserCategoria.objects.filter(user=user, rol__nombre='Autor').values_list('categoria__id', flat=True)
 
 @login_required
+@user_passes_test(user_autor)
 def crearContenido(request):
     """
     Vista para crear nuevo contenido. Requiere autenticación.
