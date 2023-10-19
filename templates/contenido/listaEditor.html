@@ -35,6 +35,8 @@
                     <td>{{ contenido.categoria }}</td>
                     <td>
                         <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
+                        <a href="#" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="#" class="btn btn-primary btn-sm">Aprobar</a>
                     </td>
                 </tr>
             {% endfor %}

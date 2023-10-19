@@ -17,6 +17,26 @@ def user_autor(user):
 
     return User.user_is_autor(user)
 
+def user_editor(user):
+
+    """
+    Funcion que comprueba si el usuario es editor (tiene el permiso "Editar contenido")
+    :param user: usuario a comprobar (User)
+    :return: True si es editor, False en caso contrario
+    """
+
+    return User.is_editor(user)
+
+def user_publicador(user):
+
+    """
+    Funcion que comprueba si el usuario es publicador (tiene el permiso "Publicar contenido")
+    :param user: usuario a comprobar (User)
+    :return: True si es publicador, False en caso contrario
+    """
+
+    return User.is_publicador(user)
+
 @login_required
 @user_passes_test(user_autor)
 def crearContenido(request):
@@ -100,6 +120,8 @@ def confirmarEliminarContenido(request, id):
     contenido = get_object_or_404(Contenido, id=id)
     return render(request, 'contenido/confirmarEliminarContenido.html', {'contenido': contenido})
 
+@login_required
+@user_passes_test(user_autor)
 def listaContenido(request):
 
     """
@@ -136,3 +158,33 @@ def listaTodos(request):
 
     contenido = Contenido.objects.all()
     return render(request, 'contenido/listaTodos.html', {'contenidos': contenido})
+
+@login_required
+@user_passes_test(user_publicador)
+def listaPublicador(request):
+
+    """
+    Vista para mostrar la lista de contenidos de los usuarios publicadores.
+    :param request: Objeto de solicitud HTTP.
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+
+    user = User.objects.get(id=request.user.id)
+    categorias = UserCategoria.objects.filter(user=user, rol__nombre='Publicador').values_list('categoria__id', flat=True)
+    contenido = Contenido.for_categorias(categorias)
+    return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})
+
+@login_required
+@user_passes_test(user_editor)
+def listaEditor(request):
+
+    """
+    Vista para mostrar la lista de contenidos de los usuarios editores.
+    :param request: Objeto de solicitud HTTP.
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+
+    user = User.objects.get(id=request.user.id)
+    categorias = UserCategoria.objects.filter(user=user, rol__nombre='Editor').values_list('categoria__id', flat=True)
+    contenido = Contenido.for_categorias(categorias)
+    return render(request, 'contenido/listaEditor.html', {'contenidos': contenido})

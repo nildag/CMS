@@ -39,3 +39,14 @@ class Contenido(models.Model):
         """
 
         return Contenido.objects.filter(autor=user)
+    
+    @classmethod
+    def for_categorias(self, categorias):
+
+        """
+        Funcion que devuelve los contenidos de una lista de categorias
+        :param categorias: lista de categorias (Categoria)
+        :return: lista de contenidos de las categorias
+        """
+
+        return Contenido.objects.filter(categoria__in=categorias)
