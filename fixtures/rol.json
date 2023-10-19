@@ -55,7 +55,7 @@
         "fields": {
             "nombre": "Administrador",
             "descripcion": "Encargado de las configuraciones generales del sistema",
-            "permisos": [8, 9],
+            "permisos": [8, 9, 10, 11],
 			"last_modification": "2023-10-10T12:34:56.789012Z"
         }
     }

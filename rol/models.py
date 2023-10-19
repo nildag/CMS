@@ -50,3 +50,17 @@ class Rol(models.Model):
         """
     
         return Rol.objects.get(nombre=nombre)
+    
+    def tiene_permiso(self, permiso):
+
+        """
+        Este metodo retorna si el rol actual tiene un permiso dado.
+        :param permiso: Permiso que se desea verificar (str)
+        :return: Se retorna un bool
+        """
+
+        permisos = self.permisos.all()
+        for permiso_rol in permisos:
+            if permiso_rol.nombre == permiso:
+                return True
+        return False

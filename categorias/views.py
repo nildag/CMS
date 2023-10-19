@@ -10,17 +10,17 @@ from usuario.models import User
 from usuario.models import UserCategoria
 from django.contrib.auth.decorators import user_passes_test
 
-def user_admin(user):
+def user_adminCategorias(user):
 
     """
-    Funcion que verifica si el usuario es administrador
-    :param user: usuario
-    :return: True si el usuario es administrador, False si no lo es (boolean)
+    Funcion que comprueba si el usuario es administrador de categorias (tiene el permiso "Administrar categorias")
+    :param user: usuario a comprobar (User)
+    :return: True si es administrador de categorias, False en caso contrario
     """
+    
+    return user.admin_categorias()
 
-    return user.is_superuser
-
-@user_passes_test(user_admin)
+@user_passes_test(user_adminCategorias)
 def crearCategorias(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
@@ -44,12 +44,12 @@ def crearCategorias(request):
         form = CategoriaForm()
     return render(request, 'categorias/crearCategorias.html', {'form': form})
 
-@user_passes_test(user_admin)
+@user_passes_test(user_adminCategorias)
 def verCategorias(request):
     categoria = Categoria.obtener_todos()
     return render(request, 'categorias/verCategorias.html', {'categorias': categoria})
 
-@user_passes_test(user_admin)
+@user_passes_test(user_adminCategorias)
 def borrarCategoria(request, categoriaId):
 
     categoria = Categoria.getById(categoriaId)
@@ -60,7 +60,7 @@ def borrarCategoria(request, categoriaId):
 
     return render(request, 'categorias/verCategorias.html', {'categorias': Categoria.obtener_todos()})
 
-@user_passes_test(user_admin)
+@user_passes_test(user_adminCategorias)
 def editarCategoria(request, categoriaId):
 
     categoria = Categoria.getById(categoriaId)

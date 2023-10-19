@@ -3,8 +3,8 @@
         "model": "categorias.Categoria",
         "pk": 1,
         "fields": {
-            "nombre": "Ciencias",
-            "descripcion": "Relacionado con diversas disciplinas cientificas"
+            "nombre": "System",
+            "descripcion": "Referente al sistema mismo"
 		}
     },
 	{
@@ -20,6 +20,14 @@
         "pk": 3,
         "fields": {
             "nombre": "Cocina",
+            "descripcion": "Exploracion de la gastronomia y el mundo culinario"
+		}
+    },
+	{
+        "model": "categorias.Categoria",
+        "pk": 4,
+        "fields": {
+            "nombre": "Ciencias",
             "descripcion": "Exploracion de la gastronomia y el mundo culinario"
 		}
     }

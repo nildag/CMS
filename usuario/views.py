@@ -10,15 +10,22 @@ from rol.models import Rol
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 
-def user_admin(user):
-    return user.is_superuser
+def user_admin_asigRoles(user):
 
-@user_passes_test(user_admin)
+    """
+    Funcion que comprueba si el usuario es administrador de asignacion de roles (tiene el permiso "Asignar roles")
+    :param user: usuario a comprobar (User)
+    :return: True si es administrador de asignacion de roles, False en caso contrario
+    """
+
+    return user.admin_asigRoles()
+
+@user_passes_test(user_admin_asigRoles)
 def verUsuarios(request):
     usuarios = User.objects.all()
     return render(request, 'usuario/verUsuarios.html', {'usuarios': usuarios})
 
-@user_passes_test(user_admin)
+@user_passes_test(user_admin_asigRoles)
 def listaUserCategoria(request, idUsuario):
     usuario = User.objects.get(id=idUsuario)
     userCategoriasRoles = UserCategoria.objects.filter(user=usuario)
@@ -26,7 +33,7 @@ def listaUserCategoria(request, idUsuario):
     userCategoriasRoles = userCategoriasRoles.order_by('categoria__nombre')
     return render(request, 'usuario/listaUserCategoria.html', {'userCategoriasRoles': userCategoriasRoles, 'usuario': usuario})
 
-@user_passes_test(user_admin)
+@user_passes_test(user_admin_asigRoles)
 def crearUserCategoria(request, idUsuario):
     usuario = User.objects.get(id=idUsuario)
     if request.method == 'POST':
@@ -41,14 +48,14 @@ def crearUserCategoria(request, idUsuario):
         form = UserCategoriaForm(initial={'user': usuario})
     return render(request, 'usuario/crearUserCategoria.html', {'form': form, 'usuario': usuario})
 
-@user_passes_test(user_admin)
+@user_passes_test(user_admin_asigRoles)
 def eliminarUserCategoria(request, idUserCategoria):
     userCategoria = UserCategoria.objects.get(id=idUserCategoria)
     usuario = userCategoria.user
     userCategoria.delete()
     return redirect('usuario:listaUserCategoria', idUsuario=usuario.id)
 
-@user_passes_test(user_admin)
+@user_passes_test(user_admin_asigRoles)
 def editarUserCategoria(request, idUserCategoria):
     userCategoria = get_object_or_404(UserCategoria, id=idUserCategoria)
     if request.method == 'POST':

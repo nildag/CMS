@@ -5,16 +5,17 @@ from usuario.models import UserCategoria
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
+from usuario.models import User
 
 def user_autor(user):
 
     """
-    Funcion que verifica si el usuario es autor en alguna categoria
-    :param user: usuario
-    :return: True si el usuario es autor, False si no lo es (boolean)
+    Funcion que comprueba si el usuario es autor (tiene el permiso "Crear contenido")
+    :param user: usuario a comprobar (User)
+    :return: True si es autor, False en caso contrario
     """
 
-    return UserCategoria.objects.filter(user=user, rol__nombre='Autor').values_list('categoria__id', flat=True)
+    return User.user_is_autor(user)
 
 @login_required
 @user_passes_test(user_autor)
@@ -43,6 +44,7 @@ def crearContenido(request):
     return render(request, 'contenido/crearContenido.html', {'form': form})
 
 @login_required
+@user_passes_test(user_autor)
 def editarContenido(request, id):
     """
     Vista para editar contenido existente. Requiere autenticación.
@@ -66,6 +68,7 @@ def editarContenido(request, id):
     return render(request, 'contenido/editarContenido.html', {'form': form})
 
 @login_required
+@user_passes_test(user_autor)
 def eliminarContenido(request, id):
     """
     Vista para eliminar contenido existente. Requiere autenticación.
@@ -82,6 +85,7 @@ def eliminarContenido(request, id):
     return redirect('contenido:lista_contenido')
 
 @login_required
+@user_passes_test(user_autor)
 def confirmarEliminarContenido(request, id):
     """
     Vista para confirmar la eliminación de un contenido existente. Requiere autenticación.
