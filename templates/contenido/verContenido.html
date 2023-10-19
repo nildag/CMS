@@ -13,15 +13,48 @@
     <link rel="stylesheet" href="{% static 'contenido/styles.css' %}">
 </head>
 
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ contenido.titulo }}</title>
+    <link rel="stylesheet" href="{% static 'contenido/styles.css' %}">
+</head>
 <body>
-    <div class="content-details">
-        <h1>{{ contenido.titulo }}</h1>
-        <p class="author">Creado por {{ contenido.autor.first_name }}, Publicado el {{ contenido.fecha_creacion }}</p>
-        <div class="content-body">{{ contenido.cuerpo | safe }}</div>
+    <div class="container">
+        <div class="content-details">
+            <h1>{{ contenido.titulo }}</h1>
+            <p class="author">Creado por {{ contenido.autor.get_full_name }}, Publicado el {{ contenido.fecha_creacion|date:"F j, Y" }}</p>
+            <div class="content-body">
+                {{ contenido.cuerpo | safe }}
+            </div>
+        </div>
+
+        <div class="content-rating">
+            <h2>Valoración Promedio</h2>
+            <p>Puntuación Promedio: {{ contenido.puntuacion | floatformat:2 }}</p>
+            <p>Número de Valoraciones: {{ contenido.numero_valoraciones }}</p>
+        </div>
+
+        {% if user.is_authenticated %}
+        <div class="content-rating">
+            <h2>Valorar este Contenido</h2>
+            <form method="post" action="{% url 'contenido:valorar_contenido' contenido.id %}">
+                {% csrf_token %}
+                <label for="puntuacion">Puntuación (1-5):</label>
+                <select name="puntuacion" id="puntuacion">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <button type="submit" class="btn btn-primary">Valorar</button>
+            </form>
+        </div>
+        {% endif %}
     </div>
 </body>
-
 </html>
 
-{% endblock %}
 
+{% endblock %}
