@@ -13,6 +13,8 @@
                 <li>Publica contenido de manera programada.</li>
             </ul>
         </div>
+
+        {% if user.user_is_autor or user.admin_categorias or user.admin_asigRoles%}
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
@@ -31,6 +33,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
