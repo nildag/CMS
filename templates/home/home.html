@@ -18,9 +18,15 @@
                 <div class="card-body">
                     <h5 class="card-title">Acciones Rápidas</h5>
                     <ul>
+                        {% if user.user_is_autor %}
                         <li><a href="{% url 'contenido:crear_contenido' %}">Crear nuevo contenido</a></li>
+                        {% endif %}
+                        {% if user.admin_categorias %}
                         <li><a href="{% url 'categorias:ver_categorias' %}">Administrar categorías</a></li>
+                        {% endif %}
+                        {% if user.admin_asigRoles %}
                         <li><a href="{% url 'usuario:verUsuarios' %}">Ver usuarios</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
