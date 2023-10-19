@@ -3,6 +3,8 @@ from usuario.models import User
 from categorias.models import Categoria
 from django.utils import timezone
 from ckeditor.fields import RichTextField
+from django.conf import settings  # Importa la configuración de Django
+from django.contrib.auth.models import User
 
 class Contenido(models.Model):
     """
@@ -17,10 +19,13 @@ class Contenido(models.Model):
     """
     titulo = models.CharField(max_length=30, default="titulo")
     cuerpo = RichTextField(default="cuerpo")
-    autor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    #autor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    autor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, default=1)
     fecha_creacion = models.DateTimeField(default=timezone.now)
-
+    # Nuevos campos para valoración
+    puntuacion = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    numero_valoraciones = models.PositiveIntegerField(default=0)
     def __str__(self):
         return f"{self.titulo} - {self.autor.first_name} {self.autor.last_name}"
 
@@ -28,6 +33,15 @@ class Contenido(models.Model):
         verbose_name = "Contenido"
         verbose_name_plural = "Contenidos"
         db_table = "contenido"
+
+class Valoracion(models.Model):
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    puntuacion = models.PositiveIntegerField()  # Aquí puedes usar un rango de 1 a 5, por ejemplo
+    fecha = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"Valoración de {self.usuario.username} para {self.contenido.titulo}"
+
 
     @classmethod
     def for_user(self, user):

@@ -12,4 +12,5 @@ urlpatterns = [
     path('listaTodos/', views.listaTodos, name='lista_todos'),
     path('listaPublicador/', views.listaPublicador, name='lista_publicador'),
     path('listaEditor/', views.listaEditor, name='lista_editor'),
+    path('valorar/<int:id>/', views.valorarContenido, name='valorar_contenido'),  # Nueva URL
 ]

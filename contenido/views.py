@@ -5,7 +5,6 @@ from usuario.models import UserCategoria
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
-from usuario.models import User
 
 def user_autor(user):
 
@@ -105,7 +104,6 @@ def eliminarContenido(request, id):
     return redirect('contenido:lista_contenido')
 
 @login_required
-@user_passes_test(user_autor)
 def confirmarEliminarContenido(request, id):
     """
     Vista para confirmar la eliminación de un contenido existente. Requiere autenticación.
@@ -188,3 +186,44 @@ def listaEditor(request):
     categorias = UserCategoria.objects.filter(user=user, rol__nombre='Editor').values_list('categoria__id', flat=True)
     contenido = Contenido.for_categorias(categorias)
     return render(request, 'contenido/listaEditor.html', {'contenidos': contenido})
+
+@login_required
+def valorarContenido(request, id):
+    """
+    Vista para valorar un contenido específico. Requiere autenticación.
+
+    Args:
+        request: Objeto de solicitud HTTP.
+        id (int): ID del contenido a valorar.
+
+    Returns:
+        HttpResponse: Redirige a la página del contenido valorado o muestra un mensaje de error.
+    """
+    if request.method == 'POST':
+        contenido = get_object_or_404(Contenido, id=id)
+        puntuacion = int(request.POST.get('puntuacion'))  # Asume que tienes un formulario con un campo 'puntuacion'
+
+        # Comprueba si el usuario ya ha valorado este contenido
+        valoracion_existente = Valoracion.objects.filter(contenido=contenido, usuario=request.user).first()
+        if valoracion_existente:
+            # Actualiza la valoración si el usuario ya ha valorado este contenido
+            valoracion_existente.puntuacion = puntuacion
+            valoracion_existente.save()
+        else:
+            # Crea una nueva valoración si el usuario no ha valorado este contenido
+            valoracion = Valoracion(contenido=contenido, usuario=request.user, puntuacion=puntuacion)
+            valoracion.save()
+
+        # Recalcula la puntuación promedio del contenido y el número de valoraciones
+        valoraciones = Valoracion.objects.filter(contenido=contenido)
+        total_puntuacion = sum(valoracion.puntuacion for valoracion in valoraciones)
+        numero_valoraciones = valoraciones.count()
+        contenido.puntuacion = total_puntuacion / numero_valoraciones
+        contenido.numero_valoraciones = numero_valoraciones
+        contenido.save()
+
+        return redirect('contenido:ver_contenido', id=id)
+    else:
+        # Muestra el contenido específico para que el usuario pueda valorarlo
+        contenido = get_object_or_404(Contenido, id=id)
+        return render(request, 'contenido/valorarContenido.html', {'contenido': contenido})
