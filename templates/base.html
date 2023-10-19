@@ -86,8 +86,10 @@
                     </a>
                     <ul class="nav">
                         <li class="nav-item"><a href="/" class="nav-link link-body-emphasis">Inicio</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link link-body-emphasis">Todos</a></li>
-                        <li class="nav-item"><a href="{% url 'contenido:lista_contenido' %}" class="nav-link link-body-emphasis">Contenido</a></li>
+                        <li class="nav-item"><a href="{% url 'contenido:lista_todos' %}" class="nav-link link-body-emphasis">Todos</a></li>
+                        {% if user.user_is_autor %}
+                        <li class="nav-item"><a href="{% url 'contenido:lista_contenido' %}" class="nav-link link-body-emphasis">Mis Contenidos</a></li>
+                        {% endif %}
                         {%  if user.is_authenticated %}
                         {%  if user.admin_roles or user.admin_categorias or user.admin_asigRoles or user.admin_tipo_contenido %}
                         <li class="nav-item dropdown">
@@ -112,6 +114,12 @@
 
                         </li>
                         {% endif %}
+                        {% endif %}
+                        {% if user.is_publicador %}
+                        <li class="nav-item"><a href="#" class="nav-link link-body-emphasis">Publicación</a></li>
+                        {% endif %}
+                        {% if user.is_editor %}
+                        <li class="nav-item"><a href="#" class="nav-link link-body-emphasis">Edición</a></li>
                         {% endif %}
                     </ul>
                     <div class="dropdown">

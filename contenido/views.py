@@ -101,16 +101,15 @@ def confirmarEliminarContenido(request, id):
     return render(request, 'contenido/confirmarEliminarContenido.html', {'contenido': contenido})
 
 def listaContenido(request):
-    """
-    Vista para mostrar la lista de contenidos.
 
-    Args:
-        request: Objeto de solicitud HTTP.
-
-    Returns:
-        HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
     """
-    contenido = Contenido.objects.all()
+    Vista para listar los contenidos de un usuario
+    :param request: Objeto de solicitud HTTP.
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+
+    user = User.objects.get(id=request.user.id)
+    contenido = Contenido.for_user(user)
     return render(request, 'contenido/listaContenido.html', {'contenidos': contenido})
 
 def verContenido(request, id):
@@ -126,3 +125,14 @@ def verContenido(request, id):
     """
     contenido = Contenido.objects.get(id=id)
     return render(request, 'contenido/verContenido.html', {'contenido': contenido})
+
+def listaTodos(request):
+
+    """
+    Vista para mostrar la lista de contenidos de todos los usuarios.
+    :param request: Objeto de solicitud HTTP.
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+
+    contenido = Contenido.objects.all()
+    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido})

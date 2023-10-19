@@ -28,3 +28,14 @@ class Contenido(models.Model):
         verbose_name = "Contenido"
         verbose_name_plural = "Contenidos"
         db_table = "contenido"
+
+    @classmethod
+    def for_user(self, user):
+
+        """
+        Funcion que devuelve los contenidos de un usuario
+        :param user: usuario a comprobar (User)
+        :return: lista de contenidos del usuario
+        """
+
+        return Contenido.objects.filter(autor=user)

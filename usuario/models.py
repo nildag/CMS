@@ -105,6 +105,32 @@ class User(AbstractUser):
             if self.tiene_permiso_en_categoria("Crear contenido", categoria):
                 return True
         return False
+    
+    def is_publicador(self):
+            
+        """
+        Este método retorna si el usuario actual es publicador.
+        :return: Se retorna un bool
+        """
+    
+        categorias = Categoria.objects.all()
+        for categoria in categorias:
+            if self.tiene_permiso_en_categoria("Publicar contenido", categoria):
+                return True
+        return False
+    
+    def is_editor(self):
+                
+        """
+        Este método retorna si el usuario actual es editor.
+        :return: Se retorna un bool
+        """
+        
+        categorias = Categoria.objects.all()
+        for categoria in categorias:
+            if self.tiene_permiso_en_categoria("Editar contenido", categoria):
+                return True
+        return False
 
 class UserCategoria(models.Model):
     

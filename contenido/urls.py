@@ -9,4 +9,5 @@ urlpatterns = [
     path('editar/<int:id>/', views.editarContenido, name='editar_contenido'),
     path('eliminar/<int:id>/', views.eliminarContenido, name='eliminar_contenido'),
     path('eliminar/<int:id>/confirmar/', views.confirmarEliminarContenido, name='confirmar_eliminar_contenido'),
+    path('listaTodos/', views.listaTodos, name='lista_todos')
 ]
