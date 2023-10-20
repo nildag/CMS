@@ -5,6 +5,11 @@
 <!DOCTYPE html>
 <html lang="es">
 
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+        rel="stylesheet">
+</head>
+
 <body>
 
     <div class="container mt-4">
@@ -12,154 +17,138 @@
         <br>
         <!-- Boton buscar para mostrar buscador -->
         <div class="col-md-3 d-flex justify-content-start align-items-center mb-3">
-            <button class="btn btn-primary" type="button" id="searchButton">
-                <span class="me-2">Buscar</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" class="bi bi-search" viewBox="0 0 16 16">
-                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                </svg>
-            </button>
-        </div>
-
-        <!-- seccion de busqueda -->
-        <div class="d-none" id="seccionBusqueda">
-            <p>
-                Escriba en el campo de entrada para buscar en la tabla de contenidos
-            </p>
-            <input class="form-control" id="busquedaIngresada" type="text" placeholder="Busque por título, autor o categoria">
+            <input type="text" class="form-control" id="busquedaIngresada"
+                placeholder="Busque por título, autor o categoria">
         </div>
         <br>
+            <!-- Botón para limpiar los filtros -->
+            <div>
+            <!-- Filtro por fechas con Bootstrap-datepicker -->
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="startDate" placeholder="Fecha de inicio" autocomplete="off">
+                <div class="input-group-append">
+                    <span class="input-group-text"> hasta </span>
+                </div>
+                <input type="text" class="form-control" id="endDate" placeholder="Fecha de fin" autocomplete="off">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" id="filterButton">Filtrar</button>
+                </div>
+            </div>
+            <!-- Botón para limpiar los filtros -->
+            <button class="btn btn-secondary" type="button" id="clearFiltersButton">Limpiar Filtros</button>
+        </div>
 
         <!-- tablas de contenidos -->
         <table class="table" id="miTabla">
             <thead>
                 <tr>
-                    <th scope="col" data-columna="titulo">Titulo   <i class='fas fa-sort'></i></th>
-                    <th scope="col" data-columna="autor">Autor   <i class='fas fa-sort'></i></th>
-                    <th scope="col" data-columna="categoria">Categoria   <i class='fas fa-sort'></i></th>
+                    <th scope="col" data-columna="titulo">Titulo <i class='fas fa-sort'></i></th>
+                    <th scope="col" data-columna="autor">Autor <i class='fas fa-sort'></i></th>
+                    <th scope="col" data-columna="fecha">Fecha de Publicación <i class='fas fa-sort'></i></th>
+                    <th scope="col" data-columna="categoria">Categoria <i class='fas fa-sort'></i></th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody id="tablaContenido">
                 {% for contenido in contenidos %}
-                    <tr>
-                        <td>{{ contenido.titulo }}</td>
-                        <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
-                        <td>{{ contenido.categoria.nombre }}</td>
-                        <td>
-                            <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>{{ contenido.titulo }}</td>
+                    <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
+                    <td class="fechaPublicacion">{{ contenido.fecha_creacion|date:"Y-m-d" }}</td>
+                    <td>{{ contenido.categoria.nombre }}</td>
+                    <td>
+                        <a href="{% url 'contenido:ver_contenido' contenido.id %}"
+                            class="btn btn-info btn-sm">Ver</a>
+                    </td>
+                </tr>
                 {% endfor %}
             </tbody>
         </table>
-        
+
     </div>
-    
+
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Ordenar tabla al hacer clic en el encabezado
-            $("#miTabla th").click(function() {
-                var columna = $(this).data("columna");
-                var orden = $(this).attr("data-order");
+        $(document).ready(function () {
+            // Inicializar los datepickers
+            $('#startDate').datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd', // Formato de fecha deseado
+                todayHighlight: true,
+                endDate: new Date() // No permitir fechas futuras
+            });
 
-                // Cambiar el orden (ascendente o descendente)
-                orden = (orden === "desc") ? "asc" : "desc";
-                $(this).attr("data-order", orden);
+            $('#endDate').datepicker({
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                endDate: new Date() // No permitir fechas futuras
+            });
 
-                // Obtener el índice de la columna
-                var columnIndex = $(this).index();
+            // Filtro por término de búsqueda
+            $('#busquedaIngresada').keyup(function () {
+                var searchTerm = $(this).val().toLowerCase();
 
-                // Obtener todas las filas de la tabla (excepto la fila del encabezado)
-                var rows = $('#miTabla tbody tr').get();
-
-                // Ordenar las filas según los valores de la columna seleccionada
-                rows.sort(function(a, b) {
-                    var A = $(a).children('td').eq(columnIndex).text().toUpperCase();
-                    var B = $(b).children('td').eq(columnIndex).text().toUpperCase();
-
-                    if (orden === "asc") {
-                        if(A < B) {
-                            return -1;
-                        }
-                        if(A > B) {
-                            return 1;
-                        }
+                // Filtrar las filas de la tabla por término de búsqueda
+                $('#tablaContenido tr').each(function () {
+                    var contenidoTexto = $(this).text().toLowerCase();
+                    if (contenidoTexto.includes(searchTerm)) {
+                        $(this).show();
                     } else {
-                        if(A > B) {
-                            return -1;
-                        }
-                        if(A < B) {
-                            return 1;
-                        }
+                        $(this).hide();
                     }
-
-                    return 0;
-                });
-
-                // Vaciar la tabla y volver a agregar las filas en el nuevo orden
-                $.each(rows, function(index, row) {
-                    $('#miTabla').children('tbody').append(row);
                 });
             });
 
-            // Script para mostrar y ocultar la sección de búsqueda
-            const searchButton = document.getElementById('searchButton');
-            const seccionBusqueda = document.getElementById('seccionBusqueda'); 
-            searchButton.addEventListener('click', function() {
-                seccionBusqueda.classList.toggle('d-none');
-                if (!seccionBusqueda.classList.contains('d-none')) {
-                    document.getElementById('busquedaIngresada').focus(); 
+            // Script para filtrar la tabla de contenidos por fechas
+            $('#filterButton').click(function () {
+                var startDateString = $('#startDate').val();
+                var endDateString = $('#endDate').val();
+
+                // Validar las fechas
+                if (startDateString === '' || endDateString === '') {
+                    alert('Por favor, selecciona ambas fechas.');
+                    return;
                 }
-            });
-        
-            // Script para filtrar la tabla de contenidos con el buscador
-            $("#busquedaIngresada").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#tablaContenido tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-                });
 
-                // Volver a ordenar después de aplicar el filtro
-                var columna = $("#miTabla th[data-order='desc'], #miTabla th[data-order='asc']").first().data("columna");
-                var orden = $("#miTabla th[data-order='desc'], #miTabla th[data-order='asc']").first().attr("data-order");
+                // Convertir las fechas a objetos Date
+                var startDate = new Date(startDateString);
+                var endDate = new Date(endDateString);
 
-                // Obtener el índice de la columna
-                var columnIndex = $("#miTabla th[data-columna='" + columna + "']").index();
+                // Filtrar las filas de la tabla por las fechas seleccionadas
+                $('#tablaContenido tr').hide();
+                $('#tablaContenido tr').each(function () {
+                    // Obtener la fecha de publicación de la fila y convertirla a objeto Date
+                    var fechaPublicacionString = $(this).find('.fechaPublicacion').text();
+                    var fechaPublicacion = new Date(fechaPublicacionString);
 
-                // Obtener todas las filas de la tabla (excepto la fila del encabezado)
-                var rows = $('#miTabla tbody tr').get();
+                    // Comparar las fechas y mostrar las filas que cumplen con el filtro de fecha
+                    if (fechaPublicacion >= startDate && fechaPublicacion <= endDate) {
+                        // Obtener el término de búsqueda y convertirlo a minúsculas
+                        var terminoBusqueda = $('#busquedaIngresada').val().toLowerCase();
+                        // Obtener el texto de la fila y convertirlo a minúsculas
+                        var contenidoTexto = $(this).text().toLowerCase();
 
-                // Ordenar las filas según los valores de la columna seleccionada
-                rows.sort(function(a, b) {
-                    var A = $(a).children('td').eq(columnIndex).text().toUpperCase();
-                    var B = $(b).children('td').eq(columnIndex).text().toUpperCase();
-
-                    if (orden === "asc") {
-                        if(A < B) {
-                            return -1;
-                        }
-                        if(A > B) {
-                            return 1;
-                        }
-                    } else {
-                        if(A > B) {
-                            return -1;
-                        }
-                        if(A < B) {
-                            return 1;
+                        // Comparar el texto de la fila con el término de búsqueda y mostrar las filas que coinciden
+                        if (contenidoTexto.includes(terminoBusqueda)) {
+                            $(this).show();
                         }
                     }
-
-                    return 0;
-                });
-
-                // Vaciar la tabla y volver a agregar las filas en el nuevo orden
-                $.each(rows, function(index, row) {
-                    $('#miTabla').children('tbody').append(row);
                 });
             });
+        });
+
+            // Botón para limpiar los filtros
+             $('#clearFiltersButton').click(function () {
+            // Restablecer el valor del campo de búsqueda y mostrar todas las filas
+            $('#busquedaIngresada').val('');
+            $('#tablaContenido tr').show();
+
+            // Restablecer los valores de los datepickers
+            $('#startDate').datepicker('setDate', null);
+            $('#endDate').datepicker('setDate', null);
         });
     </script>
 
