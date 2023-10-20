@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from usuario.models import User
+from contenido.models import Valoracion
 
 def user_autor(user):
 
