@@ -1,102 +1,83 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block content %}
-
 <!DOCTYPE html>
 <html lang="es">
 
 <body>
 
     <div class="container mt-4">
-        <form method="get" action="{% url 'contenido:buscar_contenido' %}" class="mb-3">
-            <div class="row">
-                <div class="col-md-9">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control d-none" id="titulo" name="q">
-                        <button class="btn btn-secondary d-none" type="button" id="clearButton">
-                            Olvidar Búsqueda
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-3 d-flex justify-content-end align-items-center">
-                    <button class="btn btn-primary" type="button" id="searchButton">
-                        <span class="me-2">Buscar</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" class="bi bi-search" viewBox="0 0 16 16">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </form>
-
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-9">
-                    <h1>Contenidos</h1>
-                </div>
-            </div>
+        <h2>Tabla de contenidos</h2>
+        <br>
+        <!-- Boton buscar para mostrar buscador -->
+        <div class="col-md-3 d-flex justify-content-start align-items-center mb-3">
+            <button class="btn btn-primary" type="button" id="searchButton">
+                <span class="me-2">Buscar</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </button>
         </div>
 
-        <div class="container mt-4">
-            <table class="table">
-                <thead>
+        <!-- seccion de busqueda -->
+        <div class="d-none" id="seccionBusqueda">
+            <p>
+                Escriba en el campo de entrada para buscar en la tabla de contenidos
+            </p>
+            <input class="form-control" id="busquedaIngresada" type="text" placeholder="Busque por título, autor o categoria">
+        </div>
+        <br>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaContenido">
+                {% for contenido in contenidos %}
                     <tr>
-                        <th scope="col">Titulo</th>
-                        <th scope="col">Autor</th>
-                        <th scope="col">Categoria</th>
-                        <th scope="col">Acciones</th>
+                        <td>{{ contenido.titulo }}</td>
+                        <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
+                        <td>{{ contenido.categoria.nombre }}</td>
+                        <td>
+                            <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for contenido in contenidos %}
-                        <tr>
-                            <td>{{ contenido.titulo }}</td>
-                            <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
-                            <td>{{ contenido.categoria.nombre }}</td>
-                            <td>
-                                <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
 
-        <script>
-            const searchButton = document.getElementById('searchButton');
-            const searchInput = document.getElementById('titulo');
-            const clearButton = document.getElementById('clearButton');
-
-            searchButton.addEventListener('click', function() {
-                searchInput.classList.toggle('d-none');
-                clearButton.classList.toggle('d-none');
-                if (!searchInput.classList.contains('d-none')) {
-                    searchInput.focus();
-                }
-            });
-
-            clearButton.addEventListener('click', function() {
-                searchInput.value = '';
-                searchInput.classList.add('d-none');
-                clearButton.classList.add('d-none');
-
-                const searchForm = document.querySelector('form');
-                searchForm.submit();
-            });
-
-            // Verificar si hay una consulta en la URL y mostrar el botón "Olvidar Búsqueda" en consecuencia
-            const urlParams = new URLSearchParams(window.location.search);
-            const queryParam = urlParams.get('q');
-            if (queryParam) {
-                searchInput.value = queryParam;
-                searchInput.classList.remove('d-none');
-                clearButton.classList.remove('d-none');
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script>
+        // Script para mostrar y ocultar la sección de búsqueda
+        const searchButton = document.getElementById('searchButton');
+        const seccionBusqueda = document.getElementById('seccionBusqueda'); 
+        searchButton.addEventListener('click', function() {
+            seccionBusqueda.classList.toggle('d-none');
+            if (!seccionBusqueda.classList.contains('d-none')) {
+                document.getElementById('busquedaIngresada').focus(); 
             }
-        </script>
+        });
+        
+        // Script para filtrar la tabla de contenidos con el buscador
+        $(document).ready(function(){
+            $("#busquedaIngresada").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tablaContenido tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+            });
+        });
+    </script>
 
-    </body>
+</body>
 </html>
 
 {% endblock %}
