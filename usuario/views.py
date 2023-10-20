@@ -22,26 +22,46 @@ def user_admin_asigRoles(user):
 
 @user_passes_test(user_admin_asigRoles)
 def verUsuarios(request):
+    """
+    Vista para mostrar una lista de usuarios.
+
+    :param request: La solicitud HTTP.
+    :return: La página de lista de usuarios.
+    """
     usuarios = User.objects.all()
     return render(request, 'usuario/verUsuarios.html', {'usuarios': usuarios})
 
 @user_passes_test(user_admin_asigRoles)
 def listaUserCategoria(request, idUsuario):
+    """
+    Vista para mostrar una lista de categorías y roles asignados a un usuario específico.
+
+    :param request: La solicitud HTTP.
+    :param idUsuario: El ID del usuario.
+    :return: La página de lista de categorías y roles para el usuario especificado.
+    """
     usuario = User.objects.get(id=idUsuario)
     userCategoriasRoles = UserCategoria.objects.filter(user=usuario)
-    # Ordenamos por el nombre de la categoria
+    # Ordenamos por el nombre de la categoría
     userCategoriasRoles = userCategoriasRoles.order_by('categoria__nombre')
     return render(request, 'usuario/listaUserCategoria.html', {'userCategoriasRoles': userCategoriasRoles, 'usuario': usuario})
 
 @user_passes_test(user_admin_asigRoles)
 def crearUserCategoria(request, idUsuario):
+    """
+    Vista para crear una asignación de categoría y rol para un usuario específico.
+
+    :param request: La solicitud HTTP.
+    :param idUsuario: El ID del usuario.
+    :return: La página de creación de asignación de categoría y rol o redirecciona a la lista de asignaciones si se crea con éxito.
+    """
     usuario = User.objects.get(id=idUsuario)
     if request.method == 'POST':
         form = UserCategoriaForm(request.POST)
         if form.is_valid():
             form.instance.user = usuario
             userCategoria = form.save(commit=False)
-            userCategoria.User = usuario
+            userCategoria.user = usuario
             userCategoria.save()
             return redirect('usuario:listaUserCategoria', idUsuario=usuario.id)
     else:
@@ -50,6 +70,13 @@ def crearUserCategoria(request, idUsuario):
 
 @user_passes_test(user_admin_asigRoles)
 def eliminarUserCategoria(request, idUserCategoria):
+    """
+    Vista para eliminar una asignación de categoría y rol para un usuario.
+
+    :param request: La solicitud HTTP.
+    :param idUserCategoria: El ID de la asignación de categoría y rol a eliminar.
+    :return: Redirecciona a la lista de asignaciones después de la eliminación.
+    """
     userCategoria = UserCategoria.objects.get(id=idUserCategoria)
     usuario = userCategoria.user
     userCategoria.delete()
@@ -57,6 +84,13 @@ def eliminarUserCategoria(request, idUserCategoria):
 
 @user_passes_test(user_admin_asigRoles)
 def editarUserCategoria(request, idUserCategoria):
+    """
+    Vista para editar una asignación de categoría y rol para un usuario.
+
+    :param request: La solicitud HTTP.
+    :param idUserCategoria: El ID de la asignación de categoría y rol a editar.
+    :return: La página de edición de asignación de categoría y rol o redirecciona a la lista de asignaciones si se edita con éxito.
+    """
     userCategoria = get_object_or_404(UserCategoria, id=idUserCategoria)
     if request.method == 'POST':
         form = UserCategoriaForm(request.POST, instance=userCategoria)
@@ -68,25 +102,23 @@ def editarUserCategoria(request, idUserCategoria):
     return render(request, 'usuario/crearUserCategoria.html', {'form': form, 'userCategoria': userCategoria})
 
 def index(request):
+    """
+    Vista para la página de inicio.
 
-    # El usuario recién se registra
-    if request.user.registrado == True:
+    Esta vista verifica si un usuario recién registrado y asigna el rol "Suscriptor" en todas las categorías.
 
-        # Al usuario se le asigna el rol Suscriptor por defecto en todas las categorias
-        categorias = Categoria.objects.all()
-        for categoria in categorias:
-
+    :param request: La solicitud HTTP.
+    :return: Redirecciona a la página principal (home).
+    """
+    if request.user.registrado:
+        categorías = Categoria.objects.all()
+        for categoría in categorías:
             rol = Rol.objects.get(nombre='Suscriptor')
             userCategoria = UserCategoria()
-
             userCategoria.user = request.user
-            userCategoria.categoria = categoria
+            userCategoria.categoría = categoría
             userCategoria.rol = rol
             userCategoria.save()
-
-        # Se cambia el estado del usuario a registrado
         request.user.registrado = False
         request.user.save()
-        
-    # Redirecciona a la pagina principal
     return redirect('home')
