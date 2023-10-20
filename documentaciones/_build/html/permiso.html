@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>permiso package &mdash; documentación de CMS web - 1.0.0</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=efdbd0b9"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="permiso.migrations package" href="permiso.migrations.html" />
+    <link rel="prev" title="manage module" href="manage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">cms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CMS.html">CMS package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="categorias.html">categorias package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contenido.html">contenido package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html">home package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage.html">manage module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">permiso package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="permiso.migrations.html">permiso.migrations package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-permiso.admin">permiso.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-permiso.apps">permiso.apps module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#permiso.apps.PermisosConfig"><code class="docutils literal notranslate"><span class="pre">PermisosConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-permiso.models">permiso.models module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#permiso.models.Permiso"><code class="docutils literal notranslate"><span class="pre">Permiso</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-permiso.tests">permiso.tests module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-permiso.urls">permiso.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-permiso.views">permiso.views module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-permiso">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="rol.html">rol package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tipoContenido.html">tipoContenido package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usuario.html">usuario package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">cms</a></li>
+      <li class="breadcrumb-item active">permiso package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/permiso.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="permiso-package">
+<h1>permiso package<a class="headerlink" href="#permiso-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="permiso.migrations.html">permiso.migrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="permiso.migrations.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="permiso.migrations.html#module-permiso.migrations.0001_initial">permiso.migrations.0001_initial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="permiso.migrations.html#permiso.migrations.0001_initial.Migration"><code class="docutils literal notranslate"><span class="pre">Migration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="permiso.migrations.html#permiso.migrations.0001_initial.Migration.dependencies"><code class="docutils literal notranslate"><span class="pre">Migration.dependencies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="permiso.migrations.html#permiso.migrations.0001_initial.Migration.initial"><code class="docutils literal notranslate"><span class="pre">Migration.initial</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="permiso.migrations.html#permiso.migrations.0001_initial.Migration.operations"><code class="docutils literal notranslate"><span class="pre">Migration.operations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="permiso.migrations.html#module-permiso.migrations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-permiso.admin">
+<span id="permiso-admin-module"></span><h2>permiso.admin module<a class="headerlink" href="#module-permiso.admin" title="Link to this heading"></a></h2>
+</section>
+<section id="module-permiso.apps">
+<span id="permiso-apps-module"></span><h2>permiso.apps module<a class="headerlink" href="#module-permiso.apps" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="permiso.apps.PermisosConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">permiso.apps.</span></span><span class="sig-name descname"><span class="pre">PermisosConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/permiso/apps.html#PermisosConfig"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#permiso.apps.PermisosConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="permiso.apps.PermisosConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.BigAutoField'</span></em><a class="headerlink" href="#permiso.apps.PermisosConfig.default_auto_field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="permiso.apps.PermisosConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'permiso'</span></em><a class="headerlink" href="#permiso.apps.PermisosConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-permiso.models">
+<span id="permiso-models-module"></span><h2>permiso.models module<a class="headerlink" href="#module-permiso.models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="permiso.models.Permiso">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">permiso.models.</span></span><span class="sig-name descname"><span class="pre">Permiso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/permiso/models.html#Permiso"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#permiso.models.Permiso" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Esta clase representa a un permiso dentro del sistema.
+Atributos:
+- nombre: Contiene todos los permisos del sistema en un formato { &lt;nombre-permiso&gt; : &lt;activo o desactivado&gt; } (diccionario {str:Boolean})</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="permiso.models.Permiso.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#permiso.models.Permiso.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="permiso.models.Permiso.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#permiso.models.Permiso.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="permiso.models.Permiso.crear">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">crear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/permiso/models.html#Permiso.crear"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#permiso.models.Permiso.crear" title="Link to this definition"></a></dt>
+<dd><p>Este metodo sirve para crear un permiso
+:nombre: Nombre del permiso a crear (str)
+:return: Retorna un Permiso</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="permiso.models.Permiso.getAll">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getAll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/permiso/models.html#Permiso.getAll"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#permiso.models.Permiso.getAll" title="Link to this definition"></a></dt>
+<dd><p>Este metodo retorna todos los permisos del sistema
+:return: Retorna una lista de permisos</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="permiso.models.Permiso.getByNombre">
+<span class="sig-name descname"><span class="pre">getByNombre</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/permiso/models.html#Permiso.getByNombre"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#permiso.models.Permiso.getByNombre" title="Link to this definition"></a></dt>
+<dd><p>Este metodo retorna un permiso por su nombre
+:nombre: Nombre del permiso a buscar (str)
+:return: Retorna un Permiso</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="permiso.models.Permiso.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#permiso.models.Permiso.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="permiso.models.Permiso.nombre">
+<span class="sig-name descname"><span class="pre">nombre</span></span><a class="headerlink" href="#permiso.models.Permiso.nombre" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="permiso.models.Permiso.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#permiso.models.Permiso.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="permiso.models.Permiso.rol_set">
+<span class="sig-name descname"><span class="pre">rol_set</span></span><a class="headerlink" href="#permiso.models.Permiso.rol_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the forward and reverse sides of
+a many-to-many relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Pizza</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">toppings</span> <span class="o">=</span> <span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Topping</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;pizzas&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Pizza.toppings</span></code> and <code class="docutils literal notranslate"><span class="pre">Topping.pizzas</span></code> are <code class="docutils literal notranslate"><span class="pre">ManyToManyDescriptor</span></code>
+instances.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-permiso.tests">
+<span id="permiso-tests-module"></span><h2>permiso.tests module<a class="headerlink" href="#module-permiso.tests" title="Link to this heading"></a></h2>
+</section>
+<section id="module-permiso.urls">
+<span id="permiso-urls-module"></span><h2>permiso.urls module<a class="headerlink" href="#module-permiso.urls" title="Link to this heading"></a></h2>
+</section>
+<section id="module-permiso.views">
+<span id="permiso-views-module"></span><h2>permiso.views module<a class="headerlink" href="#module-permiso.views" title="Link to this heading"></a></h2>
+</section>
+<section id="module-permiso">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-permiso" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="manage.html" class="btn btn-neutral float-left" title="manage module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="permiso.migrations.html" class="btn btn-neutral float-right" title="permiso.migrations package" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>usuario.views &mdash; documentación de CMS web - 1.0.0</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/translations.js?v=efdbd0b9"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">cms</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">usuario.views</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para usuario.views</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Create your views here.</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">UserCategoriaForm</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">UserCategoria</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">categorias.models</span> <span class="kn">import</span> <span class="n">Categoria</span>
+<span class="kn">from</span> <span class="nn">rol.models</span> <span class="kn">import</span> <span class="n">Rol</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">user_passes_test</span>
+
+<div class="viewcode-block" id="user_admin_asigRoles">
+<a class="viewcode-back" href="../../usuario.html#usuario.views.user_admin_asigRoles">[documentos]</a>
+<span class="k">def</span> <span class="nf">user_admin_asigRoles</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funcion que comprueba si el usuario es administrador de asignacion de roles (tiene el permiso &quot;Asignar roles&quot;)</span>
+<span class="sd">    :param user: usuario a comprobar (User)</span>
+<span class="sd">    :return: True si es administrador de asignacion de roles, False en caso contrario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">admin_asigRoles</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="verUsuarios">
+<a class="viewcode-back" href="../../usuario.html#usuario.views.verUsuarios">[documentos]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_asigRoles</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">verUsuarios</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para mostrar una lista de usuarios.</span>
+
+<span class="sd">    :param request: La solicitud HTTP.</span>
+<span class="sd">    :return: La página de lista de usuarios.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">usuarios</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;usuario/verUsuarios.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;usuarios&#39;</span><span class="p">:</span> <span class="n">usuarios</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="listaUserCategoria">
+<a class="viewcode-back" href="../../usuario.html#usuario.views.listaUserCategoria">[documentos]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_asigRoles</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">listaUserCategoria</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">idUsuario</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para mostrar una lista de categorías y roles asignados a un usuario específico.</span>
+
+<span class="sd">    :param request: La solicitud HTTP.</span>
+<span class="sd">    :param idUsuario: El ID del usuario.</span>
+<span class="sd">    :return: La página de lista de categorías y roles para el usuario especificado.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">usuario</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idUsuario</span><span class="p">)</span>
+    <span class="n">userCategoriasRoles</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">usuario</span><span class="p">)</span>
+    <span class="c1"># Ordenamos por el nombre de la categoría</span>
+    <span class="n">userCategoriasRoles</span> <span class="o">=</span> <span class="n">userCategoriasRoles</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s1">&#39;categoria__nombre&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;usuario/listaUserCategoria.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;userCategoriasRoles&#39;</span><span class="p">:</span> <span class="n">userCategoriasRoles</span><span class="p">,</span> <span class="s1">&#39;usuario&#39;</span><span class="p">:</span> <span class="n">usuario</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="crearUserCategoria">
+<a class="viewcode-back" href="../../usuario.html#usuario.views.crearUserCategoria">[documentos]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_asigRoles</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">crearUserCategoria</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">idUsuario</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para crear una asignación de categoría y rol para un usuario específico.</span>
+
+<span class="sd">    :param request: La solicitud HTTP.</span>
+<span class="sd">    :param idUsuario: El ID del usuario.</span>
+<span class="sd">    :return: La página de creación de asignación de categoría y rol o redirecciona a la lista de asignaciones si se crea con éxito.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">usuario</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idUsuario</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">UserCategoriaForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">instance</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">usuario</span>
+            <span class="n">userCategoria</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">userCategoria</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">usuario</span>
+            <span class="n">userCategoria</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;usuario:listaUserCategoria&#39;</span><span class="p">,</span> <span class="n">idUsuario</span><span class="o">=</span><span class="n">usuario</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">UserCategoriaForm</span><span class="p">(</span><span class="n">initial</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">usuario</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;usuario/crearUserCategoria.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s1">&#39;usuario&#39;</span><span class="p">:</span> <span class="n">usuario</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="eliminarUserCategoria">
+<a class="viewcode-back" href="../../usuario.html#usuario.views.eliminarUserCategoria">[documentos]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_asigRoles</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eliminarUserCategoria</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">idUserCategoria</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para eliminar una asignación de categoría y rol para un usuario.</span>
+
+<span class="sd">    :param request: La solicitud HTTP.</span>
+<span class="sd">    :param idUserCategoria: El ID de la asignación de categoría y rol a eliminar.</span>
+<span class="sd">    :return: Redirecciona a la lista de asignaciones después de la eliminación.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">userCategoria</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">idUserCategoria</span><span class="p">)</span>
+    <span class="n">usuario</span> <span class="o">=</span> <span class="n">userCategoria</span><span class="o">.</span><span class="n">user</span>
+    <span class="n">userCategoria</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;usuario:listaUserCategoria&#39;</span><span class="p">,</span> <span class="n">idUsuario</span><span class="o">=</span><span class="n">usuario</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="editarUserCategoria">
+<a class="viewcode-back" href="../../usuario.html#usuario.views.editarUserCategoria">[documentos]</a>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_asigRoles</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">editarUserCategoria</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">idUserCategoria</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para editar una asignación de categoría y rol para un usuario.</span>
+
+<span class="sd">    :param request: La solicitud HTTP.</span>
+<span class="sd">    :param idUserCategoria: El ID de la asignación de categoría y rol a editar.</span>
+<span class="sd">    :return: La página de edición de asignación de categoría y rol o redirecciona a la lista de asignaciones si se edita con éxito.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">userCategoria</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">UserCategoria</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">idUserCategoria</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">UserCategoriaForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">userCategoria</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;usuario:listaUserCategoria&#39;</span><span class="p">,</span> <span class="n">idUsuario</span><span class="o">=</span><span class="n">userCategoria</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">UserCategoriaForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">userCategoria</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;usuario/crearUserCategoria.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s1">&#39;userCategoria&#39;</span><span class="p">:</span> <span class="n">userCategoria</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="index">
+<a class="viewcode-back" href="../../usuario.html#usuario.views.index">[documentos]</a>
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para la página de inicio.</span>
+
+<span class="sd">    Esta vista verifica si un usuario recién registrado y asigna el rol &quot;Suscriptor&quot; en todas las categorías.</span>
+
+<span class="sd">    :param request: La solicitud HTTP.</span>
+<span class="sd">    :return: Redirecciona a la página principal (home).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">registrado</span><span class="p">:</span>
+        <span class="n">categorías</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">categoría</span> <span class="ow">in</span> <span class="n">categorías</span><span class="p">:</span>
+            <span class="n">rol</span> <span class="o">=</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s1">&#39;Suscriptor&#39;</span><span class="p">)</span>
+            <span class="n">userCategoria</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="p">()</span>
+            <span class="n">userCategoria</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">userCategoria</span><span class="o">.</span><span class="n">categoría</span> <span class="o">=</span> <span class="n">categoría</span>
+            <span class="n">userCategoria</span><span class="o">.</span><span class="n">rol</span> <span class="o">=</span> <span class="n">rol</span>
+            <span class="n">userCategoria</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">registrado</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

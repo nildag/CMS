@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>categorias package &mdash; documentación de CMS web - 1.0.0</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=efdbd0b9"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="categorias.migrations package" href="categorias.migrations.html" />
+    <link rel="prev" title="CMS package" href="CMS.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">cms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CMS.html">CMS package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">categorias package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="categorias.migrations.html">categorias.migrations package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-categorias.admin">categorias.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-categorias.apps">categorias.apps module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#categorias.apps.CategoriasConfig"><code class="docutils literal notranslate"><span class="pre">CategoriasConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-categorias.forms">categorias.forms module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#categorias.forms.CategoriaForm"><code class="docutils literal notranslate"><span class="pre">CategoriaForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-categorias.models">categorias.models module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#categorias.models.Categoria"><code class="docutils literal notranslate"><span class="pre">Categoria</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-categorias.urls">categorias.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-categorias.views">categorias.views module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#categorias.views.borrarCategoria"><code class="docutils literal notranslate"><span class="pre">borrarCategoria()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#categorias.views.crearCategorias"><code class="docutils literal notranslate"><span class="pre">crearCategorias()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#categorias.views.editarCategoria"><code class="docutils literal notranslate"><span class="pre">editarCategoria()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#categorias.views.user_adminCategorias"><code class="docutils literal notranslate"><span class="pre">user_adminCategorias()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#categorias.views.verCategorias"><code class="docutils literal notranslate"><span class="pre">verCategorias()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-categorias">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contenido.html">contenido package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html">home package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage.html">manage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="permiso.html">permiso package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rol.html">rol package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tipoContenido.html">tipoContenido package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usuario.html">usuario package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">cms</a></li>
+      <li class="breadcrumb-item active">categorias package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/categorias.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="categorias-package">
+<h1>categorias package<a class="headerlink" href="#categorias-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="categorias.migrations.html">categorias.migrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="categorias.migrations.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="categorias.migrations.html#module-categorias.migrations.0001_initial">categorias.migrations.0001_initial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="categorias.migrations.html#categorias.migrations.0001_initial.Migration"><code class="docutils literal notranslate"><span class="pre">Migration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="categorias.migrations.html#categorias.migrations.0001_initial.Migration.dependencies"><code class="docutils literal notranslate"><span class="pre">Migration.dependencies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="categorias.migrations.html#categorias.migrations.0001_initial.Migration.initial"><code class="docutils literal notranslate"><span class="pre">Migration.initial</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="categorias.migrations.html#categorias.migrations.0001_initial.Migration.operations"><code class="docutils literal notranslate"><span class="pre">Migration.operations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="categorias.migrations.html#module-categorias.migrations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-categorias.admin">
+<span id="categorias-admin-module"></span><h2>categorias.admin module<a class="headerlink" href="#module-categorias.admin" title="Link to this heading"></a></h2>
+</section>
+<section id="module-categorias.apps">
+<span id="categorias-apps-module"></span><h2>categorias.apps module<a class="headerlink" href="#module-categorias.apps" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="categorias.apps.CategoriasConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">categorias.apps.</span></span><span class="sig-name descname"><span class="pre">CategoriasConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/apps.html#CategoriasConfig"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.apps.CategoriasConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.apps.CategoriasConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.BigAutoField'</span></em><a class="headerlink" href="#categorias.apps.CategoriasConfig.default_auto_field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.apps.CategoriasConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'categorias'</span></em><a class="headerlink" href="#categorias.apps.CategoriasConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-categorias.forms">
+<span id="categorias-forms-module"></span><h2>categorias.forms module<a class="headerlink" href="#module-categorias.forms" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="categorias.forms.CategoriaForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">categorias.forms.</span></span><span class="sig-name descname"><span class="pre">CategoriaForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/forms.html#CategoriaForm"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.forms.CategoriaForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Clase de formulario para la creación y edición de categorías.</p>
+<p>Atributos:
+- model (Categoria): El modelo de datos subyacente para el formulario.
+- fields (list): Lista de campos del modelo que se deben mostrar en el formulario.
+- labels (dict): Etiquetas personalizadas para los campos del formulario.
+- widgets (dict): Configuración personalizada de widgets para los campos del formulario.</p>
+<p>Ejemplo:
+model = Categoria
+fields = [“nombre”, “descripcion”]
+labels = {</p>
+<blockquote>
+<div><p>“nombre”: “Nombre”,
+“descripcion”: “Descripcion”,</p>
+</div></blockquote>
+<p>}
+widgets = {</p>
+<blockquote>
+<div><p>“descripcion”: forms.Textarea(attrs={“rows”: 4, “cols”: 40}),</p>
+</div></blockquote>
+<p>}</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="categorias.forms.CategoriaForm.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/categorias/forms.html#CategoriaForm.Meta"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.forms.CategoriaForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Metaclase que proporciona metadatos para el formulario.</p>
+<p>Atributos:
+- model (Categoria): El modelo de datos subyacente para el formulario.
+- fields (list): Lista de campos del modelo que se deben mostrar en el formulario.
+- labels (dict): Etiquetas personalizadas para los campos del formulario.
+- widgets (dict): Configuración personalizada de widgets para los campos del formulario.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.forms.CategoriaForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['nombre',</span> <span class="pre">'descripcion']</span></em><a class="headerlink" href="#categorias.forms.CategoriaForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.forms.CategoriaForm.Meta.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'descripcion':</span> <span class="pre">'Descripcion',</span> <span class="pre">'nombre':</span> <span class="pre">'Nombre'}</span></em><a class="headerlink" href="#categorias.forms.CategoriaForm.Meta.labels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.forms.CategoriaForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#categorias.forms.CategoriaForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias de <a class="reference internal" href="#categorias.models.Categoria" title="categorias.models.Categoria"><code class="xref py py-class docutils literal notranslate"><span class="pre">Categoria</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.forms.CategoriaForm.Meta.widgets">
+<span class="sig-name descname"><span class="pre">widgets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'descripcion':</span> <span class="pre">&lt;django.forms.widgets.Textarea</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#categorias.forms.CategoriaForm.Meta.widgets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.forms.CategoriaForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'descripcion':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'nombre':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#categorias.forms.CategoriaForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.forms.CategoriaForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#categorias.forms.CategoriaForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="categorias.forms.CategoriaForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#categorias.forms.CategoriaForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-categorias.models">
+<span id="categorias-models-module"></span><h2>categorias.models module<a class="headerlink" href="#module-categorias.models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="categorias.models.Categoria">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">categorias.models.</span></span><span class="sig-name descname"><span class="pre">Categoria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/models.html#Categoria"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.models.Categoria" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Esta clase representa una categoría dentro del sistema.</p>
+<p>Atributos:
+- nombre (str): Nombre representativo de la categoría.
+- descripcion (str): Descripción de la categoría.</p>
+<p>Ejemplo:
+nombre: «Machine Learning»
+descripcion: «Artículos de machine learning»</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="categorias.models.Categoria.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#categorias.models.Categoria.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="categorias.models.Categoria.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#categorias.models.Categoria.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.models.Categoria.contenido_set">
+<span class="sig-name descname"><span class="pre">contenido_set</span></span><a class="headerlink" href="#categorias.models.Categoria.contenido_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="categorias.models.Categoria.crear">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">crear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descripcion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/models.html#Categoria.crear"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.models.Categoria.crear" title="Link to this definition"></a></dt>
+<dd><p>Este método sirve para crear una categoría.</p>
+<p>Args:
+nombre (str): Nombre de la categoría a crear.
+descripcion (str): Descripción de la categoría a crear.</p>
+<p>Returns:
+Categoria: La categoría creada.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.models.Categoria.descripcion">
+<span class="sig-name descname"><span class="pre">descripcion</span></span><a class="headerlink" href="#categorias.models.Categoria.descripcion" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="categorias.models.Categoria.eliminar">
+<span class="sig-name descname"><span class="pre">eliminar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/models.html#Categoria.eliminar"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.models.Categoria.eliminar" title="Link to this definition"></a></dt>
+<dd><p>Método que elimina la categoría correspondiente a la instancia actual.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="categorias.models.Categoria.eliminar_por_nombre">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eliminar_por_nombre</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/models.html#Categoria.eliminar_por_nombre"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.models.Categoria.eliminar_por_nombre" title="Link to this definition"></a></dt>
+<dd><p>Esta función elimina una categoría por el nombre que es recibido como parámetro.</p>
+<p>Args:
+nombre (str): Nombre de la categoría a eliminar.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="categorias.models.Categoria.getById">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/models.html#Categoria.getById"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.models.Categoria.getById" title="Link to this definition"></a></dt>
+<dd><p>Obtenemos una categoría por el id.</p>
+<p>Args:
+id (int): El id por el cual buscaremos la categoría.</p>
+<p>Returns:
+Categoria: La categoría encontrada.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.models.Categoria.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#categorias.models.Categoria.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.models.Categoria.nombre">
+<span class="sig-name descname"><span class="pre">nombre</span></span><a class="headerlink" href="#categorias.models.Categoria.nombre" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.models.Categoria.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#categorias.models.Categoria.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="categorias.models.Categoria.obtener_por_nombre">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obtener_por_nombre</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/models.html#Categoria.obtener_por_nombre"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.models.Categoria.obtener_por_nombre" title="Link to this definition"></a></dt>
+<dd><p>Obtenemos una categoría por el nombre.</p>
+<p>Args:
+nombre (str): El nombre por el cual buscaremos la categoría.</p>
+<p>Returns:
+Categoria: La categoría encontrada, o None si no existe.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="categorias.models.Categoria.obtener_todos">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obtener_todos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/models.html#Categoria.obtener_todos"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.models.Categoria.obtener_todos" title="Link to this definition"></a></dt>
+<dd><p>Obtenemos todas las categorías.</p>
+<p>Returns:
+list: Lista de todas las categorías.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="categorias.models.Categoria.usercategoria_set">
+<span class="sig-name descname"><span class="pre">usercategoria_set</span></span><a class="headerlink" href="#categorias.models.Categoria.usercategoria_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-categorias.urls">
+<span id="categorias-urls-module"></span><h2>categorias.urls module<a class="headerlink" href="#module-categorias.urls" title="Link to this heading"></a></h2>
+</section>
+<section id="module-categorias.views">
+<span id="categorias-views-module"></span><h2>categorias.views module<a class="headerlink" href="#module-categorias.views" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="categorias.views.borrarCategoria">
+<span class="sig-prename descclassname"><span class="pre">categorias.views.</span></span><span class="sig-name descname"><span class="pre">borrarCategoria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categoriaId</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/views.html#borrarCategoria"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.views.borrarCategoria" title="Link to this definition"></a></dt>
+<dd><p>Vista para borrar una categoría.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request: La solicitud HTTP.
+categoriaId (int): El ID de la categoría a borrar.</p>
+</dd>
+<dt>Returns:</dt><dd><p>HttpResponseRedirect: Redirige a la vista de ver categorías.
+render: Renderiza la vista de ver categorías.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="categorias.views.crearCategorias">
+<span class="sig-prename descclassname"><span class="pre">categorias.views.</span></span><span class="sig-name descname"><span class="pre">crearCategorias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/views.html#crearCategorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.views.crearCategorias" title="Link to this definition"></a></dt>
+<dd><p>Vista para crear una nueva categoría.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request: La solicitud HTTP.</p>
+</dd>
+<dt>Returns:</dt><dd><p>HttpResponseRedirect: Redirige a la vista de ver categorías.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="categorias.views.editarCategoria">
+<span class="sig-prename descclassname"><span class="pre">categorias.views.</span></span><span class="sig-name descname"><span class="pre">editarCategoria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categoriaId</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/views.html#editarCategoria"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.views.editarCategoria" title="Link to this definition"></a></dt>
+<dd><p>Vista para editar una categoría.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request: La solicitud HTTP.
+categoriaId (int): El ID de la categoría a editar.</p>
+</dd>
+<dt>Returns:</dt><dd><p>HttpResponseRedirect: Redirige a la vista de ver categorías.
+render: Renderiza la vista de crear categorías.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="categorias.views.user_adminCategorias">
+<span class="sig-prename descclassname"><span class="pre">categorias.views.</span></span><span class="sig-name descname"><span class="pre">user_adminCategorias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/views.html#user_adminCategorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.views.user_adminCategorias" title="Link to this definition"></a></dt>
+<dd><p>Función que comprueba si el usuario es administrador de categorías (tiene el permiso «Administrar categorías»).</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>user (User): El usuario a comprobar.</p>
+</dd>
+<dt>Returns:</dt><dd><p>bool: True si es administrador de categorías, False en caso contrario.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="categorias.views.verCategorias">
+<span class="sig-prename descclassname"><span class="pre">categorias.views.</span></span><span class="sig-name descname"><span class="pre">verCategorias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/categorias/views.html#verCategorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#categorias.views.verCategorias" title="Link to this definition"></a></dt>
+<dd><p>Vista para ver todas las categorías.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request: La solicitud HTTP.</p>
+</dd>
+<dt>Returns:</dt><dd><p>render: Renderiza la vista de ver categorías.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-categorias">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-categorias" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="CMS.html" class="btn btn-neutral float-left" title="CMS package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="categorias.migrations.html" class="btn btn-neutral float-right" title="categorias.migrations package" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
