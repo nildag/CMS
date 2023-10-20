@@ -29,12 +29,12 @@
         </div>
         <br>
 
-        <table class="table">
+        <table class="table" id="miTabla">
             <thead>
                 <tr>
-                    <th scope="col">Titulo</th>
-                    <th scope="col">Autor</th>
-                    <th scope="col">Categoria</th>
+                    <th scope="col" data-columna="titulo">Titulo</th>
+                    <th scope="col" data-columna="autor">Autor</th>
+                    <th scope="col" data-columna="categoria">Categoria</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
@@ -56,22 +56,106 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script>
-        // Script para mostrar y ocultar la sección de búsqueda
-        const searchButton = document.getElementById('searchButton');
-        const seccionBusqueda = document.getElementById('seccionBusqueda'); 
-        searchButton.addEventListener('click', function() {
-            seccionBusqueda.classList.toggle('d-none');
-            if (!seccionBusqueda.classList.contains('d-none')) {
-                document.getElementById('busquedaIngresada').focus(); 
-            }
-        });
+        $(document).ready(function() {
+            // Ordenar tabla al hacer clic en el encabezado
+            $("#miTabla th").click(function() {
+                var columna = $(this).data("columna");
+                var orden = $(this).attr("data-order");
+
+                // Cambiar el orden (ascendente o descendente)
+                orden = (orden === "desc") ? "asc" : "desc";
+                $(this).attr("data-order", orden);
+
+                // Obtener el índice de la columna
+                var columnIndex = $(this).index();
+
+                // Obtener todas las filas de la tabla (excepto la fila del encabezado)
+                var rows = $('#miTabla tbody tr').get();
+
+                // Ordenar las filas según los valores de la columna seleccionada
+                rows.sort(function(a, b) {
+                    var A = $(a).children('td').eq(columnIndex).text().toUpperCase();
+                    var B = $(b).children('td').eq(columnIndex).text().toUpperCase();
+
+                    if (orden === "asc") {
+                        if(A < B) {
+                            return -1;
+                        }
+                        if(A > B) {
+                            return 1;
+                        }
+                    } else {
+                        if(A > B) {
+                            return -1;
+                        }
+                        if(A < B) {
+                            return 1;
+                        }
+                    }
+
+                    return 0;
+                });
+
+                // Vaciar la tabla y volver a agregar las filas en el nuevo orden
+                $.each(rows, function(index, row) {
+                    $('#miTabla').children('tbody').append(row);
+                });
+            });
+
+            // Script para mostrar y ocultar la sección de búsqueda
+            const searchButton = document.getElementById('searchButton');
+            const seccionBusqueda = document.getElementById('seccionBusqueda'); 
+            searchButton.addEventListener('click', function() {
+                seccionBusqueda.classList.toggle('d-none');
+                if (!seccionBusqueda.classList.contains('d-none')) {
+                    document.getElementById('busquedaIngresada').focus(); 
+                }
+            });
         
-        // Script para filtrar la tabla de contenidos con el buscador
-        $(document).ready(function(){
+            // Script para filtrar la tabla de contenidos con el buscador
             $("#busquedaIngresada").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
                 $("#tablaContenido tr").filter(function() {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+                });
+
+                // Volver a ordenar después de aplicar el filtro
+                var columna = $("#miTabla th[data-order='desc'], #miTabla th[data-order='asc']").first().data("columna");
+                var orden = $("#miTabla th[data-order='desc'], #miTabla th[data-order='asc']").first().attr("data-order");
+
+                // Obtener el índice de la columna
+                var columnIndex = $("#miTabla th[data-columna='" + columna + "']").index();
+
+                // Obtener todas las filas de la tabla (excepto la fila del encabezado)
+                var rows = $('#miTabla tbody tr').get();
+
+                // Ordenar las filas según los valores de la columna seleccionada
+                rows.sort(function(a, b) {
+                    var A = $(a).children('td').eq(columnIndex).text().toUpperCase();
+                    var B = $(b).children('td').eq(columnIndex).text().toUpperCase();
+
+                    if (orden === "asc") {
+                        if(A < B) {
+                            return -1;
+                        }
+                        if(A > B) {
+                            return 1;
+                        }
+                    } else {
+                        if(A > B) {
+                            return -1;
+                        }
+                        if(A < B) {
+                            return 1;
+                        }
+                    }
+
+                    return 0;
+                });
+
+                // Vaciar la tabla y volver a agregar las filas en el nuevo orden
+                $.each(rows, function(index, row) {
+                    $('#miTabla').children('tbody').append(row);
                 });
             });
         });
