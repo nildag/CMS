@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from .models import Contenido
+from .models import Contenido,Categoria
 from .forms import ContenidoForm
 from usuario.models import UserCategoria
 from django.shortcuts import render, redirect
@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from usuario.models import User
 from contenido.models import Valoracion
+from django.db.models import Q
 
 def user_autor(user):
 
@@ -229,3 +230,25 @@ def valorarContenido(request, id):
         # Muestra el contenido específico para que el usuario pueda valorarlo
         contenido = get_object_or_404(Contenido, id=id)
         return render(request, 'contenido/valorarContenido.html', {'contenido': contenido})
+
+
+def buscarContenido(request):
+    """
+    Vista para buscar contenidos por título de contenido o nombre de categoría.
+
+    Args:
+        request: Objeto de solicitud HTTP.
+
+    Returns:
+        HttpResponse: Respuesta HTTP que muestra los resultados de la búsqueda.
+    """
+    query = request.GET.get('q')
+
+    contenidos = Contenido.objects.filter(
+        Q(titulo__icontains=query) |
+        Q(categoria__nombre__icontains=query) |
+        Q(autor__first_name__icontains=query) |
+        Q(autor__last_name__icontains=query)
+    )
+
+    return render(request, 'contenido/listaTodos.html', {'contenidos': contenidos, 'categorias': Categoria.objects.all()})
