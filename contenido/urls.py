@@ -12,6 +12,6 @@ urlpatterns = [
     path('listaTodos/', views.listaTodos, name='lista_todos'),
     path('listaPublicador/', views.listaPublicador, name='lista_publicador'),
     path('listaEditor/', views.listaEditor, name='lista_editor'),
-    path('valorar/<int:id>/', views.valorarContenido, name='valorar_contenido'),  # Nueva URL
-    path('buscar/', views.buscarContenido, name='buscar_contenido'), # Nueva URL para buscar contenido
+    path('valorar/<int:id>/', views.valorarContenido, name='valorar_contenido'),
+    path('buscar/', views.buscarContenido, name='buscar_contenido'),
 ]

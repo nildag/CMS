@@ -59,7 +59,7 @@ def crearUserCategoria(request, idUsuario):
     if request.method == 'POST':
         form = UserCategoriaForm(request.POST)
         if form.is_valid():
-            form.instance.user = usuario
+            form.instance.User = usuario
             userCategoria = form.save(commit=False)
             userCategoria.user = usuario
             userCategoria.save()
@@ -110,13 +110,13 @@ def index(request):
     :param request: La solicitud HTTP.
     :return: Redirecciona a la página principal (home).
     """
-    if request.user.registrado:
-        categorías = Categoria.objects.all()
-        for categoría in categorías:
+    if request.user.registrado == True:
+        categorias = Categoria.objects.all()
+        for categoria in categorias:
             rol = Rol.objects.get(nombre='Suscriptor')
             userCategoria = UserCategoria()
             userCategoria.user = request.user
-            userCategoria.categoría = categoría
+            userCategoria.categoria = categoria
             userCategoria.rol = rol
             userCategoria.save()
         request.user.registrado = False
