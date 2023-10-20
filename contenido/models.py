@@ -34,15 +34,6 @@ class Contenido(models.Model):
         verbose_name_plural = "Contenidos"
         db_table = "contenido"
 
-class Valoracion(models.Model):
-    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    puntuacion = models.PositiveIntegerField()  # Aquí puedes usar un rango de 1 a 5, por ejemplo
-    fecha = models.DateTimeField(auto_now_add=True)
-    def __str__(self):
-        return f"Valoración de {self.usuario.username} para {self.contenido.titulo}"
-
-
     @classmethod
     def for_user(self, user):
 
@@ -64,3 +55,11 @@ class Valoracion(models.Model):
         """
 
         return Contenido.objects.filter(categoria__in=categorias)
+
+class Valoracion(models.Model):
+    contenido = models.ForeignKey(Contenido, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    puntuacion = models.PositiveIntegerField()  # Aquí puedes usar un rango de 1 a 5, por ejemplo
+    fecha = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"Valoración de {self.usuario.username} para {self.contenido.titulo}"

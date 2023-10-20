@@ -102,7 +102,7 @@ class User(AbstractUser):
 
         categorias = Categoria.objects.all()
         for categoria in categorias:
-            if self.tiene_permiso_en_categoria("Crear contenido", categoria):
+            if categoria.nombre != "System" and self.tiene_permiso_en_categoria("Crear contenido", categoria):
                 return True
         return False
     

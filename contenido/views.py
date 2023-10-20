@@ -5,6 +5,7 @@ from usuario.models import UserCategoria
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
+from usuario.models import User
 
 def user_autor(user):
 
