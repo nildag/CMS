@@ -8,8 +8,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Detalles del Contenido</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <link rel="stylesheet" href="{% static 'contenido/styles.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <html lang="es">
 <head>
@@ -63,6 +63,19 @@
                 stars[i].classList.remove("checked");
             }
         }
+
+    
+    for (let i = 0; i < stars.length; i++) {
+        stars[i].classList.remove("checked");
+        stars[i].style.color = 'black'; // Establece el color a negro
+    }
+
+    
+    for (let i = 0; i < rating; i++) {
+        stars[i].classList.add("checked");
+        stars[i].style.color = 'orange'; // Establece el color a naranja
+    }
+
         document.getElementById("selectedRating").value = rating;
     }
 
