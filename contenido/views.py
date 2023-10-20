@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from .models import Contenido,Categoria
+from .models import Contenido
+from .models import Categoria
 from .forms import ContenidoForm
 from usuario.models import UserCategoria
 from django.shortcuts import render, redirect
