@@ -1,50 +1,42 @@
-# pull official base image
+# Cargamos la imagen que contendrá el contenedor
 FROM python:3.11.4-slim-buster
 
-# set work directory
-WORKDIR /usr/src/app
+# Creamos el directorio para el app user
+RUN mkdir -p /home/app
 
-# set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# Creamos el app user
+RUN addgroup --system app && adduser --system --group app
 
-# install system dependencies
+# Establecemos las variables de entorno
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+
+# Creamos los directorios. Establecemos el directorio de trabajo
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+# Instalamos/actualizamos las dependencias del systema
 RUN apt-get update && apt-get install -y netcat
 
-# install dependencies
+# Instalamos las dependencias del proyecto
 RUN pip install --upgrade pip
 COPY ../requirements.txt .
 RUN pip install -r requirements.txt
 
-# copy entrypoint.dev.sh
-#COPY entrypoint.dev.sh /usr/src/app
-
-# Formato linux
-#RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.dev.sh
-# Otorgamos todos los permisos al archivo entrypoint
-#RUN chmod a+x /usr/src/app/entrypoint.dev.sh
-
-# copy project
-COPY .. /usr/src/app
-
-# Creamos el app user
-#RUN addgroup --system app && adduser --system --group app
+# Copiamos el proyecto al HOME del contenedor
+COPY .. $APP_HOME
 
 # Cambiamos todos los archivos del directorio para que sean propietarios del app user
-#RUN chown -R app:app /usr/src/app
+RUN chown -R app:app $APP_HOME
 
 # Cambiamos al app user
-#USER app
+USER app
 
-# Formato linux
-RUN sed -i 's/\r$//g' /usr/src/app/docker/entrypoint.dev.sh
+# Damos formato de salto de linea de linux
+RUN sed -i 's/\r$//g'  $APP_HOME/docker/entrypoint.dev.sh
 
 # Otorgamos todos los permisos al archivo entrypoint
-RUN chmod a+x /usr/src/app/docker/entrypoint.dev.sh
-# Otorgamos todos los permisos al archivo entrypoint
-RUN chmod a+r /usr/src/app/docker/entrypoint.dev.sh
+RUN chmod a+x $APP_HOME/docker/entrypoint.dev.sh
 
-# run entrypoint.sh
-ENTRYPOINT ["./docker/entrypoint.dev.sh"]
-
-#CMD [ "sh", "/usr/src/app/entrypoint.sh" ]
+# Ejecutamos el Entrypoint
+ENTRYPOINT ["/home/app/web/docker/entrypoint.dev.sh"]

@@ -1,6 +1,6 @@
 # BUILDER #
 
-# Imagen del HOST
+# Cargamos la imagen que contendrá el contenedor
 FROM python:3.11.4-slim-buster as builder
 
 # Directorio de trabajo
