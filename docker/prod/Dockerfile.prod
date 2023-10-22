@@ -1,0 +1,69 @@
+# BUILDER #
+
+# Cargamos la imagen que contendrá el contenedor
+FROM python:3.11.4-slim-buster as builder
+
+# Directorio de trabajo
+WORKDIR /usr/src/app
+
+# Variables de entorno
+ENV PYTHONDONTWRITEBYTECODE 1	# Impide que python escriba archivos pyc en disco
+ENV PYTHONUNBUFFERED 1	# Impide que python almacene en buffer stdout y stderr
+
+# Instalacion/Actualizacion de dependencias
+RUN apt-get update && apt-get install -y --no-install-recommends gcc
+RUN pip install --upgrade pip	# Instalacion/Actualizacion de pip
+
+# Instalacion de los requirements del proyecto
+COPY ../requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+
+# FINAL #
+
+# Imagen base
+FROM python:3.11.4-slim-buster
+
+# Creamos el directorio para el app user
+RUN mkdir -p /home/app
+
+# Creamos el app user
+RUN addgroup --system app && adduser --system --group app
+
+# Establecemos las variables de entorno
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+
+# Creamos los directorios
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+# Instalamos/Actualizamos las dependencias
+RUN apt-get update && apt-get install -y --no-install-recommends netcat
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install --no-cache /wheels/*
+
+# Instalamos el servidor
+RUN pip install gunicorn
+
+# Copiamos el proyecto al HOME del contenedor
+COPY .. $APP_HOME
+
+# Creamos el directorio de staticfiles
+RUN mkdir $APP_HOME/staticfiles
+
+# Cambiamos todos los archivos del directorio para que sean propietarios del app user
+RUN chown -R app:app $APP_HOME
+
+# Cambiamos al app user
+USER app
+
+# Damos formato de salto de linea de linux
+RUN sed -i 's/\r$//g'  $APP_HOME/docker/prod/entrypoint.prod.sh
+# Otorgamos todos los permisos al archivo entrypoint
+RUN chmod a+x $APP_HOME/docker/prod/entrypoint.prod.sh
+
+# Ejecutamos el Entrypoint
+ENTRYPOINT ["/home/app/web/docker/prod/entrypoint.prod.sh"]

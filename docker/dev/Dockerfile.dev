@@ -1,0 +1,42 @@
+# Cargamos la imagen que contendrá el contenedor
+FROM python:3.11.4-slim-buster
+
+# Creamos el directorio para el app user
+RUN mkdir -p /home/app
+
+# Creamos el app user
+RUN addgroup --system app && adduser --system --group app
+
+# Establecemos las variables de entorno
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+
+# Creamos los directorios. Establecemos el directorio de trabajo
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+# Instalamos/actualizamos las dependencias del systema
+RUN apt-get update && apt-get install -y netcat
+
+# Instalamos las dependencias del proyecto
+RUN pip install --upgrade pip
+COPY ../requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copiamos el proyecto al HOME del contenedor
+COPY .. $APP_HOME
+
+# Cambiamos todos los archivos del directorio para que sean propietarios del app user
+RUN chown -R app:app $APP_HOME
+
+# Cambiamos al app user
+USER app
+
+# Damos formato de salto de linea de linux
+RUN sed -i 's/\r$//g'  $APP_HOME/docker/dev/entrypoint.dev.sh
+
+# Otorgamos todos los permisos al archivo entrypoint
+RUN chmod a+x $APP_HOME/docker/dev/entrypoint.dev.sh
+
+# Ejecutamos el Entrypoint
+ENTRYPOINT ["/home/app/web/docker/dev/entrypoint.dev.sh"]
