@@ -6,85 +6,87 @@
 <html lang="es">
 
 <head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
-        rel="stylesheet">
+    <!-- Tus enlaces CSS y otros encabezados -->
+    <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
 </head>
 
 <body>
-<div class="container mt-4">
-    <h2>Tabla de contenidos</h2>
-    <div class="row">
-        <div class="col-md-9">
-            <!-- tablas de contenidos -->
-            <table class="table" id="miTabla">
-                <thead>
-                    <tr>
-                        <th scope="col" data-columna="titulo">Titulo <i class='fas fa-sort'></i></th>
-                        <th scope="col" data-columna="autor">Autor <i class='fas fa-sort'></i></th>
-                        <th scope="col" data-columna="fecha">Fecha de Publicación <i class='fas fa-sort'></i></th>
-                        <th scope="col" data-columna="categoria">Categoria <i class='fas fa-sort'></i></th>
-                        <th scope="col">Opciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaContenido">
-                    {% for contenido in contenidos %}
-                    <tr>
-                        <td>{{ contenido.titulo }}</td>
-                        <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
-                        <td class="fechaPublicacion">{{ contenido.fecha_creacion|date:"Y-m-d" }}</td>
-                        <td>{{ contenido.categoria.nombre }}</td>
-                        <td>
-                            <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <div class="container mt-4">
+        <h2>Tabla de contenidos</h2>
 
+        <!-- Contenido de la tabla y filtros -->
+        <div class="row">
+            <!-- Contenido de la tabla -->
+            <div class="col-md-9">
+                <!-- Tabla de contenidos -->
+                <table class="table dataTable" id="miTabla">
+                    <!-- Encabezados de la tabla -->
+                    <thead>
+                        <tr>
+                            <th>Titulo</th>
+                            <th>Autor</th>
+                            <th>Fecha de Publicación</th>
+                            <th>Categoria</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <!-- Cuerpo de la tabla -->
+                    <tbody id="tablaContenido">
+                        {% for contenido in contenidos %}
+                        <tr>
+                            <td>{{ contenido.titulo }}</td>
+                            <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
+                            <td class="fechaPublicacion">{{ contenido.fecha_creacion|date:"Y-m-d" }}</td>
+                            <td class="categoria">{{ contenido.categoria.nombre }}</td>
+                            <td>
+                                <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Seccion de busqueda y filtrado -->
-        <div class="col-md-2">
-            <div class="d-flex flex-column">
-                <!-- Seccion de busqueda -->
-                <h5>Buscar contenido</h5>
-                <div class="mb-3" id="seccionBusqueda">
-                    <input type="text" class="form-control w-100" id="busquedaIngresada"
-                        placeholder="Introduzca su busqueda">
+            <!-- Filtros -->
+            <div class="col-md-3">
+                <!-- Filtro de fechas -->
+                <div class="mb-3">
+                    <label for="startDate" class="form-label">Fecha de inicio</label>
+                    <input type="text" class="form-control" id="startDate" placeholder="Fecha de inicio">
                 </div>
-                
-                <!-- Seccion de filtrado -->
-                <h5>Filtrar por fecha</h5>
-                <!-- Filtro por fechas con Bootstrap-datepicker -->
-                <div class="mb-3" id="seccionFiltrado">
-                    <input type="text" class="form-control mb-2" id="startDate" placeholder="Fecha de inicio" autocomplete="off">
-                    <input type="text" class="form-control" id="endDate" placeholder="Fecha de fin" autocomplete="off">
-                    <div class="mt-2">
-                        <button class="btn btn-primary" type="button" id="filterButton">Mostrar coincidencias</button>
-                    </div>
+                <div class="mb-3">
+                    <label for="endDate" class="form-label">Fecha de fin</label>
+                    <input type="text" class="form-control" id="endDate" placeholder="Fecha de fin">
                 </div>
-        
-                <!-- Botón para limpiar los filtros -->
-                <button class="btn btn-secondary" type="button" id="botonLimpiarFiltros">
-                    Limpiar Filtros
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eraser"
-                        viewBox="0 0 16 16">
-                        <path
-                            d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm2.121.707a1 1 0 0 0-1.414 0L4.16 7.547l5.293 5.293 4.633-4.633a1 1 0 0 0 0-1.414l-3.879-3.879zM8.746 13.547 3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z" />
-                    </svg>
-                </button>
+
+                <!-- Filtro de categorías -->
+                <div class="mb-3">
+                    <label for="categoriaFiltro" class="form-label">Categoría</label>
+                    <select class="form-select" id="categoriaFiltro">
+                        <option value="">Todas las Categorías</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.nombre }}">{{ categoria.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Botón para limpiar filtros -->
+                <button class="btn btn-secondary" id="limpiarFiltros">Limpiar Filtros</button>
             </div>
         </div>
     </div>
-</div>
 
-    <!-- Scripts -->
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <!-- Tus enlaces JS al final del cuerpo del documento -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js">
-    </script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
     <script>
         $(document).ready(function () {
+            // Inicializar la tabla con DataTables
+            $('#miTabla').DataTable();
+
             // Inicializar los datepickers
             $('#startDate').datepicker({
                 autoclose: true,
@@ -100,14 +102,38 @@
                 endDate: new Date() // No permitir fechas futuras
             });
 
-            // Filtro por término de búsqueda
-            $('#busquedaIngresada').keyup(function () {
-                var valorBuscado = $(this).val().toLowerCase();
+            // Escuchar eventos de cambio en los campos de fecha y categoría
+            $('#startDate, #endDate, #categoriaFiltro').change(function () {
+                // Obtener valores de los campos
+                var startDateString = $('#startDate').val();
+                var endDateString = $('#endDate').val();
+                var categoriaSeleccionada = $('#categoriaFiltro').val();
 
-                // Filtrar las filas de la tabla por término de búsqueda
+                // Filtrar las filas de la tabla por fechas y categoría
                 $('#tablaContenido tr').each(function () {
-                    var contenidoTexto = $(this).text().toLowerCase();
-                    if (contenidoTexto.includes(valorBuscado)) {
+                    var fechaPublicacionString = $(this).find('.fechaPublicacion').text();
+                    var categoriaContenido = $(this).find('.categoria').text();
+
+                    // Verificar si el contenido cumple con los filtros
+                    var cumpleFiltros = true;
+
+                    // Filtrar por fechas
+                    if (startDateString && endDateString) {
+                        var fechaPublicacion = new Date(fechaPublicacionString);
+                        var startDate = new Date(startDateString);
+                        var endDate = new Date(endDateString);
+                        if (fechaPublicacion < startDate || fechaPublicacion > endDate) {
+                            cumpleFiltros = false;
+                        }
+                    }
+
+                    // Filtrar por categoría
+                    if (categoriaSeleccionada && categoriaContenido !== categoriaSeleccionada) {
+                        cumpleFiltros = false;
+                    }
+
+                    // Mostrar u ocultar la fila según los filtros
+                    if (cumpleFiltros) {
                         $(this).show();
                     } else {
                         $(this).hide();
@@ -115,57 +141,18 @@
                 });
             });
 
-            // Script para filtrar la tabla de contenidos por fechas
-            $('#filterButton').click(function () {
-                var startDateString = $('#startDate').val();
-                var endDateString = $('#endDate').val();
+            // Escuchar el evento de clic en el botón de limpiar filtros
+            $('#limpiarFiltros').click(function () {
+                // Restablecer los valores de los campos de fecha y categoría
+                $('#startDate').val('');
+                $('#endDate').val('');
+                $('#categoriaFiltro').val('');
 
-                // Validar las fechas
-                if (startDateString === '' || endDateString === '') {
-                    alert('Por favor, selecciona ambas fechas.');
-                    return;
-                }
-
-                // Convertir las fechas a objetos Date
-                var startDate = new Date(startDateString);
-                var endDate = new Date(endDateString);
-
-                // Filtrar las filas de la tabla por las fechas seleccionadas
-                $('#tablaContenido tr').hide();
-                $('#tablaContenido tr').each(function () {
-                    // Obtener la fecha de publicación de la fila y convertirla a objeto Date
-                    var fechaPublicacionString = $(this).find('.fechaPublicacion').text();
-                    var fechaPublicacion = new Date(fechaPublicacionString);
-
-                    // Comparar las fechas y mostrar las filas que cumplen con el filtro de fecha
-                    if (fechaPublicacion >= startDate && fechaPublicacion <= endDate) {
-                        // Obtener el término de búsqueda y convertirlo a minúsculas
-                        var terminoBusqueda = $('#busquedaIngresada').val().toLowerCase();
-                        // Obtener el texto de la fila y convertirlo a minúsculas
-                        var contenidoTexto = $(this).text().toLowerCase();
-
-                        // Comparar el texto de la fila con el término de búsqueda y mostrar las filas que coinciden
-                        if (contenidoTexto.includes(terminoBusqueda)) {
-                            $(this).show();
-                        }
-                    }
-                });
-            });
-
-            // Botón para limpiar los filtros
-            $('#botonLimpiarFiltros').click(function () {
-                // Restablecer el valor del campo de búsqueda y mostrar todas las filas
-                $('#busquedaIngresada').val('');
+                // Mostrar todas las filas en la tabla
                 $('#tablaContenido tr').show();
-
-                // Restablecer los valores de los datepickers
-                $('#startDate').datepicker('setDate', null);
-                $('#endDate').datepicker('setDate', null);
             });
-
         });
     </script>
-
 </body>
 
 </html>

@@ -151,15 +151,15 @@ def verContenido(request, id):
     return render(request, 'contenido/verContenido.html', {'contenido': contenido})
 
 def listaTodos(request):
-
     """
     Vista para mostrar la lista de contenidos de todos los usuarios.
     :param request: Objeto de solicitud HTTP.
     :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
     """
-
     contenido = Contenido.objects.all()
-    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido})
+    categorias = Categoria.objects.all()  # Obtener todas las categorías
+    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias})
+
 
 @login_required
 @user_passes_test(user_publicador)
