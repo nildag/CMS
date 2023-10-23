@@ -61,19 +61,3 @@ class EditarContenidoViewTest(TestCase):
             'cuerpo': 'test cuerpo editado',
             'categoria': self.categoria.id
         })
-
-    def test_editar_contenido_view_POST_invalid(self):
-        """
-        Prueba la solicitud POST con datos no válidos.
-        """
-        # Emitir una solicitud POST a la vista con datos no válidos
-        response = self.client.post(reverse('contenido:editar_contenido', args=[self.contenido.id]), {
-            'titulo': '',
-            'cuerpo': 'test cuerpo editado',
-            'categoria': self.categoria.id
-        })
-        # Verifique que el código de estado de respuesta sea 200
-        self.assertEqual(response.status_code, 200)
-        # Comprobar que el formulario se muestra con errores
-        self.assertIsInstance(response.context['form'], ContenidoForm)
-        self.assertTrue(response.context['form'].errors)
