@@ -11,65 +11,78 @@
 </head>
 
 <body>
-
-    <div class="container mt-4">
-        <h2>Tabla de contenidos</h2>
-        <br>
-        <!-- Boton buscar para mostrar buscador -->
-        <div class="col-md-3 d-flex justify-content-start align-items-center mb-3">
-            <input type="text" class="form-control" id="busquedaIngresada"
-                placeholder="Busque por título, autor o categoria">
+<div class="container mt-4">
+    <h2>Tabla de contenidos</h2>
+    <div class="row">
+        <div class="col-md-9">
+            <!-- tablas de contenidos -->
+            <table class="table" id="miTabla">
+                <thead>
+                    <tr>
+                        <th scope="col" data-columna="titulo">Titulo <i class='fas fa-sort'></i></th>
+                        <th scope="col" data-columna="autor">Autor <i class='fas fa-sort'></i></th>
+                        <th scope="col" data-columna="fecha">Fecha de Publicación <i class='fas fa-sort'></i></th>
+                        <th scope="col" data-columna="categoria">Categoria <i class='fas fa-sort'></i></th>
+                        <th scope="col">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaContenido">
+                    {% for contenido in contenidos %}
+                    <tr>
+                        <td>{{ contenido.titulo }}</td>
+                        <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
+                        <td class="fechaPublicacion">{{ contenido.fecha_creacion|date:"Y-m-d" }}</td>
+                        <td>{{ contenido.categoria.nombre }}</td>
+                        <td>
+                            <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        <br>
-            <!-- Botón para limpiar los filtros -->
-            <div>
-            <!-- Filtro por fechas con Bootstrap-datepicker -->
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" id="startDate" placeholder="Fecha de inicio" autocomplete="off">
-                <div class="input-group-append">
-                    <span class="input-group-text"> hasta </span>
+
+
+        <!-- Seccion de busqueda y filtrado -->
+        <div class="col-md-2">
+            <div class="d-flex flex-column">
+                <!-- Seccion de busqueda -->
+                <h5>Buscar contenido</h5>
+                <div class="mb-3" id="seccionBusqueda">
+                    <input type="text" class="form-control w-100" id="busquedaIngresada"
+                        placeholder="Introduzca su busqueda">
                 </div>
-                <input type="text" class="form-control" id="endDate" placeholder="Fecha de fin" autocomplete="off">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" id="filterButton">Filtrar</button>
+                
+                <!-- Seccion de filtrado -->
+                <h5>Filtrar por fecha</h5>
+                <!-- Filtro por fechas con Bootstrap-datepicker -->
+                <div class="mb-3" id="seccionFiltrado">
+                    <input type="text" class="form-control mb-2" id="startDate" placeholder="Fecha de inicio" autocomplete="off">
+                    <input type="text" class="form-control" id="endDate" placeholder="Fecha de fin" autocomplete="off">
+                    <div class="mt-2">
+                        <button class="btn btn-primary" type="button" id="filterButton">Mostrar coincidencias</button>
+                    </div>
                 </div>
+        
+                <!-- Botón para limpiar los filtros -->
+                <button class="btn btn-secondary" type="button" id="botonLimpiarFiltros">
+                    Limpiar Filtros
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eraser"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm2.121.707a1 1 0 0 0-1.414 0L4.16 7.547l5.293 5.293 4.633-4.633a1 1 0 0 0 0-1.414l-3.879-3.879zM8.746 13.547 3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z" />
+                    </svg>
+                </button>
             </div>
-            <!-- Botón para limpiar los filtros -->
-            <button class="btn btn-secondary" type="button" id="clearFiltersButton">Limpiar Filtros</button>
         </div>
-
-        <!-- tablas de contenidos -->
-        <table class="table" id="miTabla">
-            <thead>
-                <tr>
-                    <th scope="col" data-columna="titulo">Titulo <i class='fas fa-sort'></i></th>
-                    <th scope="col" data-columna="autor">Autor <i class='fas fa-sort'></i></th>
-                    <th scope="col" data-columna="fecha">Fecha de Publicación <i class='fas fa-sort'></i></th>
-                    <th scope="col" data-columna="categoria">Categoria <i class='fas fa-sort'></i></th>
-                    <th scope="col">Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaContenido">
-                {% for contenido in contenidos %}
-                <tr>
-                    <td>{{ contenido.titulo }}</td>
-                    <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
-                    <td class="fechaPublicacion">{{ contenido.fecha_creacion|date:"Y-m-d" }}</td>
-                    <td>{{ contenido.categoria.nombre }}</td>
-                    <td>
-                        <a href="{% url 'contenido:ver_contenido' contenido.id %}"
-                            class="btn btn-info btn-sm">Ver</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
     </div>
+</div>
 
+    <!-- Scripts -->
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js">
+    </script>
     <script>
         $(document).ready(function () {
             // Inicializar los datepickers
@@ -89,12 +102,12 @@
 
             // Filtro por término de búsqueda
             $('#busquedaIngresada').keyup(function () {
-                var searchTerm = $(this).val().toLowerCase();
+                var valorBuscado = $(this).val().toLowerCase();
 
                 // Filtrar las filas de la tabla por término de búsqueda
                 $('#tablaContenido tr').each(function () {
                     var contenidoTexto = $(this).text().toLowerCase();
-                    if (contenidoTexto.includes(searchTerm)) {
+                    if (contenidoTexto.includes(valorBuscado)) {
                         $(this).show();
                     } else {
                         $(this).hide();
@@ -138,21 +151,23 @@
                     }
                 });
             });
-        });
 
             // Botón para limpiar los filtros
-             $('#clearFiltersButton').click(function () {
-            // Restablecer el valor del campo de búsqueda y mostrar todas las filas
-            $('#busquedaIngresada').val('');
-            $('#tablaContenido tr').show();
+            $('#botonLimpiarFiltros').click(function () {
+                // Restablecer el valor del campo de búsqueda y mostrar todas las filas
+                $('#busquedaIngresada').val('');
+                $('#tablaContenido tr').show();
 
-            // Restablecer los valores de los datepickers
-            $('#startDate').datepicker('setDate', null);
-            $('#endDate').datepicker('setDate', null);
+                // Restablecer los valores de los datepickers
+                $('#startDate').datepicker('setDate', null);
+                $('#endDate').datepicker('setDate', null);
+            });
+
         });
     </script>
 
 </body>
+
 </html>
 
 {% endblock %}
