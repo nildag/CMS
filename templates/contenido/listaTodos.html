@@ -6,7 +6,6 @@
 <html lang="es">
 
 <head>
-    <!-- Tus enlaces CSS y otros encabezados -->
     <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
 </head>
@@ -52,12 +51,12 @@
             <div class="col-md-3">
                 <!-- Filtro de fechas -->
                 <div class="mb-3">
-                    <label for="startDate" class="form-label">Fecha de inicio</label>
-                    <input type="text" class="form-control" id="startDate" placeholder="Fecha de inicio">
+                    <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+                    <input type="text" class="form-control" id="fechaInicio" placeholder="Fecha de inicio">
                 </div>
                 <div class="mb-3">
-                    <label for="endDate" class="form-label">Fecha de fin</label>
-                    <input type="text" class="form-control" id="endDate" placeholder="Fecha de fin">
+                    <label for="fechaFin" class="form-label">Fecha de fin</label>
+                    <input type="text" class="form-control" id="fechaFin" placeholder="Fecha de fin">
                 </div>
 
                 <!-- Filtro de categorías -->
@@ -77,36 +76,55 @@
         </div>
     </div>
 
-    <!-- Tus enlaces JS al final del cuerpo del documento -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
+    <!-- Scripts -->
     <script>
         $(document).ready(function () {
             // Inicializar la tabla con DataTables
-            $('#miTabla').DataTable();
+            $('#miTabla').DataTable(
+                {
+                    language:{
+                        search: "Buscar:",
+                        lengthMenu: "Mostrar _MENU_ contenidos por página",
+                        zeroRecords: "No se encontraron resultados",
+                        info: "Mostrando página _PAGE_ de _PAGES_",
+                        infoEmpty: "No hay registros disponibles",
+                        infoFiltered: "(filtrado de _MAX_ registros totales)",
+                        paginate: {
+                            first: "Primero",
+                            last: "Último",
+                            next: "Siguiente",
+                            previous: "Anterior"
+                        }
+                    },
+                    ordering: true
+                }
+            );
 
             // Inicializar los datepickers
-            $('#startDate').datepicker({
+            $('#fechaInicio').datepicker({
                 autoclose: true,
                 format: 'yyyy-mm-dd', // Formato de fecha deseado
                 todayHighlight: true,
-                endDate: new Date() // No permitir fechas futuras
+                fechaFin: new Date() // No permitir fechas futuras
             });
 
-            $('#endDate').datepicker({
+            $('#fechaFin').datepicker({
                 autoclose: true,
                 format: 'yyyy-mm-dd',
                 todayHighlight: true,
-                endDate: new Date() // No permitir fechas futuras
+                fechaFin: new Date() // No permitir fechas futuras
             });
 
             // Escuchar eventos de cambio en los campos de fecha y categoría
-            $('#startDate, #endDate, #categoriaFiltro').change(function () {
+            $('#fechaInicio, #fechaFin, #categoriaFiltro').change(function () {
                 // Obtener valores de los campos
-                var startDateString = $('#startDate').val();
-                var endDateString = $('#endDate').val();
+                var fechaInicioString = $('#fechaInicio').val();
+                var fechaFinString = $('#fechaFin').val();
                 var categoriaSeleccionada = $('#categoriaFiltro').val();
 
                 // Filtrar las filas de la tabla por fechas y categoría
@@ -118,11 +136,11 @@
                     var cumpleFiltros = true;
 
                     // Filtrar por fechas
-                    if (startDateString && endDateString) {
+                    if (fechaInicioString && fechaFinString) {
                         var fechaPublicacion = new Date(fechaPublicacionString);
-                        var startDate = new Date(startDateString);
-                        var endDate = new Date(endDateString);
-                        if (fechaPublicacion < startDate || fechaPublicacion > endDate) {
+                        var fechaInicio = new Date(fechaInicioString);
+                        var fechaFin = new Date(fechaFinString);
+                        if (fechaPublicacion < fechaInicio || fechaPublicacion > fechaFin) {
                             cumpleFiltros = false;
                         }
                     }
@@ -144,8 +162,8 @@
             // Escuchar el evento de clic en el botón de limpiar filtros
             $('#limpiarFiltros').click(function () {
                 // Restablecer los valores de los campos de fecha y categoría
-                $('#startDate').val('');
-                $('#endDate').val('');
+                $('#fechaInicio').val('');
+                $('#fechaFin').val('');
                 $('#categoriaFiltro').val('');
 
                 // Mostrar todas las filas en la tabla
