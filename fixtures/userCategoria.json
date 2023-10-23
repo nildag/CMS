@@ -1,0 +1,38 @@
+[
+	{
+		"model": "usuario.UserCategoria",
+        "pk": 1,
+		"fields": {
+			"user": 1,
+			"rol": 6,
+			"categoria": 1
+		}
+	},
+	{
+		"model": "usuario.UserCategoria",
+        "pk": 2,
+		"fields": {
+			"user": 1,
+			"rol": 1,
+			"categoria": 2
+		}
+	},
+	{
+		"model": "usuario.UserCategoria",
+        "pk": 3,
+		"fields": {
+			"user": 1,
+			"rol": 1,
+			"categoria": 3
+		}
+	},
+	{
+		"model": "usuario.UserCategoria",
+        "pk": 4,
+		"fields": {
+			"user": 1,
+			"rol": 1,
+			"categoria": 4
+		}
+	}
+]

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>contenido.test_models &mdash; documentación de CMS web - 1.0.0</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/translations.js?v=efdbd0b9"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">cms</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">contenido.test_models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para contenido.test_models</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.test</span> <span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">User</span>  <span class="c1"># Importa el modelo de usuario personalizado</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Contenido</span><span class="p">,</span> <span class="n">Categoria</span>
+
+<div class="viewcode-block" id="ContenidoModelTest">
+<a class="viewcode-back" href="../../contenido.html#contenido.test_models.ContenidoModelTest">[documentos]</a>
+<span class="k">class</span> <span class="nc">ContenidoModelTest</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Esta clase contiene pruebas para el modelo de Contenido.</span>
+
+<span class="sd">    Métodos de Clase:</span>
+<span class="sd">        setUpTestData(): Configura los datos de prueba.</span>
+
+<span class="sd">    Métodos de Prueba:</span>
+<span class="sd">        test_titulo_label(): Prueba la etiqueta del campo &#39;titulo&#39;.</span>
+<span class="sd">        test_cuerpo_label(): Prueba la etiqueta del campo &#39;cuerpo&#39;.</span>
+<span class="sd">        test_autor_label(): Prueba la etiqueta del campo &#39;autor&#39;.</span>
+<span class="sd">        test_categoria_label(): Prueba la etiqueta del campo &#39;categoria&#39;.</span>
+<span class="sd">        test_fecha_creacion_label(): Prueba la etiqueta del campo &#39;fecha_creacion&#39;.</span>
+<span class="sd">        test_titulo_max_length(): Prueba la longitud máxima del campo &#39;titulo&#39;.</span>
+<span class="sd">        test_object_name_is_title_and_author(): Prueba el nombre del objeto Contenido.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ContenidoModelTest.setUpTestData">
+<a class="viewcode-back" href="../../contenido.html#contenido.test_models.ContenidoModelTest.setUpTestData">[documentos]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpTestData</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Configura los datos de prueba.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s1">&#39;testuser&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;12345&#39;</span><span class="p">)</span>  <span class="c1"># Usa el modelo de usuario personalizado</span>
+        <span class="n">categoria</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s1">&#39;test categoria&#39;</span><span class="p">)</span>
+        <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">titulo</span><span class="o">=</span><span class="s1">&#39;test titulo&#39;</span><span class="p">,</span> <span class="n">cuerpo</span><span class="o">=</span><span class="s1">&#39;test cuerpo&#39;</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">categoria</span><span class="o">=</span><span class="n">categoria</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ContenidoModelTest.test_titulo_label">
+<a class="viewcode-back" href="../../contenido.html#contenido.test_models.ContenidoModelTest.test_titulo_label">[documentos]</a>
+    <span class="k">def</span> <span class="nf">test_titulo_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prueba la etiqueta del campo &#39;titulo&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">field_label</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;titulo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">verbose_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">field_label</span><span class="p">,</span> <span class="s1">&#39;titulo&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ContenidoModelTest.test_cuerpo_label">
+<a class="viewcode-back" href="../../contenido.html#contenido.test_models.ContenidoModelTest.test_cuerpo_label">[documentos]</a>
+    <span class="k">def</span> <span class="nf">test_cuerpo_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prueba la etiqueta del campo &#39;cuerpo&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">field_label</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;cuerpo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">verbose_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">field_label</span><span class="p">,</span> <span class="s1">&#39;cuerpo&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ContenidoModelTest.test_autor_label">
+<a class="viewcode-back" href="../../contenido.html#contenido.test_models.ContenidoModelTest.test_autor_label">[documentos]</a>
+    <span class="k">def</span> <span class="nf">test_autor_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prueba la etiqueta del campo &#39;autor&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">field_label</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;autor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">verbose_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">field_label</span><span class="p">,</span> <span class="s1">&#39;autor&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ContenidoModelTest.test_categoria_label">
+<a class="viewcode-back" href="../../contenido.html#contenido.test_models.ContenidoModelTest.test_categoria_label">[documentos]</a>
+    <span class="k">def</span> <span class="nf">test_categoria_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prueba la etiqueta del campo &#39;categoria&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">field_label</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;categoria&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">verbose_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">field_label</span><span class="p">,</span> <span class="s1">&#39;categoria&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ContenidoModelTest.test_fecha_creacion_label">
+<a class="viewcode-back" href="../../contenido.html#contenido.test_models.ContenidoModelTest.test_fecha_creacion_label">[documentos]</a>
+    <span class="k">def</span> <span class="nf">test_fecha_creacion_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prueba la etiqueta del campo &#39;fecha_creacion&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">field_label</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;fecha_creacion&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">verbose_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">field_label</span><span class="p">,</span> <span class="s1">&#39;fecha creacion&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ContenidoModelTest.test_titulo_max_length">
+<a class="viewcode-back" href="../../contenido.html#contenido.test_models.ContenidoModelTest.test_titulo_max_length">[documentos]</a>
+    <span class="k">def</span> <span class="nf">test_titulo_max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prueba la longitud máxima del campo &#39;titulo&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">max_length</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;titulo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">max_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">max_length</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ContenidoModelTest.test_object_name_is_title_and_author">
+<a class="viewcode-back" href="../../contenido.html#contenido.test_models.ContenidoModelTest.test_object_name_is_title_and_author">[documentos]</a>
+    <span class="k">def</span> <span class="nf">test_object_name_is_title_and_author</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prueba el nombre del objeto Contenido.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">expected_object_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">contenido</span><span class="o">.</span><span class="n">titulo</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="n">contenido</span><span class="o">.</span><span class="n">autor</span><span class="o">.</span><span class="n">first_name</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">contenido</span><span class="o">.</span><span class="n">autor</span><span class="o">.</span><span class="n">last_name</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEquals</span><span class="p">(</span><span class="n">expected_object_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">contenido</span><span class="p">))</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

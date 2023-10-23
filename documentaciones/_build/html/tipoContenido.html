@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tipoContenido package &mdash; documentación de CMS web - 1.0.0</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=efdbd0b9"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="tipoContenido.migrations package" href="tipoContenido.migrations.html" />
+    <link rel="prev" title="rol.migrations package" href="rol.migrations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">cms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CMS.html">CMS package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="categorias.html">categorias package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contenido.html">contenido package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html">home package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage.html">manage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="permiso.html">permiso package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rol.html">rol package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tipoContenido package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tipoContenido.migrations.html">tipoContenido.migrations package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tipoContenido.admin">tipoContenido.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tipoContenido.apps">tipoContenido.apps module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tipoContenido.apps.tipoContenidoConfig"><code class="docutils literal notranslate"><span class="pre">tipoContenidoConfig</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tipoContenido.forms">tipoContenido.forms module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tipoContenido.forms.tipoContenidoForm"><code class="docutils literal notranslate"><span class="pre">tipoContenidoForm</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tipoContenido.models">tipoContenido.models module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tipoContenido.models.tipoContenido"><code class="docutils literal notranslate"><span class="pre">tipoContenido</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tipoContenido.tests">tipoContenido.tests module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tipoContenido.urls">tipoContenido.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tipoContenido.views">tipoContenido.views module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tipoContenido.views.borrarTipoContenido"><code class="docutils literal notranslate"><span class="pre">borrarTipoContenido()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tipoContenido.views.crearTipoContenido"><code class="docutils literal notranslate"><span class="pre">crearTipoContenido()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tipoContenido.views.editarTipoContenido"><code class="docutils literal notranslate"><span class="pre">editarTipoContenido()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tipoContenido.views.user_admin_tipoContenido"><code class="docutils literal notranslate"><span class="pre">user_admin_tipoContenido()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tipoContenido.views.verTipoContenido"><code class="docutils literal notranslate"><span class="pre">verTipoContenido()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tipoContenido">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usuario.html">usuario package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">cms</a></li>
+      <li class="breadcrumb-item active">tipoContenido package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tipoContenido.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tipocontenido-package">
+<h1>tipoContenido package<a class="headerlink" href="#tipocontenido-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tipoContenido.migrations.html">tipoContenido.migrations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tipoContenido.migrations.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tipoContenido.migrations.html#module-tipoContenido.migrations.0001_initial">tipoContenido.migrations.0001_initial module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tipoContenido.migrations.html#tipoContenido.migrations.0001_initial.Migration"><code class="docutils literal notranslate"><span class="pre">Migration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tipoContenido.migrations.html#tipoContenido.migrations.0001_initial.Migration.dependencies"><code class="docutils literal notranslate"><span class="pre">Migration.dependencies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tipoContenido.migrations.html#tipoContenido.migrations.0001_initial.Migration.initial"><code class="docutils literal notranslate"><span class="pre">Migration.initial</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tipoContenido.migrations.html#tipoContenido.migrations.0001_initial.Migration.operations"><code class="docutils literal notranslate"><span class="pre">Migration.operations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tipoContenido.migrations.html#module-tipoContenido.migrations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tipoContenido.admin">
+<span id="tipocontenido-admin-module"></span><h2>tipoContenido.admin module<a class="headerlink" href="#module-tipoContenido.admin" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tipoContenido.apps">
+<span id="tipocontenido-apps-module"></span><h2>tipoContenido.apps module<a class="headerlink" href="#module-tipoContenido.apps" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tipoContenido.apps.tipoContenidoConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tipoContenido.apps.</span></span><span class="sig-name descname"><span class="pre">tipoContenidoConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/apps.html#tipoContenidoConfig"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.apps.tipoContenidoConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.apps.tipoContenidoConfig.default_auto_field">
+<span class="sig-name descname"><span class="pre">default_auto_field</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'django.db.models.BigAutoField'</span></em><a class="headerlink" href="#tipoContenido.apps.tipoContenidoConfig.default_auto_field" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.apps.tipoContenidoConfig.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tipoContenido'</span></em><a class="headerlink" href="#tipoContenido.apps.tipoContenidoConfig.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tipoContenido.forms">
+<span id="tipocontenido-forms-module"></span><h2>tipoContenido.forms module<a class="headerlink" href="#module-tipoContenido.forms" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tipoContenido.forms.tipoContenidoForm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tipoContenido.forms.</span></span><span class="sig-name descname"><span class="pre">tipoContenidoForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/forms.html#tipoContenidoForm"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.forms.tipoContenidoForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="tipoContenido.forms.tipoContenidoForm.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/tipoContenido/forms.html#tipoContenidoForm.Meta"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.forms.tipoContenidoForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.forms.tipoContenidoForm.Meta.fields">
+<span class="sig-name descname"><span class="pre">fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['nombre',</span> <span class="pre">'descripcion']</span></em><a class="headerlink" href="#tipoContenido.forms.tipoContenidoForm.Meta.fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.forms.tipoContenidoForm.Meta.labels">
+<span class="sig-name descname"><span class="pre">labels</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'descripcion':</span> <span class="pre">'Descripcion',</span> <span class="pre">'nombre':</span> <span class="pre">'Nombre'}</span></em><a class="headerlink" href="#tipoContenido.forms.tipoContenidoForm.Meta.labels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.forms.tipoContenidoForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#tipoContenido.forms.tipoContenidoForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias de <a class="reference internal" href="#tipoContenido.models.tipoContenido" title="tipoContenido.models.tipoContenido"><code class="xref py py-class docutils literal notranslate"><span class="pre">tipoContenido</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.forms.tipoContenidoForm.Meta.widgets">
+<span class="sig-name descname"><span class="pre">widgets</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'descripcion':</span> <span class="pre">&lt;django.forms.widgets.Textarea</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#tipoContenido.forms.tipoContenidoForm.Meta.widgets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.forms.tipoContenidoForm.base_fields">
+<span class="sig-name descname"><span class="pre">base_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'descripcion':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;,</span> <span class="pre">'nombre':</span> <span class="pre">&lt;django.forms.fields.CharField</span> <span class="pre">object&gt;}</span></em><a class="headerlink" href="#tipoContenido.forms.tipoContenidoForm.base_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.forms.tipoContenidoForm.declared_fields">
+<span class="sig-name descname"><span class="pre">declared_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#tipoContenido.forms.tipoContenidoForm.declared_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="tipoContenido.forms.tipoContenidoForm.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#tipoContenido.forms.tipoContenidoForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tipoContenido.models">
+<span id="tipocontenido-models-module"></span><h2>tipoContenido.models module<a class="headerlink" href="#module-tipoContenido.models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tipoContenido.models.</span></span><span class="sig-name descname"><span class="pre">tipoContenido</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/models.html#tipoContenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.models.tipoContenido" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Esta clase representa un tipo de Contenido dentro del sistema.
+Atributos:
+- nombre: Nombre representativo del tipo de Contenido.
+- descripcion: Descripcion del tipo de Contenido.
+Ejemplo:    nombre: Wiki</p>
+<blockquote>
+<div><p>descripcion: Contenido del tipo Wiki</p>
+</div></blockquote>
+<dl class="py exception">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#tipoContenido.models.tipoContenido.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#tipoContenido.models.tipoContenido.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.crear">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">crear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">descripcion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/models.html#tipoContenido.crear"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.models.tipoContenido.crear" title="Link to this definition"></a></dt>
+<dd><p>Este metodo sirve para crear un tipo de Contenido
+:nombre: Nombre del tipo de Contenido a crear (str)
+:descripcion: Descripcion del tipo de Contenido a crear (str)
+:return: Retorna el tipo de Contenido</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.descripcion">
+<span class="sig-name descname"><span class="pre">descripcion</span></span><a class="headerlink" href="#tipoContenido.models.tipoContenido.descripcion" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.eliminar">
+<span class="sig-name descname"><span class="pre">eliminar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/models.html#tipoContenido.eliminar"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.models.tipoContenido.eliminar" title="Link to this definition"></a></dt>
+<dd><p>Metodo que elimina el rol correspondiente a la instancia actual</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.eliminar_por_nombre">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">eliminar_por_nombre</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/models.html#tipoContenido.eliminar_por_nombre"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.models.tipoContenido.eliminar_por_nombre" title="Link to this definition"></a></dt>
+<dd><p>Esta funcion elimina un tipo de Contenido por el nombre que es recibido como parametro
+:nombre: Nombre del tipo de Contenido (str)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.getById">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/models.html#tipoContenido.getById"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.models.tipoContenido.getById" title="Link to this definition"></a></dt>
+<dd><p>Obtenemos un tipo de Contenido por el id
+:id: El id por el cual buscaremos el tipo de Contenido (int)
+:return: (tipoContenido)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#tipoContenido.models.tipoContenido.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.nombre">
+<span class="sig-name descname"><span class="pre">nombre</span></span><a class="headerlink" href="#tipoContenido.models.tipoContenido.nombre" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#tipoContenido.models.tipoContenido.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.obtener_por_nombre">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obtener_por_nombre</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nombre</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/models.html#tipoContenido.obtener_por_nombre"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.models.tipoContenido.obtener_por_nombre" title="Link to this definition"></a></dt>
+<dd><p>Obtenemos un tipo de Contenido por el nombre
+:nombre: El nombre por el cual buscaremos el tipo de Contenido (str)
+:return: (tipoContenido)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tipoContenido.models.tipoContenido.obtener_todos">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obtener_todos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/models.html#tipoContenido.obtener_todos"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.models.tipoContenido.obtener_todos" title="Link to this definition"></a></dt>
+<dd><p>Obtenemos todas los tipos de Contenidos
+:return: (tipoContenido-list)</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tipoContenido.tests">
+<span id="tipocontenido-tests-module"></span><h2>tipoContenido.tests module<a class="headerlink" href="#module-tipoContenido.tests" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tipoContenido.urls">
+<span id="tipocontenido-urls-module"></span><h2>tipoContenido.urls module<a class="headerlink" href="#module-tipoContenido.urls" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tipoContenido.views">
+<span id="tipocontenido-views-module"></span><h2>tipoContenido.views module<a class="headerlink" href="#module-tipoContenido.views" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="tipoContenido.views.borrarTipoContenido">
+<span class="sig-prename descclassname"><span class="pre">tipoContenido.views.</span></span><span class="sig-name descname"><span class="pre">borrarTipoContenido</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tipoContenidoId</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/views.html#borrarTipoContenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.views.borrarTipoContenido" title="Link to this definition"></a></dt>
+<dd><p>Vista para eliminar un tipo de contenido.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – La solicitud HTTP.</p></li>
+<li><p><strong>tipoContenidoId</strong> – El ID del tipo de contenido a eliminar.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>La página de lista de tipos de contenido o redirecciona a la lista de tipos de contenido si se elimina con éxito.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tipoContenido.views.crearTipoContenido">
+<span class="sig-prename descclassname"><span class="pre">tipoContenido.views.</span></span><span class="sig-name descname"><span class="pre">crearTipoContenido</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/views.html#crearTipoContenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.views.crearTipoContenido" title="Link to this definition"></a></dt>
+<dd><p>Vista para crear un nuevo tipo de contenido.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> – La solicitud HTTP.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>La página de creación de tipo de contenido o redirecciona a la lista de tipo de contenido si se crea con éxito.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tipoContenido.views.editarTipoContenido">
+<span class="sig-prename descclassname"><span class="pre">tipoContenido.views.</span></span><span class="sig-name descname"><span class="pre">editarTipoContenido</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tipoContenidoId</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/views.html#editarTipoContenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.views.editarTipoContenido" title="Link to this definition"></a></dt>
+<dd><p>Vista para editar un tipo de contenido existente.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> – La solicitud HTTP.</p></li>
+<li><p><strong>tipoContenidoId</strong> – El ID del tipo de contenido a editar.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>La página de edición de tipos de contenido o redirecciona a la lista de tipos de contenido si se edita con éxito.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tipoContenido.views.user_admin_tipoContenido">
+<span class="sig-prename descclassname"><span class="pre">tipoContenido.views.</span></span><span class="sig-name descname"><span class="pre">user_admin_tipoContenido</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/views.html#user_admin_tipoContenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.views.user_admin_tipoContenido" title="Link to this definition"></a></dt>
+<dd><p>Función que comprueba si el usuario es administrador de tipo de contenido (tiene el permiso «Administrar tipo de contenido»).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>user</strong> – El usuario a comprobar (User).</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>True si es administrador de tipo de contenido, False en caso contrario.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tipoContenido.views.verTipoContenido">
+<span class="sig-prename descclassname"><span class="pre">tipoContenido.views.</span></span><span class="sig-name descname"><span class="pre">verTipoContenido</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tipoContenido/views.html#verTipoContenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#tipoContenido.views.verTipoContenido" title="Link to this definition"></a></dt>
+<dd><p>Vista para mostrar la lista de tipos de contenido.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> – La solicitud HTTP.</p>
+</dd>
+<dt class="field-even">Devuelve<span class="colon">:</span></dt>
+<dd class="field-even"><p>La página de lista de tipos de contenido.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-tipoContenido">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tipoContenido" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="rol.migrations.html" class="btn btn-neutral float-left" title="rol.migrations package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="tipoContenido.migrations.html" class="btn btn-neutral float-right" title="tipoContenido.migrations package" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

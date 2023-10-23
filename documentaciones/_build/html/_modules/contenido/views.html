@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>contenido.views &mdash; documentación de CMS web - 1.0.0</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/translations.js?v=efdbd0b9"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">cms</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">contenido.views</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para contenido.views</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Contenido</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Categoria</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">ContenidoForm</span>
+<span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">UserCategoria</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">user_passes_test</span>
+<span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">contenido.models</span> <span class="kn">import</span> <span class="n">Valoracion</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+
+<div class="viewcode-block" id="user_autor">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.user_autor">[documentos]</a>
+<span class="k">def</span> <span class="nf">user_autor</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funcion que comprueba si el usuario es autor (tiene el permiso &quot;Crear contenido&quot;)</span>
+<span class="sd">    :param user: usuario a comprobar (User)</span>
+<span class="sd">    :return: True si es autor, False en caso contrario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">user_is_autor</span><span class="p">(</span><span class="n">user</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="user_editor">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.user_editor">[documentos]</a>
+<span class="k">def</span> <span class="nf">user_editor</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funcion que comprueba si el usuario es editor (tiene el permiso &quot;Editar contenido&quot;)</span>
+<span class="sd">    :param user: usuario a comprobar (User)</span>
+<span class="sd">    :return: True si es editor, False en caso contrario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">is_editor</span><span class="p">(</span><span class="n">user</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="user_publicador">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.user_publicador">[documentos]</a>
+<span class="k">def</span> <span class="nf">user_publicador</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funcion que comprueba si el usuario es publicador (tiene el permiso &quot;Publicar contenido&quot;)</span>
+<span class="sd">    :param user: usuario a comprobar (User)</span>
+<span class="sd">    :return: True si es publicador, False en caso contrario</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">is_publicador</span><span class="p">(</span><span class="n">user</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="crearContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.crearContenido">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_autor</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">crearContenido</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para crear nuevo contenido. Requiere autenticación.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request: Objeto de solicitud HTTP.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de creación.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">categorias_autor</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Autor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">contenido</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">contenido</span><span class="o">.</span><span class="n">autor</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">contenido</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;contenido:lista_contenido&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">categorias_autor</span><span class="o">=</span><span class="n">categorias_autor</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/crearContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="editarContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.editarContenido">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_autor</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">editarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para editar contenido existente. Requiere autenticación.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request: Objeto de solicitud HTTP.</span>
+<span class="sd">        id (int): ID del contenido a editar.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de edición.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">categorias_autor</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Autor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Contenido</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">contenido</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">categorias_autor</span><span class="o">=</span><span class="n">categorias_autor</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;contenido:lista_contenido&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">contenido</span><span class="p">,</span> <span class="n">categorias_autor</span><span class="o">=</span><span class="n">categorias_autor</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/editarContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="eliminarContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.eliminarContenido">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_autor</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">eliminarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para eliminar contenido existente. Requiere autenticación.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request: Objeto de solicitud HTTP.</span>
+<span class="sd">        id (int): ID del contenido a eliminar.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: Respuesta HTTP que redirige a la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Contenido</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;contenido:lista_contenido&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="confirmarEliminarContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.confirmarEliminarContenido">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">confirmarEliminarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para confirmar la eliminación de un contenido existente. Requiere autenticación.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request: Objeto de solicitud HTTP.</span>
+<span class="sd">        id (int): ID del contenido a confirmar la eliminación.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: Respuesta HTTP que muestra la página de confirmación de eliminación.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Contenido</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/confirmarEliminarContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenido&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="listaContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.listaContenido">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_autor</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">listaContenido</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para listar los contenidos de un usuario</span>
+<span class="sd">    :param request: Objeto de solicitud HTTP.</span>
+<span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="verContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.verContenido">[documentos]</a>
+<span class="k">def</span> <span class="nf">verContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para ver un contenido específico. No requiere autenticación.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request: Objeto de solicitud HTTP.</span>
+<span class="sd">        id (int): ID del contenido a visualizar.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: Respuesta HTTP que muestra la página del contenido específico.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/verContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenido&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="listaTodos">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.listaTodos">[documentos]</a>
+<span class="k">def</span> <span class="nf">listaTodos</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para mostrar la lista de contenidos de todos los usuarios.</span>
+<span class="sd">    :param request: Objeto de solicitud HTTP.</span>
+<span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaTodos.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="listaPublicador">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.listaPublicador">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_publicador</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">listaPublicador</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para mostrar la lista de contenidos de los usuarios publicadores.</span>
+<span class="sd">    :param request: Objeto de solicitud HTTP.</span>
+<span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">categorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Publicador&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_categorias</span><span class="p">(</span><span class="n">categorias</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaPublicador.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="listaEditor">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.listaEditor">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_editor</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">listaEditor</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para mostrar la lista de contenidos de los usuarios editores.</span>
+<span class="sd">    :param request: Objeto de solicitud HTTP.</span>
+<span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">categorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Editor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_categorias</span><span class="p">(</span><span class="n">categorias</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaEditor.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="valorarContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.valorarContenido">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">valorarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para valorar un contenido específico. Requiere autenticación.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request: Objeto de solicitud HTTP.</span>
+<span class="sd">        id (int): ID del contenido a valorar.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: Redirige a la página del contenido valorado o muestra un mensaje de error.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">contenido</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Contenido</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+        <span class="n">puntuacion</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;puntuacion&#39;</span><span class="p">))</span>  <span class="c1"># Asume que tienes un formulario con un campo &#39;puntuacion&#39;</span>
+
+        <span class="c1"># Comprueba si el usuario ya ha valorado este contenido</span>
+        <span class="n">valoracion_existente</span> <span class="o">=</span> <span class="n">Valoracion</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">contenido</span><span class="o">=</span><span class="n">contenido</span><span class="p">,</span> <span class="n">usuario</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">valoracion_existente</span><span class="p">:</span>
+            <span class="c1"># Actualiza la valoración si el usuario ya ha valorado este contenido</span>
+            <span class="n">valoracion_existente</span><span class="o">.</span><span class="n">puntuacion</span> <span class="o">=</span> <span class="n">puntuacion</span>
+            <span class="n">valoracion_existente</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Crea una nueva valoración si el usuario no ha valorado este contenido</span>
+            <span class="n">valoracion</span> <span class="o">=</span> <span class="n">Valoracion</span><span class="p">(</span><span class="n">contenido</span><span class="o">=</span><span class="n">contenido</span><span class="p">,</span> <span class="n">usuario</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">puntuacion</span><span class="o">=</span><span class="n">puntuacion</span><span class="p">)</span>
+            <span class="n">valoracion</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="c1"># Recalcula la puntuación promedio del contenido y el número de valoraciones</span>
+        <span class="n">valoraciones</span> <span class="o">=</span> <span class="n">Valoracion</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">contenido</span><span class="o">=</span><span class="n">contenido</span><span class="p">)</span>
+        <span class="n">total_puntuacion</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">valoracion</span><span class="o">.</span><span class="n">puntuacion</span> <span class="k">for</span> <span class="n">valoracion</span> <span class="ow">in</span> <span class="n">valoraciones</span><span class="p">)</span>
+        <span class="n">numero_valoraciones</span> <span class="o">=</span> <span class="n">valoraciones</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">contenido</span><span class="o">.</span><span class="n">puntuacion</span> <span class="o">=</span> <span class="n">total_puntuacion</span> <span class="o">/</span> <span class="n">numero_valoraciones</span>
+        <span class="n">contenido</span><span class="o">.</span><span class="n">numero_valoraciones</span> <span class="o">=</span> <span class="n">numero_valoraciones</span>
+        <span class="n">contenido</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;contenido:ver_contenido&#39;</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Muestra el contenido específico para que el usuario pueda valorarlo</span>
+        <span class="n">contenido</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Contenido</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/valorarContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenido&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="buscarContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.buscarContenido">[documentos]</a>
+<span class="k">def</span> <span class="nf">buscarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista para buscar contenidos por título de contenido o nombre de categoría.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        request: Objeto de solicitud HTTP.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: Respuesta HTTP que muestra los resultados de la búsqueda.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">)</span>
+
+    <span class="n">contenidos</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">Q</span><span class="p">(</span><span class="n">titulo__icontains</span><span class="o">=</span><span class="n">query</span><span class="p">)</span> <span class="o">|</span>
+        <span class="n">Q</span><span class="p">(</span><span class="n">categoria__nombre__icontains</span><span class="o">=</span><span class="n">query</span><span class="p">)</span> <span class="o">|</span>
+        <span class="n">Q</span><span class="p">(</span><span class="n">autor__first_name__icontains</span><span class="o">=</span><span class="n">query</span><span class="p">)</span> <span class="o">|</span>
+        <span class="n">Q</span><span class="p">(</span><span class="n">autor__last_name__icontains</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaTodos.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenidos</span><span class="p">,</span> <span class="s1">&#39;categorias&#39;</span><span class="p">:</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()})</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

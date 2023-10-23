@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>usuario.models &mdash; documentación de CMS web - 1.0.0</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/translations.js?v=efdbd0b9"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">cms</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">usuario.models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para usuario.models</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">AbstractUser</span>
+<span class="kn">from</span> <span class="nn">rol.models</span> <span class="kn">import</span> <span class="n">Rol</span>
+<span class="kn">from</span> <span class="nn">categorias.models</span> <span class="kn">import</span> <span class="n">Categoria</span>
+<span class="kn">from</span> <span class="nn">permiso.models</span> <span class="kn">import</span> <span class="n">Permiso</span>
+
+<div class="viewcode-block" id="User">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User">[documentos]</a>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">AbstractUser</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Esta clase hereda de AbstractUser y se encarga de almacenar los datos de los usuarios.</span>
+<span class="sd">    - roles: Atributo correspondiente a los roles que posee el usuario (ManyToManyField)</span>
+<span class="sd">    - registrado: Atributo que indica si el usuario se encuentra registrado o no (bool)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Campos personalizados</span>
+    <span class="n">roles</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span><span class="n">Rol</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;roles&#39;</span><span class="p">,</span> <span class="n">through</span><span class="o">=</span><span class="s2">&quot;UserCategoria&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">registrado</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna los datos del usuario.</span>
+<span class="sd">        :return: Se retorna un str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
+    
+<div class="viewcode-block" id="User.getAll">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.getAll">[documentos]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">getAll</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna todos los usuarios que existen en el sistema.</span>
+<span class="sd">        :return: Se retorna un QuerySet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
+
+    
+<div class="viewcode-block" id="User.tiene_permiso_en_categoria">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_en_categoria">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_en_categoria</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">permiso</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual tiene un permiso dado en una categoría dada.</span>
+<span class="sd">        :param permiso: Permiso que se desea verificar (str)</span>
+<span class="sd">        :param categoria: Categoría en la que se desea verificar el permiso (Categoria)</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">userCategorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">userCategoria</span> <span class="ow">in</span> <span class="n">userCategorias</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">userCategoria</span><span class="o">.</span><span class="n">categoria</span> <span class="o">==</span> <span class="n">categoria</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">userCategoria</span><span class="o">.</span><span class="n">rol</span><span class="o">.</span><span class="n">tiene_permiso</span><span class="p">(</span><span class="n">permiso</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="User.admin_roles">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.admin_roles">[documentos]</a>
+    <span class="k">def</span> <span class="nf">admin_roles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual es administrador de roles.</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">system</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
+        <span class="n">permiso</span> <span class="o">=</span> <span class="s2">&quot;Administrar roles&quot;</span>
+        <span class="n">tiene_permiso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tiene_permiso</span></div>
+
+    
+<div class="viewcode-block" id="User.admin_categorias">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.admin_categorias">[documentos]</a>
+    <span class="k">def</span> <span class="nf">admin_categorias</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual es administrador de categorías.</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">system</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
+        <span class="n">permiso</span> <span class="o">=</span> <span class="s2">&quot;Administrar categorias&quot;</span>
+        <span class="n">tiene_permiso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tiene_permiso</span></div>
+
+    
+<div class="viewcode-block" id="User.admin_asigRoles">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.admin_asigRoles">[documentos]</a>
+    <span class="k">def</span> <span class="nf">admin_asigRoles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual es administrador de asignación de roles.</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">system</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
+        <span class="n">permiso</span> <span class="o">=</span> <span class="s2">&quot;Asignar roles&quot;</span>
+        <span class="n">tiene_permiso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tiene_permiso</span></div>
+
+    
+<div class="viewcode-block" id="User.admin_tipo_contenido">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.admin_tipo_contenido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">admin_tipo_contenido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual es administrador de tipo de contenido.</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">system</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
+        <span class="n">permiso</span> <span class="o">=</span> <span class="s2">&quot;Administrar tipo de contenido&quot;</span>
+        <span class="n">tiene_permiso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tiene_permiso</span></div>
+
+    
+<div class="viewcode-block" id="User.user_is_autor">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.user_is_autor">[documentos]</a>
+    <span class="k">def</span> <span class="nf">user_is_autor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual es autor.</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">categorias</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">categorias</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">categoria</span><span class="o">.</span><span class="n">nombre</span> <span class="o">!=</span> <span class="s2">&quot;System&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Crear contenido&quot;</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="User.is_publicador">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.is_publicador">[documentos]</a>
+    <span class="k">def</span> <span class="nf">is_publicador</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">            </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual es publicador.</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+    
+        <span class="n">categorias</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">categorias</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Publicar contenido&quot;</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+    
+<div class="viewcode-block" id="User.is_editor">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.is_editor">[documentos]</a>
+    <span class="k">def</span> <span class="nf">is_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">                </span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual es editor.</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">categorias</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">categorias</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Editar contenido&quot;</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+</div>
+
+
+<div class="viewcode-block" id="UserCategoria">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.UserCategoria">[documentos]</a>
+<span class="k">class</span> <span class="nc">UserCategoria</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">rol</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Rol</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">categoria</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Categoria</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna los datos del usuario.</span>
+<span class="sd">        :return: Se retorna un str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rol</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">categoria</span><span class="si">}</span><span class="s2">&quot;</span>
+    
+<div class="viewcode-block" id="UserCategoria.getByUser">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.UserCategoria.getByUser">[documentos]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">getByUser</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna todos los roles que tiene un usuario.</span>
+<span class="sd">        :return: Se retorna un QuerySet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

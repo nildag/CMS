@@ -30,3 +30,11 @@ h1 {
     line-height: 1.6;
 }
 
+
+.star-rating .fa-star {
+    font-size: 24px;
+    cursor: pointer;
+}
+.star-rating .fa-star.checked {
+    color: orange;
+}

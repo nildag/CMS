@@ -68,5 +68,12 @@
 		"fields": {
 			"nombre": "Asignar roles"
 		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 11,
+		"fields": {
+			"nombre": "Administrar tipo de contenido"
+		}
 	}
 ]

@@ -86,19 +86,41 @@
                     </a>
                     <ul class="nav">
                         <li class="nav-item"><a href="/" class="nav-link link-body-emphasis">Inicio</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link link-body-emphasis">Todos</a></li>
-                        <li class="nav-item"><a href="{% url 'contenido:lista_contenido' %}" class="nav-link link-body-emphasis">Contenido</a></li>
+                        <li class="nav-item"><a href="{% url 'contenido:lista_todos' %}" class="nav-link link-body-emphasis">Todos</a></li>
+                        {% if user.user_is_autor %}
+                        <li class="nav-item"><a href="{% url 'contenido:lista_contenido' %}" class="nav-link link-body-emphasis">Mis Contenidos</a></li>
+                        {% endif %}
+                        {%  if user.is_authenticated %}
+                        {%  if user.admin_roles or user.admin_categorias or user.admin_asigRoles or user.admin_tipo_contenido %}
                         <li class="nav-item dropdown">
-                            <!-- Mostrar el menú desplegable -->
-                            <a class="nav-link dropdown-toggle link-body-emphasis text-decoration-none" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administrar</a>
 
-                            <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                                <li><a class="dropdown-item" href="{% url 'rol:lista_roles' %}">Roles</a></li>
-                                <li><a class="dropdown-item" href="{% url 'categorias:ver_categorias' %}">Categorias</a></li>
-                                <li><a class="dropdown-item" href="{% url 'usuario:verUsuarios' %}">Usuarios</a></li>
-                                <li><a class="dropdown-item" href="{% url 'tipoContenido:ver_tipo_de_contenido' %}">Tipo de Contenido</a></li>
-                            </ul>
+                                <!-- Mostrar el menú desplegable -->
+                                <a class="nav-link dropdown-toggle link-body-emphasis text-decoration-none" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administrar</a>
+
+                                <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
+                                    {% if user.admin_roles %}
+                                    <li><a class="dropdown-item" href="{% url 'rol:lista_roles' %}">Roles</a></li>
+                                    {% endif %}
+                                    {% if user.admin_categorias %}
+                                    <li><a class="dropdown-item" href="{% url 'categorias:ver_categorias' %}">Categorias</a></li>
+                                    {% endif %}
+                                    {% if user.admin_asigRoles %}
+                                    <li><a class="dropdown-item" href="{% url 'usuario:verUsuarios' %}">Usuarios</a></li>
+                                    {% endif %}
+                                    {% if user.admin_tipo_contenido %}
+                                    <li><a class="dropdown-item" href="{% url 'tipoContenido:ver_tipo_de_contenido' %}">Tipo de Contenido</a></li>
+                                    {% endif %}
+                                </ul>
+
                         </li>
+                        {% endif %}
+                        {% endif %}
+                        {% if user.is_publicador %}
+                        <li class="nav-item"><a href="{% url 'contenido:lista_publicador' %}" class="nav-link link-body-emphasis">Publicación</a></li>
+                        {% endif %}
+                        {% if user.is_editor %}
+                        <li class="nav-item"><a href="{% url 'contenido:lista_editor' %}" class="nav-link link-body-emphasis">Edición</a></li>
+                        {% endif %}
                     </ul>
                     <div class="dropdown">
                         <a href="#" class="dropdown-toggle link-body-emphasis text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">

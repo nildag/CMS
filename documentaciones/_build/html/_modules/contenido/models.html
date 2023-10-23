@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>contenido.models &mdash; documentación de CMS web - 1.0.0</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../_static/translations.js?v=efdbd0b9"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">cms</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">contenido.models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para contenido.models</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">categorias.models</span> <span class="kn">import</span> <span class="n">Categoria</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">ckeditor.fields</span> <span class="kn">import</span> <span class="n">RichTextField</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>  <span class="c1"># Importa la configuración de Django</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<div class="viewcode-block" id="Contenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.forms.Contenido">[documentos]</a>
+<span class="k">class</span> <span class="nc">Contenido</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="Contenido.Contenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.forms.Contenido.Contenido">[documentos]</a>
+    <span class="k">class</span> <span class="nc">Contenido</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Modelo para almacenar el contenido creado por los usuarios.</span>
+
+<span class="sd">        Atributos:</span>
+<span class="sd">            - titulo (str): Título del contenido.</span>
+<span class="sd">            - cuerpo (RichTextField): Cuerpo del contenido en formato rico.</span>
+<span class="sd">            - autor (User): Usuario que crea el contenido.</span>
+<span class="sd">            - categoria (Categoria): Categoría a la que pertenece el contenido.</span>
+<span class="sd">            - fecha_creacion (datetime): Fecha y hora de creación del contenido.</span>
+<span class="sd">            - puntuacion (Decimal): Puntuación promedio del contenido.</span>
+<span class="sd">            - numero_valoraciones (int): Número total de valoraciones del contenido.</span>
+
+<span class="sd">        Métodos:</span>
+<span class="sd">            - for_user(user): Devuelve los contenidos creados por un usuario específico.</span>
+<span class="sd">            - for_categorias(categorias): Devuelve los contenidos asociados a una lista de categorías.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+    <span class="n">titulo</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;titulo&quot;</span><span class="p">)</span>
+    <span class="n">cuerpo</span> <span class="o">=</span> <span class="n">RichTextField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;cuerpo&quot;</span><span class="p">)</span>
+    <span class="c1">#autor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)</span>
+    <span class="n">autor</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">categoria</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Categoria</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fecha_creacion</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+    <span class="c1"># Nuevos campos para valoración</span>
+    <span class="n">puntuacion</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.00</span><span class="p">)</span>
+    <span class="n">numero_valoraciones</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PositiveIntegerField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">titulo</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">autor</span><span class="o">.</span><span class="n">first_name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">autor</span><span class="o">.</span><span class="n">last_name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="s2">&quot;Contenido&quot;</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="s2">&quot;Contenidos&quot;</span>
+        <span class="n">db_table</span> <span class="o">=</span> <span class="s2">&quot;contenido&quot;</span>
+
+<div class="viewcode-block" id="Contenido.for_user">
+<a class="viewcode-back" href="../../contenido.html#contenido.forms.Contenido.for_user">[documentos]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">for_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Devuelve una lista de contenidos creados por un usuario específico.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user (User): El usuario para el que se obtienen los contenidos.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            QuerySet: Una lista de objetos de contenido creados por el usuario.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            Para obtener los contenidos creados por el usuario &#39;alice&#39;, puedes usar:</span>
+<span class="sd">            contenidos = Contenido.for_user(User.objects.get(username=&#39;alice&#39;))</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">autor</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Contenido.for_categorias">
+<a class="viewcode-back" href="../../contenido.html#contenido.forms.Contenido.for_categorias">[documentos]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">for_categorias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categorias</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Funcion que devuelve los contenidos de una lista de categorias</span>
+<span class="sd">        :param categorias: lista de categorias (Categoria)</span>
+<span class="sd">        :return: lista de contenidos de las categorias</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">categoria__in</span><span class="o">=</span><span class="n">categorias</span><span class="p">)</span></div>
+</div>
+
+
+<div class="viewcode-block" id="Valoracion">
+<a class="viewcode-back" href="../../contenido.html#contenido.forms.Valoracion">[documentos]</a>
+<span class="k">class</span> <span class="nc">Valoracion</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modelo que representa una valoración de contenido.</span>
+
+<span class="sd">    Atributos:</span>
+<span class="sd">        contenido (Contenido): El contenido que se valora.</span>
+<span class="sd">        usuario (User): El usuario que realiza la valoración.</span>
+<span class="sd">        puntuacion (int): La puntuación otorgada, generalmente en un rango de 1 a 5.</span>
+<span class="sd">        fecha (datetime): La fecha y hora en que se creó la valoración.</span>
+
+<span class="sd">    Métodos:</span>
+<span class="sd">        __str__(): Devuelve una representación legible de la valoración.</span>
+
+<span class="sd">    Atributos:</span>
+<span class="sd">        contenido (Contenido): El contenido que se valora.</span>
+<span class="sd">        usuario (User): El usuario que realiza la valoración.</span>
+<span class="sd">        puntuacion (int): La puntuación otorgada, generalmente en un rango de 1 a 5.</span>
+<span class="sd">        fecha (datetime): La fecha y hora en que se creó la valoración.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Contenido</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">usuario</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">puntuacion</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PositiveIntegerField</span><span class="p">()</span>  <span class="c1"># Aquí puedes usar un rango de 1 a 5, por ejemplo</span>
+    <span class="n">fecha</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Devuelve una representación legible de la valoración.</span>
+<span class="sd">        :return: Cadena con el formato &quot;Valoración de [nombre de usuario] para [título del contenido]&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Valoración de </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">usuario</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2"> para </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">contenido</span><span class="o">.</span><span class="n">titulo</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
