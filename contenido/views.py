@@ -40,6 +40,16 @@ def user_publicador(user):
 
     return User.is_publicador(user)
 
+def user_autor_or_editor(user):
+
+    """
+    Funcion que comprueba si el usuario es autor o editor
+    :param user: usuario a comprobar (User)
+    :return: True si es autor o editor, False en caso contrario
+    """
+
+    return user_autor(user) or user_editor(user)
+
 @login_required
 @user_passes_test(user_autor)
 def crearContenido(request):
@@ -67,7 +77,7 @@ def crearContenido(request):
     return render(request, 'contenido/crearContenido.html', {'form': form})
 
 @login_required
-@user_passes_test(user_autor)
+@user_passes_test(user_autor_or_editor)
 def editarContenido(request, id):
     """
     Vista para editar contenido existente. Requiere autenticación.
@@ -79,13 +89,22 @@ def editarContenido(request, id):
     Returns:
         HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de edición.
     """
-    categorias_autor = UserCategoria.objects.filter(user=request.user, rol__nombre='Autor').values_list('categoria__id', flat=True)
+    if user_autor(request.user):
+        categorias_autor = UserCategoria.objects.filter(user=request.user, rol__nombre='Autor').values_list('categoria__id', flat=True)
+    else:
+        categorias_autor = Contenido.objects.filter(id=id).values_list('categoria__id', flat=True)
+
     contenido = get_object_or_404(Contenido, id=id)
     if request.method == 'POST':
         form = ContenidoForm(request.POST, instance=contenido, autor=request.user, categorias_autor=categorias_autor)
         if form.is_valid():
             form.save()
-            return redirect('contenido:lista_contenido')
+            
+            if user_autor(request.user):
+                return redirect('contenido:lista_contenido')
+            else:
+                return redirect('contenido:lista_editor')
+        
     else:
         form = ContenidoForm(instance=contenido, categorias_autor=categorias_autor, autor=request.user)
     return render(request, 'contenido/editarContenido.html', {'form': form})
