@@ -19,6 +19,7 @@ class Contenido(models.Model):
             - fecha_creacion (datetime): Fecha y hora de creación del contenido.
             - puntuacion (Decimal): Puntuación promedio del contenido.
             - numero_valoraciones (int): Número total de valoraciones del contenido.
+            - estado (str): Estado del contenido. Puede ser 'Borrador', 'Edicion', 'Publicacion' o 'Deshabilitado'.
 
         Métodos:
             - for_user(user): Devuelve los contenidos creados por un usuario específico.
@@ -33,6 +34,8 @@ class Contenido(models.Model):
     # Nuevos campos para valoración
     puntuacion = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     numero_valoraciones = models.PositiveIntegerField(default=0)
+    estado = models.CharField(max_length=30, default="Borrador")
+
     def __str__(self):
         return f"{self.titulo} - {self.autor.first_name} {self.autor.last_name}"
 

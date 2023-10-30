@@ -33,6 +33,7 @@
             <tr>
                 <th scope="col">Titulo</th>
                 <th scope="col">Categoria</th>
+                <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
             </tr>
         </thead>
@@ -41,10 +42,16 @@
                 <tr>
                     <td>{{ contenido.titulo }}</td>
                     <td>{{ contenido.categoria.nombre }}</td>
+                    <td>{{ contenido.estado }}</td>
                     <td>
                         <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
-                        <a href="{% url 'contenido:editar_contenido' contenido.id %}" class="btn btn-warning btn-sm">Editar</a>
+                        {% if contenido.estado == 'Borrador' %}
+                            <a href="{% url 'contenido:editar_contenido' contenido.id %}" class="btn btn-warning btn-sm">Editar</a>
+                        {% endif %}
                         <a href="{% url 'contenido:confirmar_eliminar_contenido' contenido.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                        {% if contenido.estado == 'Borrador' %}
+                            <a href="{% url 'contenido:a_edicion' contenido.id %}" class="btn btn-primary btn-sm">A Edición</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

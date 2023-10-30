@@ -153,6 +153,7 @@ def listaContenido(request):
 
     user = User.objects.get(id=request.user.id)
     contenido = Contenido.for_user(user)
+    #contenido = contenido.filter(estado='Borrador')
     return render(request, 'contenido/listaContenido.html', {'contenidos': contenido})
 
 def verContenido(request, id):
@@ -176,6 +177,7 @@ def listaTodos(request):
     :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
     """
     contenido = Contenido.objects.all()
+    contenido = contenido.filter(estado='Publicado')
     categorias = Categoria.objects.all()  # Obtener todas las categorías
     return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias})
 
@@ -193,6 +195,7 @@ def listaPublicador(request):
     user = User.objects.get(id=request.user.id)
     categorias = UserCategoria.objects.filter(user=user, rol__nombre='Publicador').values_list('categoria__id', flat=True)
     contenido = Contenido.for_categorias(categorias)
+    contenido = contenido.filter(estado='Publicacion')
     return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})
 
 @login_required
@@ -208,6 +211,7 @@ def listaEditor(request):
     user = User.objects.get(id=request.user.id)
     categorias = UserCategoria.objects.filter(user=user, rol__nombre='Editor').values_list('categoria__id', flat=True)
     contenido = Contenido.for_categorias(categorias)
+    contenido = contenido.filter(estado='Edicion')
     return render(request, 'contenido/listaEditor.html', {'contenidos': contenido})
 
 @login_required
@@ -272,3 +276,53 @@ def buscarContenido(request):
     )
 
     return render(request, 'contenido/listaTodos.html', {'contenidos': contenidos, 'categorias': Categoria.objects.all()})
+
+def aEdicion(request, id):
+    """
+    Función que sirve para cambiar el estado de un contenido a "Edicion"
+    :param request: Objeto de solicitud HTTP.
+    :id: id del contenido a cambiar de estado
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+    contenido = Contenido.objects.get(id=id)
+    contenido.estado = 'Edicion'
+    contenido.save()
+
+    user = User.objects.get(id=request.user.id)
+    contenido = Contenido.for_user(user)
+    #contenido = contenido.filter(estado='Borrador')
+    return render(request, 'contenido/listaContenido.html', {'contenidos': contenido})
+    
+def aPublicacion(request, id):
+    """
+    Función que sirve para cambiar el estado de un contenido a "Publicacion"
+    :param request: Objeto de solicitud HTTP.
+    :id: id del contenido a cambiar de estado
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+    contenido = Contenido.objects.get(id=id)
+    contenido.estado = 'Publicacion'
+    contenido.save()
+
+    user = User.objects.get(id=request.user.id)
+    categorias = UserCategoria.objects.filter(user=user, rol__nombre='Editor').values_list('categoria__id', flat=True)
+    contenido = Contenido.for_categorias(categorias)
+    contenido = contenido.filter(estado='Edicion')
+    return render(request, 'contenido/listaEditor.html', {'contenidos': contenido})
+
+def publicarContenido(request, id):
+    """
+    Función que sirve para cambiar el estado de un contenido a "Publicado"
+    :param request: Objeto de solicitud HTTP.
+    :id: id del contenido a cambiar de estado
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+    contenido = Contenido.objects.get(id=id)
+    contenido.estado = 'Publicado'
+    contenido.save()
+
+    user = User.objects.get(id=request.user.id)
+    categorias = UserCategoria.objects.filter(user=user, rol__nombre='Publicador').values_list('categoria__id', flat=True)
+    contenido = Contenido.for_categorias(categorias)
+    contenido = contenido.filter(estado='Publicacion')
+    return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})

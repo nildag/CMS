@@ -33,9 +33,10 @@
                     <td>{{ contenido.titulo }}</td>
                     <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
                     <td>{{ contenido.categoria.nombre }}</td>
+                    <td>{{ contenido.estado }}</td>
                     <td>
                         <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
-                        <a href="#" class="btn btn-primary btn-sm">Publicar</a>
+                        <a href="{% url 'contenido:publicar_contenido' contenido.id %}" class="btn btn-primary btn-sm">Publicar</a>
                     </td>
                 </tr>
             {% endfor %}
