@@ -25,7 +25,7 @@ class Contenido(models.Model):
             - for_user(user): Devuelve los contenidos creados por un usuario específico.
             - for_categorias(categorias): Devuelve los contenidos asociados a una lista de categorías.
         """
-    titulo = models.CharField(max_length=30, default="titulo")
+    titulo = models.CharField(max_length=200, default="titulo")
     cuerpo = RichTextField(default="cuerpo")
     #autor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     autor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -34,6 +34,7 @@ class Contenido(models.Model):
     # Nuevos campos para valoración
     puntuacion = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     numero_valoraciones = models.PositiveIntegerField(default=0)
+    numero_vistas = models.PositiveIntegerField(default=0)
     estado = models.CharField(max_length=30, default="Borrador")
 
     def __str__(self):

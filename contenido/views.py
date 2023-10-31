@@ -168,6 +168,9 @@ def verContenido(request, id):
         HttpResponse: Respuesta HTTP que muestra la página del contenido específico.
     """
     contenido = Contenido.objects.get(id=id)
+    contenido.numero_vistas += 1
+    contenido.save()
+    
     return render(request, 'contenido/verContenido.html', {'contenido': contenido})
 
 def listaTodos(request):
