@@ -2,6 +2,7 @@ from django import forms
 from .models import Contenido
 from categorias.models import Categoria
 from usuario.models import UserCategoria
+from tipoContenido.models import tipoContenido
 
 class ContenidoForm(forms.ModelForm):
     """
@@ -13,11 +14,12 @@ class ContenidoForm(forms.ModelForm):
     """
     class Meta:
         model = Contenido
-        fields = ['titulo', 'cuerpo', 'categoria']
+        fields = ['titulo', 'cuerpo', 'categoria', 'tipo_contenido']
         labels = {
             'titulo': 'Titulo',
             'cuerpo': 'Cuerpo',
             'categoria': 'Categoria',
+            'tipo_c ontenido': 'Tipo de Contenido'
         }
         widgets = {
             'cuerpo': forms.Textarea(attrs={'rows': 4, 'cols': 40}),

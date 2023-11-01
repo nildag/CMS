@@ -1,6 +1,7 @@
 from django.db import models
 from usuario.models import User
 from categorias.models import Categoria
+from tipoContenido.models import tipoContenido
 from django.utils import timezone
 from ckeditor.fields import RichTextField
 from django.conf import settings  # Importa la configuración de Django
@@ -16,6 +17,7 @@ class Contenido(models.Model):
             - cuerpo (RichTextField): Cuerpo del contenido en formato rico.
             - autor (User): Usuario que crea el contenido.
             - categoria (Categoria): Categoría a la que pertenece el contenido.
+            - tipo_contenido (TipoContenido): Tipo de contenido.
             - fecha_creacion (datetime): Fecha y hora de creación del contenido.
             - puntuacion (Decimal): Puntuación promedio del contenido.
             - numero_valoraciones (int): Número total de valoraciones del contenido.
@@ -30,6 +32,7 @@ class Contenido(models.Model):
     #autor = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     autor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, default=1)
+    tipo_contenido = models.ForeignKey(tipoContenido, on_delete=models.SET_NULL, null=True, blank=True)
     fecha_creacion = models.DateTimeField(default=timezone.now)
     # Nuevos campos para valoración
     puntuacion = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)

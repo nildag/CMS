@@ -69,6 +69,7 @@ def crearContenido(request):
         if form.is_valid():
             contenido = form.save(commit=False)
             contenido.autor = request.user
+            contenido.tipo_contenido = form.cleaned_data['tipo_contenido']
             contenido.save()
             return redirect('contenido:lista_contenido')
     else:
@@ -98,6 +99,7 @@ def editarContenido(request, id):
     if request.method == 'POST':
         form = ContenidoForm(request.POST, instance=contenido, autor=request.user, categorias_autor=categorias_autor)
         if form.is_valid():
+            contenido.tipo_contenido = form.cleaned_data['tipo_contenido']
             form.save()
             
             if user_autor(request.user):
