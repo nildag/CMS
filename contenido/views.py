@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from .models import Contenido
 from .models import Categoria
+from .models import tipoContenido
 from .forms import ContenidoForm
 from usuario.models import UserCategoria
 from django.shortcuts import render, redirect
@@ -184,7 +185,8 @@ def listaTodos(request):
     contenido = Contenido.objects.all()
     contenido = contenido.filter(estado='Publicado')
     categorias = Categoria.objects.all()  # Obtener todas las categorías
-    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias})
+    tipo_contenido = tipoContenido.objects.all()  # Obtener todos los tipos de contenido
+    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias, 'tipo_contenido': tipo_contenido})
 
 
 @login_required

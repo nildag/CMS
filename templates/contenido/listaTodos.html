@@ -27,6 +27,7 @@
                             <th>Autor</th>
                             <th>Fecha de Publicación</th>
                             <th>Categoria</th>
+                            <th>Tipo Contenido</th>
                             <th>Opciones</th>
                         </tr>
                     </thead>
@@ -37,7 +38,14 @@
                             <td>{{ contenido.titulo }}</td>
                             <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
                             <td class="fechaPublicacion">{{ contenido.fecha_creacion|date:"Y-m-d" }}</td>
-                            <td class="categoria">{{ contenido.categoria.nombre }}</td>
+                            <td class="categoria">{{contenido.categoria.nombre}}</td>
+                            <td> 
+                                 {% if contenido.tipo_contenido %}
+                                    {{ contenido.tipo_contenido.nombre }}
+                                {% else %}
+                                    Sin tipo
+                                {% endif %}
+                            </td>
                             <td>
                                 <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
                             </td>
@@ -51,12 +59,12 @@
             <div class="col-md-3">
                 <!-- Filtro de fechas -->
                 <div class="mb-3">
-                    <label for="fechaInicio" class="form-label">Fecha de inicio</label>
-                    <input type="text" class="form-control" id="fechaInicio" placeholder="Fecha de inicio">
+                    <label for="startDate" class="form-label">Fecha de inicio</label>
+                    <input type="text" class="form-control" id="startDate" placeholder="Fecha de inicio">
                 </div>
                 <div class="mb-3">
-                    <label for="fechaFin" class="form-label">Fecha de fin</label>
-                    <input type="text" class="form-control" id="fechaFin" placeholder="Fecha de fin">
+                    <label for="endDate" class="form-label">Fecha de fin</label>
+                    <input type="text" class="form-control" id="endDate" placeholder="Fecha de fin">
                 </div>
 
                 <!-- Filtro de categorías -->
@@ -65,7 +73,19 @@
                     <select class="form-select" id="categoriaFiltro">
                         <option value="">Todas las Categorías</option>
                         {% for categoria in categorias %}
-                            <option value="{{ categoria.nombre }}">{{ categoria.nombre }}</option>
+                            {% if categoria.nombre != 'System' %}
+                                <option value="{{ categoria.nombre }}">{{ categoria.nombre }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Filtro de tipo de contenido -->
+                <div class="mb-3">
+                    <label for="tipoContenidoFiltro" class="form-label">Tipo de Contenido</label>
+                    <select class="form-select" id="tipoContenidoFiltro">
+                        <option value="">Todos los tipos de contenido</option>
+                        {% for tipo_contenido in tipos_contenido %}
+                            <option value="{{ tipo_contenido.nombre }}">{{ tipo_contenido.nombre }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -106,47 +126,54 @@
             );
 
             // Inicializar los datepickers
-            $('#fechaInicio').datepicker({
+            $('#startDate').datepicker({
                 autoclose: true,
                 format: 'yyyy-mm-dd', // Formato de fecha deseado
                 todayHighlight: true,
-                fechaFin: new Date() // No permitir fechas futuras
+                endDate: new Date() // No permitir fechas futuras
             });
 
-            $('#fechaFin').datepicker({
+            $('#endDate').datepicker({
                 autoclose: true,
                 format: 'yyyy-mm-dd',
                 todayHighlight: true,
-                fechaFin: new Date() // No permitir fechas futuras
+                endDate: new Date() // No permitir fechas futuras
             });
 
             // Escuchar eventos de cambio en los campos de fecha y categoría
-            $('#fechaInicio, #fechaFin, #categoriaFiltro').change(function () {
+            $('#startDate #fechaFin, #categoriaFiltro, #tipoContenidoFiltro').change(function () {
                 // Obtener valores de los campos
-                var fechaInicioString = $('#fechaInicio').val();
-                var fechaFinString = $('#fechaFin').val();
+                var startDateString = $('#startDate').val();
+                var endDateString = $('#endDate').val();
                 var categoriaSeleccionada = $('#categoriaFiltro').val();
+                var tipoContenidoSeleccionado = $('#tipoContenidoFiltro').val();
 
-                // Filtrar las filas de la tabla por fechas y categoría
+                // Filtrar las filas de la tabla por fechas,categoría y tipo de contenido
                 $('#tablaContenido tr').each(function () {
                     var fechaPublicacionString = $(this).find('.fechaPublicacion').text();
                     var categoriaContenido = $(this).find('.categoria').text();
+                    var tipoContenido = $(this).find('.tipoContenido').text();
 
                     // Verificar si el contenido cumple con los filtros
                     var cumpleFiltros = true;
 
                     // Filtrar por fechas
-                    if (fechaInicioString && fechaFinString) {
+                    if (startDateString && endDateString) {
                         var fechaPublicacion = new Date(fechaPublicacionString);
-                        var fechaInicio = new Date(fechaInicioString);
-                        var fechaFin = new Date(fechaFinString);
-                        if (fechaPublicacion < fechaInicio || fechaPublicacion > fechaFin) {
+                        var startDate = new Date(startDateString);
+                        var endDate = new Date(endDateString);
+                        if (fechaPublicacion < startDate || fechaPublicacion > endDate) {
                             cumpleFiltros = false;
                         }
                     }
 
                     // Filtrar por categoría
                     if (categoriaSeleccionada && categoriaContenido !== categoriaSeleccionada) {
+                        cumpleFiltros = false;
+                    }
+
+                    // Filtrar por tipo de contenido
+                    if (tipoContenidoSeleccionado && tipoContenido !== tipoContenidoSeleccionado) {
                         cumpleFiltros = false;
                     }
 
@@ -162,10 +189,10 @@
             // Escuchar el evento de clic en el botón de limpiar filtros
             $('#limpiarFiltros').click(function () {
                 // Restablecer los valores de los campos de fecha y categoría
-                $('#fechaInicio').val('');
-                $('#fechaFin').val('');
+                $('#startDate').val('');
+                $('#endDate').val('');
                 $('#categoriaFiltro').val('');
-
+                $('#tipoContenidoFiltro').val('');
                 // Mostrar todas las filas en la tabla
                 $('#tablaContenido tr').show();
             });
