@@ -80,6 +80,16 @@
                     </select>
                 </div>
                 
+                <!-- Filtro por rango de fechas -->
+                <div class="mb-3">
+                    <label for="fechaInicioFiltro" class="form-label">Fecha desde</label>
+                    <input type="date" class="form-control" id="fechaInicioFiltro">
+
+                    <label for="fechaFinFiltro" class="form-label">Fecha hata</label>
+                    <input type="date" class="form-control" id="fechaFinFiltro">
+                </div>
+                <!-- Botón para limpiar filtros -->
+                <button class="btn btn-primary" id="aplicarRangoFechas">Aplicar rango de fechas</button>
                 <!-- Botón para limpiar filtros -->
                 <button class="btn btn-secondary" id="limpiarFiltros">Limpiar Filtros</button>
             </div>
@@ -119,22 +129,22 @@
 
            
             // Escuchar eventos de cambio en los campos de fecha y categoría
-            $('#categoriaFiltro, #tipoContenidoFiltro').change(function () {
+            $('#categoriaFiltro, #tipoContenidoFiltro, #aplicarRangoFechas').on('change click',function () {
                 console.log('Evento de cambio ejecutado');
                 // Obtener valores de los campos
                 var categoriaSeleccionada = $('#categoriaFiltro').val();
                 var tipoContenidoSeleccionado = $('#tipoContenidoFiltro').val();
+                var fechaInicioSeleccionada = $('#fechaInicioFiltro').val();
+                var fechaFinSeleccionada = $('#fechaFinFiltro').val();
                 
                 // Filtrar las filas de la tabla por fechas,categoría y tipo de contenido
                 $('#tablaContenido tr').each(function () {
                     var categoriaContenido = $(this).find('.categoria').text();
                     var tipoContenido = $(this).find('.tipoContenido').text();
+                    var fechaContenido = $(this).find('.fechaPublicacion').text();
 
                     // Verificar si el contenido cumple con los filtros
                     var cumpleFiltros = true;
-
-                    // Filtrar por fechas
-                    
 
                     // Filtrar por categoría
                     if (categoriaSeleccionada && categoriaContenido !== categoriaSeleccionada) {
@@ -145,6 +155,18 @@
                     if (tipoContenidoSeleccionado && tipoContenido !== tipoContenidoSeleccionado) {
                         cumpleFiltros = false;
                     }
+
+                    // Filtrar por rango de fechas
+                    if (fechaInicioSeleccionada && fechaFinSeleccionada) {
+                        var fechaContenidoDate = new Date(fechaContenido);
+                        var fechaInicioDate = new Date(fechaInicioSeleccionada);
+                        var fechaFinDate = new Date(fechaFinSeleccionada);
+                        if (fechaContenidoDate < fechaInicioDate || fechaContenidoDate > fechaFinDate) {
+                            cumpleFiltros = false;
+                        }
+                    }
+
+
 
                     // Mostrar u ocultar la fila según los filtros
                     if (cumpleFiltros) {
@@ -160,6 +182,8 @@
                 // Restablecer los valores de los campos de fecha y categoría
                 $('#categoriaFiltro').val('');
                 $('#tipoContenidoFiltro').val('');
+                $('#fechaInicioFiltro').val('');
+                $('#fechaFinFiltro').val('');
                 // Mostrar todas las filas en la tabla
                 $('#tablaContenido tr').show();
             });
