@@ -39,7 +39,7 @@
                             <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
                             <td class="fechaPublicacion">{{ contenido.fecha_creacion|date:"d-m-Y" }}</td>
                             <td class="categoria">{{contenido.categoria.nombre}}</td>
-                            <td> 
+                            <td class="tipo"> 
                                  {% if contenido.tipo_contenido %}
                                     {{ contenido.tipo_contenido.nombre }}
                                 {% else %}
@@ -81,15 +81,17 @@
                 </div>
                 
                 <!-- Filtro por rango de fechas -->
-                <div class="mb-3">
-                    <label for="fechaInicioFiltro" class="form-label">Fecha desde</label>
-                    <input type="date" class="form-control" id="fechaInicioFiltro">
+                <div class="mb-3" id="bloque-filtros">
+                    <div class="mb-3">
+                        <label for="fechaInicioFiltro" class="form-label">Fecha desde</label>
+                        <input type="date" class="form-control" id="fechaInicioFiltro">
 
-                    <label for="fechaFinFiltro" class="form-label">Fecha hata</label>
-                    <input type="date" class="form-control" id="fechaFinFiltro">
-                </div>
-                <!-- Botón para aplicar el filtro de rango de fechas -->
-                <button class="btn btn-primary" id="aplicarRangoFechas">Aplicar rango de fechas</button>
+                        <label for="fechaFinFiltro" class="form-label">Fecha hata</label>
+                        <input type="date" class="form-control" id="fechaFinFiltro">
+                    </div>
+                    <!-- Botón para aplicar el filtro de rango de fechas -->
+                    <button class="btn btn-primary" id="aplicarRangoFechas">Aplicar rango de fechas</button>
+                </div>   
                 <!-- Botón para limpiar filtros -->
                 <button class="btn btn-secondary" id="limpiarFiltros">Limpiar Filtros</button>
             </div>
@@ -138,7 +140,6 @@
            
             // Escuchar eventos de cambio en los campos de fecha y categoría
             $('#categoriaFiltro, #tipoContenidoFiltro, #aplicarRangoFechas').on('change click',function () {
-                console.log('Evento de cambio ejecutado');
                 // Obtener valores de los campos
                 var categoriaSeleccionada = $('#categoriaFiltro').val();
                 var tipoContenidoSeleccionado = $('#tipoContenidoFiltro').val();
@@ -153,7 +154,7 @@
                 // Filtrar las filas de la tabla por fechas,categoría y tipo de contenido
                 $('#tablaContenido tr').each(function () {
                     var categoriaContenido = $(this).find('.categoria').text();
-                    var tipoContenido = $(this).find('.tipoContenido').text();
+                    var tipoContenido = $(this).find('.tipo').text();
                     var fechaContenido = $(this).find('.fechaPublicacion').text();
 
                     // Verificar si el contenido cumple con los filtros
@@ -163,12 +164,15 @@
                     if (categoriaSeleccionada && categoriaContenido !== categoriaSeleccionada) {
                         cumpleFiltros = false;
                     }
-
+                    console.log('tipo de contenido seleccionado:',tipoContenidoSeleccionado)
+                    console.log('tipo de contenido:',tipoContenido)
+                    console.log('cumpleFiltros:',cumpleFiltros)
                     // Filtrar por tipo de contenido
-                    if (tipoContenidoSeleccionado && tipoContenido !== tipoContenidoSeleccionado) {
+                    if (tipoContenidoSeleccionado && tipoContenido.trim() !== tipoContenidoSeleccionado) {
                         cumpleFiltros = false;
                     }
-
+                    console.log('cumpleFiltros:',cumpleFiltros)
+                    console.log('-----------------------------')
                     // Filtrar por rango de fechas
                     if (fechaInicioSeleccionada && fechaFinSeleccionada) {
                         var fechaContenidoDate = new Date(fechaContenido.split('-').reverse().join('-'));
