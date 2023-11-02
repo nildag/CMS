@@ -3,6 +3,9 @@ from django.contrib.auth.models import AbstractUser
 from rol.models import Rol
 from categorias.models import Categoria
 from permiso.models import Permiso
+from django.utils import timezone
+from django.db.models.signals import post_save
+from notify.signals import notificar
 
 class User(AbstractUser):
 
@@ -152,3 +155,14 @@ class UserCategoria(models.Model):
         :return: Se retorna un QuerySet
         """
         return UserCategoria.objects.filter(user=user)
+
+
+class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    image = models.FileField(upload_to='fotos')
+    text = models.TextField()
+    timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+
+    def __str__(self):
+        return self.title
