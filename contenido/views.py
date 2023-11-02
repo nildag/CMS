@@ -184,9 +184,10 @@ def listaTodos(request):
     """
     contenido = Contenido.objects.all()
     contenido = contenido.filter(estado='Publicado')
+    
     categorias = Categoria.objects.all()  # Obtener todas las categorías
-    tipo_contenido = tipoContenido.objects.all()  # Obtener todos los tipos de contenido
-    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias, 'tipo_contenido': tipo_contenido})
+    tipos_contenido = tipoContenido.objects.all()  # Obtener todos los tipos de contenido
+    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias, 'tipos_contenido': tipos_contenido})
 
 
 @login_required

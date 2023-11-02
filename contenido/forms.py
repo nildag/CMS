@@ -19,7 +19,7 @@ class ContenidoForm(forms.ModelForm):
             'titulo': 'Titulo',
             'cuerpo': 'Cuerpo',
             'categoria': 'Categoria',
-            'tipo_c ontenido': 'Tipo de Contenido'
+            'tipo_contenido': 'Tipo de Contenido'
         }
         widgets = {
             'cuerpo': forms.Textarea(attrs={'rows': 4, 'cols': 40}),

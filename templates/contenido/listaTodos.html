@@ -37,7 +37,7 @@
                         <tr>
                             <td>{{ contenido.titulo }}</td>
                             <td>{{ contenido.autor.first_name }} {{ contenido.autor.last_name }}</td>
-                            <td class="fechaPublicacion">{{ contenido.fecha_creacion|date:"Y-m-d" }}</td>
+                            <td class="fechaPublicacion">{{ contenido.fecha_creacion|date:"d-m-Y" }}</td>
                             <td class="categoria">{{contenido.categoria.nombre}}</td>
                             <td> 
                                  {% if contenido.tipo_contenido %}
@@ -57,16 +57,6 @@
 
             <!-- Filtros -->
             <div class="col-md-3">
-                <!-- Filtro de fechas -->
-                <div class="mb-3">
-                    <label for="startDate" class="form-label">Fecha de inicio</label>
-                    <input type="text" class="form-control" id="startDate" placeholder="Fecha de inicio">
-                </div>
-                <div class="mb-3">
-                    <label for="endDate" class="form-label">Fecha de fin</label>
-                    <input type="text" class="form-control" id="endDate" placeholder="Fecha de fin">
-                </div>
-
                 <!-- Filtro de categorías -->
                 <div class="mb-3">
                     <label for="categoriaFiltro" class="form-label">Categoría</label>
@@ -81,7 +71,7 @@
                 </div>
                 <!-- Filtro de tipo de contenido -->
                 <div class="mb-3">
-                    <label for="tipoContenidoFiltro" class="form-label">Tipo de Contenido</label>
+                    <label for="tipoContenidoFiltro" class="form-label">Tipo de contenido</label>
                     <select class="form-select" id="tipoContenidoFiltro">
                         <option value="">Todos los tipos de contenido</option>
                         {% for tipo_contenido in tipos_contenido %}
@@ -89,7 +79,7 @@
                         {% endfor %}
                     </select>
                 </div>
-
+                
                 <!-- Botón para limpiar filtros -->
                 <button class="btn btn-secondary" id="limpiarFiltros">Limpiar Filtros</button>
             </div>
@@ -100,6 +90,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
+    
 
     <!-- Scripts -->
     <script>
@@ -125,32 +117,16 @@
                 }
             );
 
-            // Inicializar los datepickers
-            $('#startDate').datepicker({
-                autoclose: true,
-                format: 'yyyy-mm-dd', // Formato de fecha deseado
-                todayHighlight: true,
-                endDate: new Date() // No permitir fechas futuras
-            });
-
-            $('#endDate').datepicker({
-                autoclose: true,
-                format: 'yyyy-mm-dd',
-                todayHighlight: true,
-                endDate: new Date() // No permitir fechas futuras
-            });
-
+           
             // Escuchar eventos de cambio en los campos de fecha y categoría
-            $('#startDate #fechaFin, #categoriaFiltro, #tipoContenidoFiltro').change(function () {
+            $('#categoriaFiltro, #tipoContenidoFiltro').change(function () {
+                console.log('Evento de cambio ejecutado');
                 // Obtener valores de los campos
-                var startDateString = $('#startDate').val();
-                var endDateString = $('#endDate').val();
                 var categoriaSeleccionada = $('#categoriaFiltro').val();
                 var tipoContenidoSeleccionado = $('#tipoContenidoFiltro').val();
-
+                
                 // Filtrar las filas de la tabla por fechas,categoría y tipo de contenido
                 $('#tablaContenido tr').each(function () {
-                    var fechaPublicacionString = $(this).find('.fechaPublicacion').text();
                     var categoriaContenido = $(this).find('.categoria').text();
                     var tipoContenido = $(this).find('.tipoContenido').text();
 
@@ -158,14 +134,7 @@
                     var cumpleFiltros = true;
 
                     // Filtrar por fechas
-                    if (startDateString && endDateString) {
-                        var fechaPublicacion = new Date(fechaPublicacionString);
-                        var startDate = new Date(startDateString);
-                        var endDate = new Date(endDateString);
-                        if (fechaPublicacion < startDate || fechaPublicacion > endDate) {
-                            cumpleFiltros = false;
-                        }
-                    }
+                    
 
                     // Filtrar por categoría
                     if (categoriaSeleccionada && categoriaContenido !== categoriaSeleccionada) {
@@ -189,8 +158,6 @@
             // Escuchar el evento de clic en el botón de limpiar filtros
             $('#limpiarFiltros').click(function () {
                 // Restablecer los valores de los campos de fecha y categoría
-                $('#startDate').val('');
-                $('#endDate').val('');
                 $('#categoriaFiltro').val('');
                 $('#tipoContenidoFiltro').val('');
                 // Mostrar todas las filas en la tabla
