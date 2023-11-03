@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "rol",
     "categorias",
     "tipoContenido",
+    "notify",
 ]
 
 AUTH_USER_MODEL = 'usuario.User'

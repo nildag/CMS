@@ -14,4 +14,8 @@ urlpatterns = [
     path('listaEditor/', views.listaEditor, name='lista_editor'),
     path('valorar/<int:id>/', views.valorarContenido, name='valorar_contenido'),
     path('buscar/', views.buscarContenido, name='buscar_contenido'),
+    path('aEdicion/<int:id>/', views.aEdicion, name='a_edicion'),
+    path('aPublicacion/<int:id>/', views.aPublicacion, name='a_publicacion'),
+    path('publicar/<int:id>/', views.publicarContenido, name='publicar_contenido'),
+    path('kanban/', views.kanbanView, name='kanban'),
 ]

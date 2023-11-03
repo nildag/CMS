@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from .models import Contenido
 from .models import Categoria
+from .models import tipoContenido
 from .forms import ContenidoForm
+from .forms import EditorContenidoForm
 from usuario.models import UserCategoria
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
@@ -9,6 +11,8 @@ from django.contrib.auth.decorators import user_passes_test
 from usuario.models import User
 from contenido.models import Valoracion
 from django.db.models import Q
+from notify.signals import notificar
+from django.utils import timezone
 
 def user_autor(user):
 
@@ -40,6 +44,16 @@ def user_publicador(user):
 
     return User.is_publicador(user)
 
+def user_autor_or_editor(user):
+
+    """
+    Funcion que comprueba si el usuario es autor o editor
+    :param user: usuario a comprobar (User)
+    :return: True si es autor o editor, False en caso contrario
+    """
+
+    return user_autor(user) or user_editor(user)
+
 @login_required
 @user_passes_test(user_autor)
 def crearContenido(request):
@@ -59,6 +73,7 @@ def crearContenido(request):
         if form.is_valid():
             contenido = form.save(commit=False)
             contenido.autor = request.user
+            contenido.tipo_contenido = form.cleaned_data['tipo_contenido']
             contenido.save()
             return redirect('contenido:lista_contenido')
     else:
@@ -67,7 +82,7 @@ def crearContenido(request):
     return render(request, 'contenido/crearContenido.html', {'form': form})
 
 @login_required
-@user_passes_test(user_autor)
+@user_passes_test(user_autor_or_editor)
 def editarContenido(request, id):
     """
     Vista para editar contenido existente. Requiere autenticación.
@@ -79,15 +94,40 @@ def editarContenido(request, id):
     Returns:
         HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de edición.
     """
-    categorias_autor = UserCategoria.objects.filter(user=request.user, rol__nombre='Autor').values_list('categoria__id', flat=True)
+
     contenido = get_object_or_404(Contenido, id=id)
-    if request.method == 'POST':
-        form = ContenidoForm(request.POST, instance=contenido, autor=request.user, categorias_autor=categorias_autor)
-        if form.is_valid():
-            form.save()
-            return redirect('contenido:lista_contenido')
+
+    if (request.user).is_autor_in_categoria(contenido.categoria):
+        categorias_autor = UserCategoria.objects.filter(user=request.user, rol__nombre='Autor').values_list('categoria__id', flat=True)
     else:
-        form = ContenidoForm(instance=contenido, categorias_autor=categorias_autor, autor=request.user)
+        categorias_autor = Contenido.objects.filter(id=id).values_list('categoria__id', flat=True)
+
+    if request.method == 'POST':
+
+        if (request.user).is_autor_in_categoria(contenido.categoria):
+            form = ContenidoForm(request.POST, instance=contenido, autor=request.user, categorias_autor=categorias_autor)
+        else:
+            form = EditorContenidoForm(request.POST, instance=contenido)
+
+        if form.is_valid():
+
+            if (request.user).is_autor_in_categoria(contenido.categoria):
+                contenido.tipo_contenido = form.cleaned_data['tipo_contenido']
+
+            form.save()
+            
+            if (request.user).is_autor_in_categoria(contenido.categoria):
+                return redirect('contenido:lista_contenido')
+            else:
+                return redirect('contenido:lista_editor')
+        
+    else:
+
+        if (request.user).is_autor_in_categoria(contenido.categoria):
+            form = ContenidoForm(instance=contenido, categorias_autor=categorias_autor, autor=request.user)
+        else:
+            form = EditorContenidoForm(instance=contenido)
+
     return render(request, 'contenido/editarContenido.html', {'form': form})
 
 @login_required
@@ -134,6 +174,7 @@ def listaContenido(request):
 
     user = User.objects.get(id=request.user.id)
     contenido = Contenido.for_user(user)
+    #contenido = contenido.filter(estado='Borrador')
     return render(request, 'contenido/listaContenido.html', {'contenidos': contenido})
 
 def verContenido(request, id):
@@ -148,6 +189,9 @@ def verContenido(request, id):
         HttpResponse: Respuesta HTTP que muestra la página del contenido específico.
     """
     contenido = Contenido.objects.get(id=id)
+    contenido.numero_vistas += 1
+    contenido.save()
+    
     return render(request, 'contenido/verContenido.html', {'contenido': contenido})
 
 def listaTodos(request):
@@ -157,8 +201,11 @@ def listaTodos(request):
     :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
     """
     contenido = Contenido.objects.all()
+    contenido = contenido.filter(estado='Publicado')
+    
     categorias = Categoria.objects.all()  # Obtener todas las categorías
-    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias})
+    tipos_contenido = tipoContenido.objects.all()  # Obtener todos los tipos de contenido
+    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias, 'tipos_contenido': tipos_contenido})
 
 
 @login_required
@@ -174,6 +221,7 @@ def listaPublicador(request):
     user = User.objects.get(id=request.user.id)
     categorias = UserCategoria.objects.filter(user=user, rol__nombre='Publicador').values_list('categoria__id', flat=True)
     contenido = Contenido.for_categorias(categorias)
+    contenido = contenido.filter(estado='Publicacion')
     return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})
 
 @login_required
@@ -189,6 +237,7 @@ def listaEditor(request):
     user = User.objects.get(id=request.user.id)
     categorias = UserCategoria.objects.filter(user=user, rol__nombre='Editor').values_list('categoria__id', flat=True)
     contenido = Contenido.for_categorias(categorias)
+    contenido = contenido.filter(estado='Edicion')
     return render(request, 'contenido/listaEditor.html', {'contenidos': contenido})
 
 @login_required
@@ -253,3 +302,110 @@ def buscarContenido(request):
     )
 
     return render(request, 'contenido/listaTodos.html', {'contenidos': contenidos, 'categorias': Categoria.objects.all()})
+
+def aEdicion(request, id):
+    """
+    Función que sirve para cambiar el estado de un contenido a "Edicion"
+    :param request: Objeto de solicitud HTTP.
+    :id: id del contenido a cambiar de estado
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+    contenido = Contenido.objects.get(id=id)
+    contenido.estado = 'Edicion'
+    contenido.save()
+
+
+    # Notificar a los usuarios editores en la categoría del contenido
+    categoria = contenido.categoria  # Obtener la categoría del contenido
+    users_with_editor_role = User.objects.filter(
+        usercategoria__rol__nombre="Editor",
+        usercategoria__categoria=categoria
+    )
+    print(contenido)
+    new_notifications = []
+    for user in users_with_editor_role:
+        notification = notificar.send(sender=contenido.autor, verb=contenido.titulo, destiny=user, timestamp=timezone.now(),categoria_destino=categoria)
+        new_notifications.extend(notification)
+
+
+    user = User.objects.get(id=request.user.id)
+    contenido = Contenido.for_user(user)
+    #contenido = contenido.filter(estado='Borrador')
+    return render(request, 'contenido/listaContenido.html', {'contenidos': contenido})
+    
+def aPublicacion(request, id):
+    """
+    Función que sirve para cambiar el estado de un contenido a "Publicacion"
+    :param request: Objeto de solicitud HTTP.
+    :id: id del contenido a cambiar de estado
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+    contenido = Contenido.objects.get(id=id)
+    contenido.estado = 'Publicacion'
+    contenido.save()
+
+    user = User.objects.get(id=request.user.id)
+    categorias = UserCategoria.objects.filter(user=user, rol__nombre='Editor').values_list('categoria__id', flat=True)
+    contenido = Contenido.for_categorias(categorias)
+    contenido = contenido.filter(estado='Edicion')
+    return render(request, 'contenido/listaEditor.html', {'contenidos': contenido})
+
+def publicarContenido(request, id):
+    """
+    Función que sirve para cambiar el estado de un contenido a "Publicado"
+    :param request: Objeto de solicitud HTTP.
+    :id: id del contenido a cambiar de estado
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+    contenido = Contenido.objects.get(id=id)
+    contenido.estado = 'Publicado'
+    contenido.save()
+
+    user = User.objects.get(id=request.user.id)
+    categorias = UserCategoria.objects.filter(user=user, rol__nombre='Publicador').values_list('categoria__id', flat=True)
+    contenido = Contenido.for_categorias(categorias)
+    contenido = contenido.filter(estado='Publicacion')
+    return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})
+
+def kanbanView(request):
+    """
+    Vista de Kanban para mostrar contenidos organizados por categoría y estado.
+
+    Esta vista recopila todos los contenidos de la base de datos y los organiza en un tablero Kanban.
+    Los contenidos se agrupan por categoría y estado para su visualización.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP que desencadenó esta vista.
+
+    Returns:
+        HttpResponse: Una respuesta HTTP que renderiza la plantilla 'contenido/kanban.html' con
+        los contenidos organizados en forma de tablero Kanban.
+
+    Raises:
+        N/A
+
+    Example:
+        Ejemplo de uso en una URL de Django:
+        ```
+        path('kanban/', views.kanbanView, name='kanban'),
+        ```
+    """
+    # Obtén todos los contenidos de tu base de datos
+    contenidos = Contenido.objects.all()
+
+    # Organiza los contenidos en un diccionario por categoría y estado
+    tablero_kanban = {}
+
+    for contenido in contenidos:
+        categoria = contenido.categoria.nombre
+        estado = contenido.estado
+
+        if categoria not in tablero_kanban:
+            tablero_kanban[categoria] = {}
+
+        if estado not in tablero_kanban[categoria]:
+            tablero_kanban[categoria][estado] = []
+
+        tablero_kanban[categoria][estado].append(contenido)
+
+    return render(request, 'contenido/kanban.html', {'tablero_kanban': tablero_kanban})

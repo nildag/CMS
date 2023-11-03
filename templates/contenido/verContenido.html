@@ -21,21 +21,23 @@
 <div class="container">
     <div class="content-details">
         <h1>{{ contenido.titulo }}</h1>
-        <p class="author">Creado por {{ contenido.autor.get_full_name }}, Publicado el {{ contenido.fecha_creacion|date:"F j, Y" }}</p>
+        <p class="author">
+        Creado por {{ contenido.autor.get_full_name }}, Publicado el {{ contenido.fecha_creacion|date:"d/m/Y" }}<br>
+        Numero de Visitas: {{ contenido.numero_vistas}}   Puntuación Promedio: {{ contenido.puntuacion | floatformat:2 }} en {{ contenido.numero_valoraciones }} voto/s
+        </p>
         <div class="content-body">
             {{ contenido.cuerpo | safe }}
         </div>
     </div>
 
     <div class="content-rating text-center">
-        <h2>Valoración Promedio</h2>
-        <p>Puntuación Promedio: {{ contenido.puntuacion | floatformat:2 }}</p>
+        <h5>Valoración Promedio</h5>
         <p>Número de Valoraciones: {{ contenido.numero_valoraciones }}</p>
     </div>
 
     {% if user.is_authenticated %}
     <div class="content-rating text-center">
-        <h2>Valorar este Contenido</h2>
+        <h5>Tu valoración</h5>
         <form method="post" action="{% url 'contenido:valorar_contenido' contenido.id %}" id="rating-form">
             {% csrf_token %}
             <label for="puntuacion">Puntuación (1-5):</label>

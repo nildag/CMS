@@ -104,6 +104,9 @@
                                     {% if user.admin_categorias %}
                                     <li><a class="dropdown-item" href="{% url 'categorias:ver_categorias' %}">Categorias</a></li>
                                     {% endif %}
+                                    {% if user.is_admin %}
+                                    <li><a class="dropdown-item" href="{% url 'contenido:kanban' %}">Kanban</a></li>
+                                    {% endif %}
                                     {% if user.admin_asigRoles %}
                                     <li><a class="dropdown-item" href="{% url 'usuario:verUsuarios' %}">Usuarios</a></li>
                                     {% endif %}
@@ -120,6 +123,19 @@
                         {% endif %}
                         {% if user.is_editor %}
                         <li class="nav-item"><a href="{% url 'contenido:lista_editor' %}" class="nav-link link-body-emphasis">Edición</a></li>
+                        {% endif %}
+                        {%  if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a href="{% url 'notify' %}" class="nav-link link-body-emphasis">
+                                <span class="notification-icon">
+                                    <i class="fas fa-bell"></i>
+                                </span>
+                                <!---place holder para cantidad de notificaciones sin leer--->
+                                {% load notificaciones_tags %}
+                                {% notificaciones_tag as notifi %}
+                                <!----------------------------------------------------------->
+                            </a>
+                        </li>
                         {% endif %}
                     </ul>
                     <div class="dropdown">
