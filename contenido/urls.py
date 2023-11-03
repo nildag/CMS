@@ -17,4 +17,5 @@ urlpatterns = [
     path('aEdicion/<int:id>/', views.aEdicion, name='a_edicion'),
     path('aPublicacion/<int:id>/', views.aPublicacion, name='a_publicacion'),
     path('publicar/<int:id>/', views.publicarContenido, name='publicar_contenido'),
+    path('kanban/', views.kanbanView, name='kanban'),
 ]

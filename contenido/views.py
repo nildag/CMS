@@ -350,3 +350,46 @@ def publicarContenido(request, id):
     contenido = Contenido.for_categorias(categorias)
     contenido = contenido.filter(estado='Publicacion')
     return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})
+
+def kanbanView(request):
+    """
+    Vista de Kanban para mostrar contenidos organizados por categoría y estado.
+
+    Esta vista recopila todos los contenidos de la base de datos y los organiza en un tablero Kanban.
+    Los contenidos se agrupan por categoría y estado para su visualización.
+
+    Args:
+        request (HttpRequest): La solicitud HTTP que desencadenó esta vista.
+
+    Returns:
+        HttpResponse: Una respuesta HTTP que renderiza la plantilla 'contenido/kanban.html' con
+        los contenidos organizados en forma de tablero Kanban.
+
+    Raises:
+        N/A
+
+    Example:
+        Ejemplo de uso en una URL de Django:
+        ```
+        path('kanban/', views.kanbanView, name='kanban'),
+        ```
+    """
+    # Obtén todos los contenidos de tu base de datos
+    contenidos = Contenido.objects.all()
+
+    # Organiza los contenidos en un diccionario por categoría y estado
+    tablero_kanban = {}
+
+    for contenido in contenidos:
+        categoria = contenido.categoria.nombre
+        estado = contenido.estado
+
+        if categoria not in tablero_kanban:
+            tablero_kanban[categoria] = {}
+
+        if estado not in tablero_kanban[categoria]:
+            tablero_kanban[categoria][estado] = []
+
+        tablero_kanban[categoria][estado].append(contenido)
+
+    return render(request, 'contenido/kanban.html', {'tablero_kanban': tablero_kanban})
