@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import user_passes_test
 from usuario.models import User
 from contenido.models import Valoracion
 from django.db.models import Q
+from notify.signals import notificar
+from django.utils import timezone
 
 def user_autor(user):
 
@@ -295,6 +297,20 @@ def aEdicion(request, id):
     contenido = Contenido.objects.get(id=id)
     contenido.estado = 'Edicion'
     contenido.save()
+
+
+    # Notificar a los usuarios editores en la categoría del contenido
+    categoria = contenido.categoria  # Obtener la categoría del contenido
+    users_with_editor_role = User.objects.filter(
+        usercategoria__rol__nombre="Editor",
+        usercategoria__categoria=categoria
+    )
+    print(contenido)
+    new_notifications = []
+    for user in users_with_editor_role:
+        notification = notificar.send(sender=contenido.autor, verb=contenido.titulo, destiny=user, timestamp=timezone.now(),categoria_destino=categoria)
+        new_notifications.extend(notification)
+
 
     user = User.objects.get(id=request.user.id)
     contenido = Contenido.for_user(user)

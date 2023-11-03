@@ -114,6 +114,14 @@
 
                         </li>
                         {% endif %}
+                        {% endif %}
+                        {% if user.is_publicador %}
+                        <li class="nav-item"><a href="{% url 'contenido:lista_publicador' %}" class="nav-link link-body-emphasis">Publicación</a></li>
+                        {% endif %}
+                        {% if user.is_editor %}
+                        <li class="nav-item"><a href="{% url 'contenido:lista_editor' %}" class="nav-link link-body-emphasis">Edición</a></li>
+                        {% endif %}
+                        {%  if user.is_authenticated %}
                         <li class="nav-item">
                             <a href="{% url 'notify' %}" class="nav-link link-body-emphasis">
                                 <span class="notification-icon">
@@ -125,12 +133,6 @@
                                 <!----------------------------------------------------------->
                             </a>
                         </li>
-                        {% endif %}
-                        {% if user.is_publicador %}
-                        <li class="nav-item"><a href="{% url 'contenido:lista_publicador' %}" class="nav-link link-body-emphasis">Publicación</a></li>
-                        {% endif %}
-                        {% if user.is_editor %}
-                        <li class="nav-item"><a href="{% url 'contenido:lista_editor' %}" class="nav-link link-body-emphasis">Edición</a></li>
                         {% endif %}
                     </ul>
                     <div class="dropdown">

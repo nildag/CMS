@@ -14,18 +14,17 @@ from usuario.models import User
 
 
 class NotificationQueryset(models.QuerySet):
-    def leido(self, include_deleted=True):
+    def leido(self):
         """
-        Retornamos las notificacion que hayan sido leidas en el actual Queryset
+        Retorna las notificacion que hayan sido leidas en el actual Queryset
         :param include_deleted:
         :return:
         """
-        if include_deleted:
-            return self.filter(read=True)
+        return self.filter(read=True)
 
     def no_leido(self):
         """
-        Retornamos solo los items que no hayan sido leidos en el actual Queryset
+        Retorna solo los items que no hayan sido leidos en el actual Queryset
         :param include_deleted:
         :return:
         """
@@ -99,7 +98,7 @@ def notify_signals(verb, **kwargs):
     :param kwargs:
     :return:
     """
-    destiny = kwargs.pop('destiny')
+    #destiny = kwargs.pop('destiny')
     actor = kwargs.pop('sender')
 
     publico = bool(kwargs.pop('publico', True))
@@ -108,28 +107,29 @@ def notify_signals(verb, **kwargs):
     Notify = load_model('notify', 'Notification')
     levels = kwargs.pop('level', Notify.Levels.info)
 
-    if isinstance(destiny, Group):
-        destinies = destiny.user_set.all()
-    elif isinstance(destiny, (QuerySet, list)):
-        destinies = destiny
-    else:
-        destinies = [destiny]
+    categoria_destino = kwargs.pop('categoria_destino', None)
 
-    new_notify = []
-    for destiny in destinies:
-        notification = Notify(
-            destiny=destiny,
-            actor_content_type=ContentType.objects.get_for_model(actor),
-            object_id_actor=actor.pk,
-            verbo=str(verb),
-            publico=publico,
-            timestamp=timestamp,
-            level=levels
+    if categoria_destino:
+        # Obtén a los usuarios editores de la categoría
+        users_with_editor_role = User.objects.filter(
+            usercategoria__rol__nombre="Editor",
+            usercategoria__categoria=categoria_destino
         )
 
-        notification.save()
-        new_notify.append(notification)
-    return new_notify
+        new_notify = []
+        for user in users_with_editor_role:
+            notification = Notify(
+                destiny=user,
+                actor_content_type=ContentType.objects.get_for_model(actor),
+                object_id_actor=actor.pk,
+                verbo=str(verb),
+                publico=publico,
+                timestamp=timestamp,
+                level=levels,
+            )
+            notification.save()
+            new_notify.append(notification)
+        return new_notify
 
 
 notificar.connect(notify_signals, dispatch_uid='notify.models.Notification')
