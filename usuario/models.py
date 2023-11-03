@@ -134,6 +134,19 @@ class User(AbstractUser):
             if self.tiene_permiso_en_categoria("Editar contenido", categoria):
                 return True
         return False
+    
+    def is_autor_in_categoria(self, categoria):
+        """
+        Este método retorna si el usuario actual tiene el rol Autor en una categoría dada.
+        :param categoria: Categoría en la que se desea verificar si el usuario es autor (Categoria)
+        :return: Se retorna un bool
+        """
+        userCategorias = UserCategoria.objects.filter(user=self)
+        for userCategoria in userCategorias:
+            if userCategoria.categoria == categoria:
+                if userCategoria.rol.nombre == "Autor":
+                    return True
+        return False
 
 
 class UserCategoria(models.Model):

@@ -3,6 +3,7 @@ from .models import Contenido
 from .models import Categoria
 from .models import tipoContenido
 from .forms import ContenidoForm
+from .forms import EditorContenidoForm
 from usuario.models import UserCategoria
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
@@ -93,25 +94,40 @@ def editarContenido(request, id):
     Returns:
         HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de edición.
     """
-    if user_autor(request.user):
+
+    contenido = get_object_or_404(Contenido, id=id)
+
+    if (request.user).is_autor_in_categoria(contenido.categoria):
         categorias_autor = UserCategoria.objects.filter(user=request.user, rol__nombre='Autor').values_list('categoria__id', flat=True)
     else:
         categorias_autor = Contenido.objects.filter(id=id).values_list('categoria__id', flat=True)
 
-    contenido = get_object_or_404(Contenido, id=id)
     if request.method == 'POST':
-        form = ContenidoForm(request.POST, instance=contenido, autor=request.user, categorias_autor=categorias_autor)
+
+        if (request.user).is_autor_in_categoria(contenido.categoria):
+            form = ContenidoForm(request.POST, instance=contenido, autor=request.user, categorias_autor=categorias_autor)
+        else:
+            form = EditorContenidoForm(request.POST, instance=contenido)
+
         if form.is_valid():
-            contenido.tipo_contenido = form.cleaned_data['tipo_contenido']
+
+            if (request.user).is_autor_in_categoria(contenido.categoria):
+                contenido.tipo_contenido = form.cleaned_data['tipo_contenido']
+
             form.save()
             
-            if user_autor(request.user):
+            if (request.user).is_autor_in_categoria(contenido.categoria):
                 return redirect('contenido:lista_contenido')
             else:
                 return redirect('contenido:lista_editor')
         
     else:
-        form = ContenidoForm(instance=contenido, categorias_autor=categorias_autor, autor=request.user)
+
+        if (request.user).is_autor_in_categoria(contenido.categoria):
+            form = ContenidoForm(instance=contenido, categorias_autor=categorias_autor, autor=request.user)
+        else:
+            form = EditorContenidoForm(instance=contenido)
+
     return render(request, 'contenido/editarContenido.html', {'form': form})
 
 @login_required
