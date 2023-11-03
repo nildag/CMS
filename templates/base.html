@@ -104,6 +104,9 @@
                                     {% if user.admin_categorias %}
                                     <li><a class="dropdown-item" href="{% url 'categorias:ver_categorias' %}">Categorias</a></li>
                                     {% endif %}
+                                    {% if user.is_admin %}
+                                    <li><a class="dropdown-item" href="{% url 'contenido:kanban' %}">Kanban</a></li>
+                                    {% endif %}
                                     {% if user.admin_asigRoles %}
                                     <li><a class="dropdown-item" href="{% url 'usuario:verUsuarios' %}">Usuarios</a></li>
                                     {% endif %}

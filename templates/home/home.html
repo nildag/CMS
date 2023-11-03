@@ -14,7 +14,7 @@
             </ul>
         </div>
 
-        {% if user.user_is_autor or user.admin_categorias or user.admin_asigRoles%}
+        {% if user.user_is_autor or user.admin_categorias or user.admin_asigRoles or user.is_admin%}
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
@@ -25,6 +25,9 @@
                         {% endif %}
                         {% if user.admin_categorias %}
                         <li><a href="{% url 'categorias:ver_categorias' %}">Administrar categorías</a></li>
+                        {% endif %}
+                        {% if user.is_admin %}
+                        <li><a href="{% url 'contenido:kanban' %}">Tablero Kanban</a></li>
                         {% endif %}
                         {% if user.admin_asigRoles %}
                         <li><a href="{% url 'usuario:verUsuarios' %}">Ver usuarios</a></li>

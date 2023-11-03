@@ -63,10 +63,10 @@ class User(AbstractUser):
     def admin_categorias(self):
 
         """
-        Este método retorna si el usuario actual es administrador de categorías.
+        Este método retorna si el usuario actual es administrador de categorías en alguna categoria.
         :return: Se retorna un bool
         """
-
+            
         system = Categoria.objects.get(nombre="System")
         permiso = "Administrar categorias"
         tiene_permiso = self.tiene_permiso_en_categoria(permiso, system)
@@ -145,6 +145,19 @@ class User(AbstractUser):
         for userCategoria in userCategorias:
             if userCategoria.categoria == categoria:
                 if userCategoria.rol.nombre == "Autor":
+                    return True
+        return False
+    
+    def is_admin(self):
+        """
+        Este método retorna si el usuario actual es administrador en la categoria System
+        :return: Se retorna un bool
+        """
+        system = Categoria.objects.get(nombre="System")
+        userCategorias = UserCategoria.objects.filter(user=self)
+        for userCategoria in userCategorias:
+            if userCategoria.categoria == system:
+                if userCategoria.rol.nombre == "Administrador":
                     return True
         return False
 
