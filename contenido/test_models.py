@@ -74,7 +74,7 @@ class ContenidoModelTest(TestCase):
         """
         contenido = Contenido.objects.get(id=1)
         max_length = contenido._meta.get_field('titulo').max_length
-        self.assertEquals(max_length, 30)
+        self.assertEquals(max_length, 200)
 
     def test_object_name_is_title_and_author(self):
         """
