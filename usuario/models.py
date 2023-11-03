@@ -7,8 +7,8 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from notify.signals import notificar
 
-class User(AbstractUser):
 
+class User(AbstractUser):
     """
     Esta clase hereda de AbstractUser y se encarga de almacenar los datos de los usuarios.
     - roles: Atributo correspondiente a los roles que posee el usuario (ManyToManyField)
@@ -25,7 +25,7 @@ class User(AbstractUser):
         :return: Se retorna un str
         """
         return f"{self.username} : {self.first_name} : {self.last_name} : {self.email}"
-    
+
     @classmethod
     def getAll(cls):
         """
@@ -33,7 +33,7 @@ class User(AbstractUser):
         :return: Se retorna un QuerySet
         """
         return User.objects.all()
-    
+
     def tiene_permiso_en_categoria(self, permiso, categoria):
         """
         Este método retorna si el usuario actual tiene un permiso dado en una categoría dada.
@@ -47,7 +47,7 @@ class User(AbstractUser):
                 if userCategoria.rol.tiene_permiso(permiso):
                     return True
         return False
-    
+
     def admin_roles(self):
 
         """
@@ -59,7 +59,7 @@ class User(AbstractUser):
         permiso = "Administrar roles"
         tiene_permiso = self.tiene_permiso_en_categoria(permiso, system)
         return tiene_permiso
-    
+
     def admin_categorias(self):
 
         """
@@ -71,7 +71,7 @@ class User(AbstractUser):
         permiso = "Administrar categorias"
         tiene_permiso = self.tiene_permiso_en_categoria(permiso, system)
         return tiene_permiso
-    
+
     def admin_asigRoles(self):
 
         """
@@ -83,7 +83,7 @@ class User(AbstractUser):
         permiso = "Asignar roles"
         tiene_permiso = self.tiene_permiso_en_categoria(permiso, system)
         return tiene_permiso
-    
+
     def admin_tipo_contenido(self):
 
         """
@@ -95,7 +95,7 @@ class User(AbstractUser):
         permiso = "Administrar tipo de contenido"
         tiene_permiso = self.tiene_permiso_en_categoria(permiso, system)
         return tiene_permiso
-    
+
     def user_is_autor(self):
 
         """
@@ -108,35 +108,35 @@ class User(AbstractUser):
             if categoria.nombre != "System" and self.tiene_permiso_en_categoria("Crear contenido", categoria):
                 return True
         return False
-    
+
     def is_publicador(self):
-            
+
         """
         Este método retorna si el usuario actual es publicador.
         :return: Se retorna un bool
         """
-    
+
         categorias = Categoria.objects.all()
         for categoria in categorias:
             if self.tiene_permiso_en_categoria("Publicar contenido", categoria):
                 return True
         return False
-    
+
     def is_editor(self):
-                
+
         """
         Este método retorna si el usuario actual es editor.
         :return: Se retorna un bool
         """
-        
+
         categorias = Categoria.objects.all()
         for categoria in categorias:
             if self.tiene_permiso_en_categoria("Editar contenido", categoria):
                 return True
         return False
 
+
 class UserCategoria(models.Model):
-    
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
@@ -147,7 +147,7 @@ class UserCategoria(models.Model):
         :return: Se retorna un str
         """
         return f"{self.user} : {self.rol} : {self.categoria}"
-    
+
     @classmethod
     def getByUser(user):
         """
@@ -166,3 +166,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+
+def notify_post(sender, instance, created, **kwargs):
+    notificar.send(instance.user, destiny=instance.user, verb=instance.title, level='success')
+
+
+post_save.connect(notify_post, sender=Post)

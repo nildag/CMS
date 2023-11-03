@@ -114,6 +114,17 @@
 
                         </li>
                         {% endif %}
+                        <li class="nav-item">
+                            <a href="{% url 'notify' %}" class="nav-link link-body-emphasis">
+                                <span class="notification-icon">
+                                    <i class="fas fa-bell"></i>
+                                </span>
+                                <!---place holder para cantidad de notificaciones sin leer--->
+                                {% load notificaciones_tags %}
+                                {% notificaciones_tag as notifi %}
+                                <!----------------------------------------------------------->
+                            </a>
+                        </li>
                         {% endif %}
                         {% if user.is_publicador %}
                         <li class="nav-item"><a href="{% url 'contenido:lista_publicador' %}" class="nav-link link-body-emphasis">Publicación</a></li>

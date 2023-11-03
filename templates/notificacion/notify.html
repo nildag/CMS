@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="mt-4 mb-3">Notificaciones</h2>
+        <ul class="list-group">
+            {% for notify in notify %}
+                <li class="list-group-item {% if not notify.read %}list-group-item-warning{% endif %}">
+                    {{ notify.actor }} ha creado un articulo para editar: "{{ notify.verb }}"
+                    <span>
+                        el {{ notify.timestamp }}
+                    </span>
+                    <span class="badge badge-{{ notify.level|lower }} bg-success">
+                        {{ notify.level }}
+                    </span>
+                    {% if not notify.read %}
+                        <span class="badge badge-secondary bg-danger">No leído</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

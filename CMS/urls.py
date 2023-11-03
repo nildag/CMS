@@ -11,4 +11,5 @@ urlpatterns = [
     path("usuario/", include('usuario.urls')),
     path("contenido/", include('contenido.urls')),
     path("tipoContenido/", include('tipoContenido.urls')),
+    path("", include('notify.urls'))
 ]
