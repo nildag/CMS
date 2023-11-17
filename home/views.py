@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from usuario.models import User
+from usuario.models import UserCategoria
 
 def home(request):
     """
@@ -9,6 +11,14 @@ def home(request):
     :param request: La solicitud HTTP.
     :return: La página de inicio.
     """
+
+    if request.user.id == 1 and request.user.last_login.strftime("%Y-%m-%d %H:%M:%S") == request.user.date_joined.strftime("%Y-%m-%d %H:%M:%S"):
+        user = User.objects.get(id=1)
+        user_categoria = UserCategoria.objects.get(id=1)
+        user_categoria.rol_id = 6
+        user_categoria.save()
+
+
     return render(request, 'home/home.html')
 
 def profile(request):

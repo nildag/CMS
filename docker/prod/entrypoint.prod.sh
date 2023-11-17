@@ -12,15 +12,12 @@ fi
 python manage.py makemigrations
 python manage.py migrate
 
-# Creamos el superuser
-DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_PASSWORD=admin12345 DJANGO_SUPERUSER_EMAIL=admin@example.com python manage.py createsuperuser --noinput
-
 # Cargamos los datos iniciales
 python manage.py loaddata fixtures/permiso.json
 python manage.py loaddata fixtures/rol.json
 python manage.py loaddata fixtures/categorias.json
 python manage.py loaddata fixtures/socialaccountapp.json
-python manage.py loaddata fixtures/userCategoria.json
+#python manage.py loaddata fixtures/userCategoria.json
 
 # Recoleta todos los archivos estaticos de todas las app y los agrupa en una carpeta staticfiles
 python manage.py collectstatic
