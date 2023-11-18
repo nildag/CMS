@@ -67,9 +67,12 @@ def crearContenido(request):
         HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de creación.
     """
     categorias_autor = UserCategoria.objects.filter(user=request.user, rol__nombre='Autor').values_list('categoria__id', flat=True)
-    
+
     if request.method == 'POST':
-        form = ContenidoForm(request.POST, autor=request.user)
+
+        form = ContenidoForm(request.POST, autor=request.user, categorias_autor=categorias_autor)
+        form.autor = request.user
+        
         if form.is_valid():
             contenido = form.save(commit=False)
             contenido.autor = request.user
