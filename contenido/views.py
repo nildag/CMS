@@ -412,3 +412,21 @@ def kanbanView(request):
         tablero_kanban[categoria][estado].append(contenido)
 
     return render(request, 'contenido/kanban.html', {'tablero_kanban': tablero_kanban})
+
+
+def rechazar_contenido(request, id):
+    """
+    Función que sirve para cambiar el estado de un contenido a "Rechazado"
+    :param request: Objeto de solicitud HTTP.
+    :id: id del contenido a cambiar de estado
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+    contenido = Contenido.objects.get(id=id)
+    contenido.estado = 'Rechazado'
+    contenido.save()
+
+    user = User.objects.get(id=request.user.id)
+    categorias = UserCategoria.objects.filter(user=user, rol__nombre='Publicador').values_list('categoria__id', flat=True)
+    contenido = Contenido.for_categorias(categorias)
+    contenido = contenido.filter(estado='Publicacion')
+    return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})
