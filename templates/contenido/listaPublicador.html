@@ -36,7 +36,7 @@
                     <td>
                         <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
                         <a href="{% url 'contenido:publicar_contenido' contenido.id %}" class="btn btn-primary btn-sm">Publicar</a>
-                        <a href="{% url 'contenido:rechazar_contenido' contenido.id %}" class="btn btn-primary btn-sm">Rechazar</a>
+                        <a href="{% url 'contenido:rechazar_contenido' contenido.id %}" class="btn btn-danger btn-sm">Rechazar</a>
                     </td>
                 </tr>
             {% endfor %}

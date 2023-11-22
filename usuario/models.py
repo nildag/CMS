@@ -7,8 +7,8 @@ from django.utils import timezone
 from django.db.models.signals import post_save
 from notify.signals import notificar
 
-
 class User(AbstractUser):
+
     """
     Esta clase hereda de AbstractUser y se encarga de almacenar los datos de los usuarios.
     - roles: Atributo correspondiente a los roles que posee el usuario (ManyToManyField)
@@ -20,34 +20,24 @@ class User(AbstractUser):
     registrado = models.BooleanField(default=True)
 
     def __str__(self):
+
         """
         Este método retorna los datos del usuario.
         :return: Se retorna un str
         """
+
         return f"{self.username} : {self.first_name} : {self.last_name} : {self.email}"
 
     @classmethod
     def getAll(cls):
+
         """
         Este método retorna todos los usuarios que existen en el sistema.
         :return: Se retorna un QuerySet
         """
+
         return User.objects.all()
-
-    def tiene_permiso_en_categoria(self, permiso, categoria):
-        """
-        Este método retorna si el usuario actual tiene un permiso dado en una categoría dada.
-        :param permiso: Permiso que se desea verificar (str)
-        :param categoria: Categoría en la que se desea verificar el permiso (Categoria)
-        :return: Se retorna un bool
-        """
-        userCategorias = UserCategoria.objects.filter(user=self)
-        for userCategoria in userCategorias:
-            if userCategoria.categoria == categoria:
-                if userCategoria.rol.tiene_permiso(permiso):
-                    return True
-        return False
-
+    
     def admin_roles(self):
 
         """
@@ -160,7 +150,47 @@ class User(AbstractUser):
                 if userCategoria.rol.nombre == "Administrador":
                     return True
         return False
+    
+    def tiene_permiso_en_categoria(self, permiso, categoria):
 
+        """
+        Este método retorna si el usuario actual tiene un permiso dado en una categoría dada. Si se recibe null en categoria, se verifica en todas las categorías.
+        :param permiso: Permiso que se desea verificar (str)
+        :param categoria: Categoría en la que se desea verificar el permiso (Categoria)
+        :return: Se retorna un bool
+        """
+
+        userCategorias = UserCategoria.objects.filter(user=self)
+        for userCategoria in userCategorias:
+            if categoria is None or userCategoria.categoria == categoria:
+                permisos = Permiso.objects.filter(rol=userCategoria.rol)
+                for permisoRol in permisos:
+                    if permisoRol.nombre == permiso:
+                        return True
+        return False
+    
+    @classmethod
+    def obtener_usuarios_sin_permiso(cls, permiso):
+            
+        """
+        Este método retorna los usuarios que no tienen un permiso dado.
+        :param permiso: Permiso que se desea verificar (str)
+        :return: Se retorna un QuerySet
+        """
+    
+        usuarios = User.objects.all()
+        usuarios_sin_permiso = []
+        for usuario in usuarios:
+            if not usuario.tiene_permiso_en_categoria(permiso, None):
+                usuarios_sin_permiso.append(usuario)
+        return usuarios_sin_permiso
+    
+    def tiene_permiso_asignar_roles(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Asignar roles"
+        :return: Se retorna un bool
+        """
+        return self.tiene_permiso_en_categoria("Asignar roles", None)
 
 class UserCategoria(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -10,28 +10,33 @@ from rol.models import Rol
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 
-def user_admin_asigRoles(user):
+def tiene_permiso_asignar_roles(user):
 
     """
-    Funcion que comprueba si el usuario es administrador de asignacion de roles (tiene el permiso "Asignar roles")
+    Funcion que comprueba si el usuario tiene el permiso "Asignar roles"
     :param user: usuario a comprobar (User)
     :return: True si es administrador de asignacion de roles, False en caso contrario
     """
 
-    return user.admin_asigRoles()
+    return user.tiene_permiso_en_categoria("Asignar roles", None)
 
-@user_passes_test(user_admin_asigRoles)
+@user_passes_test(tiene_permiso_asignar_roles)
 def verUsuarios(request):
+
     """
     Vista para mostrar una lista de usuarios.
-
     :param request: La solicitud HTTP.
     :return: La página de lista de usuarios.
     """
-    usuarios = User.objects.all()
+
+    system = Categoria.objects.get(nombre="System")
+    if request.user.tiene_permiso_en_categoria("Asignar roles", system):
+        usuarios = User.objects.all().exclude(id=request.user.id)
+    else:
+        usuarios = User.obtener_usuarios_sin_permiso("Asignar roles")
     return render(request, 'usuario/verUsuarios.html', {'usuarios': usuarios})
 
-@user_passes_test(user_admin_asigRoles)
+@user_passes_test(tiene_permiso_asignar_roles)
 def listaUserCategoria(request, idUsuario):
     """
     Vista para mostrar una lista de categorías y roles asignados a un usuario específico.
@@ -46,7 +51,7 @@ def listaUserCategoria(request, idUsuario):
     userCategoriasRoles = userCategoriasRoles.order_by('categoria__nombre')
     return render(request, 'usuario/listaUserCategoria.html', {'userCategoriasRoles': userCategoriasRoles, 'usuario': usuario})
 
-@user_passes_test(user_admin_asigRoles)
+@user_passes_test(tiene_permiso_asignar_roles)
 def crearUserCategoria(request, idUsuario):
     """
     Vista para crear una asignación de categoría y rol para un usuario específico.
@@ -68,7 +73,7 @@ def crearUserCategoria(request, idUsuario):
         form = UserCategoriaForm(initial={'user': usuario})
     return render(request, 'usuario/crearUserCategoria.html', {'form': form, 'usuario': usuario})
 
-@user_passes_test(user_admin_asigRoles)
+@user_passes_test(tiene_permiso_asignar_roles)
 def eliminarUserCategoria(request, idUserCategoria):
     """
     Vista para eliminar una asignación de categoría y rol para un usuario.
@@ -82,7 +87,7 @@ def eliminarUserCategoria(request, idUserCategoria):
     userCategoria.delete()
     return redirect('usuario:listaUserCategoria', idUsuario=usuario.id)
 
-@user_passes_test(user_admin_asigRoles)
+@user_passes_test(tiene_permiso_asignar_roles)
 def editarUserCategoria(request, idUserCategoria):
     """
     Vista para editar una asignación de categoría y rol para un usuario.
@@ -92,13 +97,17 @@ def editarUserCategoria(request, idUserCategoria):
     :return: La página de edición de asignación de categoría y rol o redirecciona a la lista de asignaciones si se edita con éxito.
     """
     userCategoria = get_object_or_404(UserCategoria, id=idUserCategoria)
+    system = Categoria.objects.get(nombre="System")
     if request.method == 'POST':
-        form = UserCategoriaForm(request.POST, instance=userCategoria)
+        user_rol = "Administrador" if request.user.tiene_permiso_en_categoria("Administrar roles", system) else ""
+        form = UserCategoriaForm(request.POST, instance=userCategoria, user_rol=user_rol)
         if form.is_valid():
             form.save()
             return redirect('usuario:listaUserCategoria', idUsuario=userCategoria.user.id)
     else:
-        form = UserCategoriaForm(instance=userCategoria)
+        user_rol = "Administrador" if request.user.tiene_permiso_en_categoria("Administrar roles", system) else ""
+        form = UserCategoriaForm(instance=userCategoria, user_rol=user_rol)
+        
     return render(request, 'usuario/crearUserCategoria.html', {'form': form, 'userCategoria': userCategoria})
 
 def index(request):

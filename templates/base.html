@@ -91,7 +91,7 @@
                         <li class="nav-item"><a href="{% url 'contenido:lista_contenido' %}" class="nav-link link-body-emphasis">Mis Contenidos</a></li>
                         {% endif %}
                         {%  if user.is_authenticated %}
-                        {%  if user.admin_roles or user.admin_categorias or user.admin_asigRoles or user.admin_tipo_contenido %}
+                        {%  if user.admin_roles or user.admin_categorias or user.tiene_permiso_asignar_roles or user.admin_tipo_contenido %}
                         <li class="nav-item dropdown">
 
                                 <!-- Mostrar el menú desplegable -->
@@ -107,7 +107,7 @@
                                     {% if user.is_admin %}
                                     <li><a class="dropdown-item" href="{% url 'contenido:kanban' %}">Kanban</a></li>
                                     {% endif %}
-                                    {% if user.admin_asigRoles %}
+                                    {% if user.tiene_permiso_asignar_roles %}
                                     <li><a class="dropdown-item" href="{% url 'usuario:verUsuarios' %}">Usuarios</a></li>
                                     {% endif %}
                                     {% if user.admin_tipo_contenido %}
