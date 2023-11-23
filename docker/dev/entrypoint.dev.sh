@@ -17,7 +17,7 @@ python manage.py loaddata fixtures/permiso.json
 python manage.py loaddata fixtures/rol.json
 python manage.py loaddata fixtures/categorias.json
 python manage.py loaddata fixtures/socialaccountapp.json
-# python manage.py loaddata fixtures/userCategoria.json
+python manage.py loaddata fixtures/tipoContenido.json
 
 # Corremos el proyecto
 python manage.py runserver 0.0.0.0:8000

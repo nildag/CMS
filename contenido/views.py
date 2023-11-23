@@ -14,55 +14,61 @@ from django.db.models import Q
 from notify.signals import notificar
 from django.utils import timezone
 
-def user_autor(user):
-
+def tiene_permiso_visualizar_kanban(user):
     """
-    Funcion que comprueba si el usuario es autor (tiene el permiso "Crear contenido")
+    Funcion que comprueba si el usuario tiene el permiso "Visualizar Kanban" en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.
     :param user: usuario a comprobar (User)
-    :return: True si es autor, False en caso contrario
+    :return: True tiene el permiso, False en caso contrario (Boolean)
     """
+    return user.tiene_permiso_visualizar_kanban()
 
-    return User.user_is_autor(user)
-
-def user_editor(user):
-
+def tiene_permiso_crear_contenido(user):
     """
-    Funcion que comprueba si el usuario es editor (tiene el permiso "Editar contenido")
+    Funcion que comprueba si el usuario tiene el permiso "Crear contenido" en alguna categoria
     :param user: usuario a comprobar (User)
-    :return: True si es editor, False en caso contrario
+    :return: True tiene el permiso, False en caso contrario (Boolean)
     """
+    return user.tiene_permiso_crear_contenido()
 
-    return User.is_editor(user)
-
-def user_publicador(user):
-
+def tiene_permiso_eliminar_contenido(user):
     """
-    Funcion que comprueba si el usuario es publicador (tiene el permiso "Publicar contenido")
+    Funcion que comprueba si el usuario tiene el permiso "Eliminar contenido" en alguna categoria
     :param user: usuario a comprobar (User)
-    :return: True si es publicador, False en caso contrario
+    :return: True tiene el permiso, False en caso contrario (Boolean)
     """
+    return user.tiene_permiso_eliminar_contenido()
 
-    return User.is_publicador(user)
-
-def user_autor_or_editor(user):
-
+def tiene_permiso_editar_contenido(user):
     """
-    Funcion que comprueba si el usuario es autor o editor
+    Funcion que comprueba si el usuario tiene el permiso "Editar contenido" en alguna categoria
     :param user: usuario a comprobar (User)
-    :return: True si es autor o editor, False en caso contrario
+    :return: True tiene el permiso, False en caso contrario (Boolean)
     """
+    return user.tiene_permiso_editar_contenido()
 
-    return user_autor(user) or user_editor(user)
+def tiene_permiso_publicar_contenido(user):
+    """
+    Funcion que comprueba si el usuario tiene el permiso "Publicar contenido" en alguna categoria
+    :param user: usuario a comprobar (User)
+    :return: True tiene el permiso, False en caso contrario (Boolean)
+    """
+    return user.tiene_permiso_publicar_contenido()
+
+def tiene_permiso_crear_o_editar_contenido(user):
+    """
+    Funcion que comprueba si el usuario tiene el permiso "Crear contenido" o "Editar contenido" en alguna categoria
+    :param user: usuario a comprobar (User)
+    :return: True tiene el permiso, False en caso contrario (Boolean)
+    """
+    return user.tiene_permiso_crear_contenido() or user.tiene_permiso_editar_contenido()
 
 @login_required
-@user_passes_test(user_autor)
+@user_passes_test(tiene_permiso_crear_contenido)
 def crearContenido(request):
     """
     Vista para crear nuevo contenido. Requiere autenticación.
-
     Args:
         request: Objeto de solicitud HTTP.
-
     Returns:
         HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de creación.
     """
@@ -85,64 +91,49 @@ def crearContenido(request):
     return render(request, 'contenido/crearContenido.html', {'form': form})
 
 @login_required
-@user_passes_test(user_autor_or_editor)
+@user_passes_test(tiene_permiso_crear_o_editar_contenido)
 def editarContenido(request, id):
     """
     Vista para editar contenido existente. Requiere autenticación.
-
     Args:
         request: Objeto de solicitud HTTP.
         id (int): ID del contenido a editar.
-
     Returns:
         HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de edición.
     """
-
     contenido = get_object_or_404(Contenido, id=id)
-
     if (request.user).is_autor_in_categoria(contenido.categoria):
         categorias_autor = UserCategoria.objects.filter(user=request.user, rol__nombre='Autor').values_list('categoria__id', flat=True)
     else:
         categorias_autor = Contenido.objects.filter(id=id).values_list('categoria__id', flat=True)
-
     if request.method == 'POST':
-
         if (request.user).is_autor_in_categoria(contenido.categoria):
             form = ContenidoForm(request.POST, instance=contenido, autor=request.user, categorias_autor=categorias_autor)
         else:
             form = EditorContenidoForm(request.POST, instance=contenido)
-
         if form.is_valid():
-
             if (request.user).is_autor_in_categoria(contenido.categoria):
                 contenido.tipo_contenido = form.cleaned_data['tipo_contenido']
-
             form.save()
-            
             if (request.user).is_autor_in_categoria(contenido.categoria):
                 return redirect('contenido:lista_contenido')
             else:
                 return redirect('contenido:lista_editor')
-        
     else:
-
         if (request.user).is_autor_in_categoria(contenido.categoria):
             form = ContenidoForm(instance=contenido, categorias_autor=categorias_autor, autor=request.user)
         else:
             form = EditorContenidoForm(instance=contenido)
-
     return render(request, 'contenido/editarContenido.html', {'form': form})
 
 @login_required
-@user_passes_test(user_autor)
+@user_passes_test(tiene_permiso_eliminar_contenido)
 def eliminarContenido(request, id):
     """
     Vista para eliminar contenido existente. Requiere autenticación.
-
     Args:
         request: Objeto de solicitud HTTP.
         id (int): ID del contenido a eliminar.
-
     Returns:
         HttpResponse: Respuesta HTTP que redirige a la lista de contenidos.
     """
@@ -151,14 +142,13 @@ def eliminarContenido(request, id):
     return redirect('contenido:lista_contenido')
 
 @login_required
+@user_passes_test(tiene_permiso_eliminar_contenido)
 def confirmarEliminarContenido(request, id):
     """
     Vista para confirmar la eliminación de un contenido existente. Requiere autenticación.
-
     Args:
         request: Objeto de solicitud HTTP.
         id (int): ID del contenido a confirmar la eliminación.
-
     Returns:
         HttpResponse: Respuesta HTTP que muestra la página de confirmación de eliminación.
     """
@@ -166,15 +156,13 @@ def confirmarEliminarContenido(request, id):
     return render(request, 'contenido/confirmarEliminarContenido.html', {'contenido': contenido})
 
 @login_required
-@user_passes_test(user_autor)
+@user_passes_test(tiene_permiso_crear_contenido)
 def listaContenido(request):
-
     """
     Vista para listar los contenidos de un usuario
     :param request: Objeto de solicitud HTTP.
     :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
     """
-
     user = User.objects.get(id=request.user.id)
     contenido = Contenido.for_user(user)
     #contenido = contenido.filter(estado='Borrador')
@@ -183,11 +171,9 @@ def listaContenido(request):
 def verContenido(request, id):
     """
     Vista para ver un contenido específico. No requiere autenticación.
-
     Args:
         request: Objeto de solicitud HTTP.
         id (int): ID del contenido a visualizar.
-
     Returns:
         HttpResponse: Respuesta HTTP que muestra la página del contenido específico.
     """
@@ -210,9 +196,8 @@ def listaTodos(request):
     tipos_contenido = tipoContenido.objects.all()  # Obtener todos los tipos de contenido
     return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias, 'tipos_contenido': tipos_contenido})
 
-
 @login_required
-@user_passes_test(user_publicador)
+@user_passes_test(tiene_permiso_publicar_contenido)
 def listaPublicador(request):
 
     """
@@ -228,15 +213,13 @@ def listaPublicador(request):
     return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})
 
 @login_required
-@user_passes_test(user_editor)
+@user_passes_test(tiene_permiso_editar_contenido)
 def listaEditor(request):
-
     """
     Vista para mostrar la lista de contenidos de los usuarios editores.
     :param request: Objeto de solicitud HTTP.
     :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
     """
-
     user = User.objects.get(id=request.user.id)
     categorias = UserCategoria.objects.filter(user=user, rol__nombre='Editor').values_list('categoria__id', flat=True)
     contenido = Contenido.for_categorias(categorias)
@@ -247,11 +230,9 @@ def listaEditor(request):
 def valorarContenido(request, id):
     """
     Vista para valorar un contenido específico. Requiere autenticación.
-
     Args:
         request: Objeto de solicitud HTTP.
         id (int): ID del contenido a valorar.
-
     Returns:
         HttpResponse: Redirige a la página del contenido valorado o muestra un mensaje de error.
     """
@@ -284,14 +265,11 @@ def valorarContenido(request, id):
         contenido = get_object_or_404(Contenido, id=id)
         return render(request, 'contenido/valorarContenido.html', {'contenido': contenido})
 
-
 def buscarContenido(request):
     """
     Vista para buscar contenidos por título de contenido o nombre de categoría.
-
     Args:
         request: Objeto de solicitud HTTP.
-
     Returns:
         HttpResponse: Respuesta HTTP que muestra los resultados de la búsqueda.
     """
@@ -306,6 +284,8 @@ def buscarContenido(request):
 
     return render(request, 'contenido/listaTodos.html', {'contenidos': contenidos, 'categorias': Categoria.objects.all()})
 
+@login_required
+@user_passes_test(tiene_permiso_crear_contenido)
 def aEdicion(request, id):
     """
     Función que sirve para cambiar el estado de un contenido a "Edicion"
@@ -316,7 +296,6 @@ def aEdicion(request, id):
     contenido = Contenido.objects.get(id=id)
     contenido.estado = 'Edicion'
     contenido.save()
-
 
     # Notificar a los usuarios editores en la categoría del contenido
     categoria = contenido.categoria  # Obtener la categoría del contenido
@@ -335,7 +314,9 @@ def aEdicion(request, id):
     contenido = Contenido.for_user(user)
     #contenido = contenido.filter(estado='Borrador')
     return render(request, 'contenido/listaContenido.html', {'contenidos': contenido})
-    
+
+@login_required
+@user_passes_test(tiene_permiso_editar_contenido)
 def aPublicacion(request, id):
     """
     Función que sirve para cambiar el estado de un contenido a "Publicacion"
@@ -353,6 +334,8 @@ def aPublicacion(request, id):
     contenido = contenido.filter(estado='Edicion')
     return render(request, 'contenido/listaEditor.html', {'contenidos': contenido})
 
+@login_required
+@user_passes_test(tiene_permiso_publicar_contenido)
 def publicarContenido(request, id):
     """
     Función que sirve para cambiar el estado de un contenido a "Publicado"
@@ -370,23 +353,20 @@ def publicarContenido(request, id):
     contenido = contenido.filter(estado='Publicacion')
     return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})
 
+@login_required
+@user_passes_test(tiene_permiso_visualizar_kanban)
 def kanbanView(request):
     """
     Vista de Kanban para mostrar contenidos organizados por categoría y estado.
-
     Esta vista recopila todos los contenidos de la base de datos y los organiza en un tablero Kanban.
     Los contenidos se agrupan por categoría y estado para su visualización.
-
     Args:
         request (HttpRequest): La solicitud HTTP que desencadenó esta vista.
-
     Returns:
         HttpResponse: Una respuesta HTTP que renderiza la plantilla 'contenido/kanban.html' con
         los contenidos organizados en forma de tablero Kanban.
-
     Raises:
         N/A
-
     Example:
         Ejemplo de uso en una URL de Django:
         ```
@@ -413,7 +393,8 @@ def kanbanView(request):
 
     return render(request, 'contenido/kanban.html', {'tablero_kanban': tablero_kanban})
 
-
+@login_required
+@user_passes_test(tiene_permiso_publicar_contenido)
 def rechazar_contenido(request, id):
     """
     Función que sirve para cambiar el estado de un contenido a "Rechazado"

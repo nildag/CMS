@@ -1,6 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
 from .models import Categoria
 from django.shortcuts import render, redirect
 from .forms import CategoriaForm
@@ -10,21 +8,19 @@ from usuario.models import User
 from usuario.models import UserCategoria
 from django.contrib.auth.decorators import user_passes_test
 
-
-def user_adminCategorias(user):
+def tiene_permiso_administrar_categorias(user):
     """
-    Función que comprueba si el usuario es administrador de categorías (tiene el permiso "Administrar categorías").
+    Función que comprueba si el usuario tiene el permiso "Administrar categorías".
 
     Args:
         user (User): El usuario a comprobar.
 
     Returns:
-        bool: True si es administrador de categorías, False en caso contrario.
+        bool: True si tiene el permiso, False en caso contrario.
     """
-    return user.admin_categorias()
+    return user.tiene_permiso_administrar_categorias()
 
-
-@user_passes_test(user_adminCategorias)
+@user_passes_test(tiene_permiso_administrar_categorias)
 def crearCategorias(request):
     """
     Vista para crear una nueva categoría.
@@ -55,8 +51,7 @@ def crearCategorias(request):
         form = CategoriaForm()
     return render(request, 'categorias/crearCategorias.html', {'form': form})
 
-
-@user_passes_test(user_adminCategorias)
+@user_passes_test(tiene_permiso_administrar_categorias)
 def verCategorias(request):
     """
     Vista para ver todas las categorías.
@@ -70,8 +65,7 @@ def verCategorias(request):
     categoria = Categoria.obtener_todos()
     return render(request, 'categorias/verCategorias.html', {'categorias': categoria})
 
-
-@user_passes_test(user_adminCategorias)
+@user_passes_test(tiene_permiso_administrar_categorias)
 def borrarCategoria(request, categoriaId):
     """
     Vista para borrar una categoría.
@@ -92,8 +86,7 @@ def borrarCategoria(request, categoriaId):
 
     return render(request, 'categorias/verCategorias.html', {'categorias': Categoria.obtener_todos()})
 
-
-@user_passes_test(user_adminCategorias)
+@user_passes_test(tiene_permiso_administrar_categorias)
 def editarCategoria(request, categoriaId):
     """
     Vista para editar una categoría.

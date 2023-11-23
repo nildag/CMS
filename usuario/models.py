@@ -38,93 +38,6 @@ class User(AbstractUser):
 
         return User.objects.all()
     
-    def admin_roles(self):
-
-        """
-        Este método retorna si el usuario actual es administrador de roles.
-        :return: Se retorna un bool
-        """
-
-        system = Categoria.objects.get(nombre="System")
-        permiso = "Administrar roles"
-        tiene_permiso = self.tiene_permiso_en_categoria(permiso, system)
-        return tiene_permiso
-
-    def admin_categorias(self):
-
-        """
-        Este método retorna si el usuario actual es administrador de categorías en alguna categoria.
-        :return: Se retorna un bool
-        """
-            
-        system = Categoria.objects.get(nombre="System")
-        permiso = "Administrar categorias"
-        tiene_permiso = self.tiene_permiso_en_categoria(permiso, system)
-        return tiene_permiso
-
-    def admin_asigRoles(self):
-
-        """
-        Este método retorna si el usuario actual es administrador de asignación de roles.
-        :return: Se retorna un bool
-        """
-
-        system = Categoria.objects.get(nombre="System")
-        permiso = "Asignar roles"
-        tiene_permiso = self.tiene_permiso_en_categoria(permiso, system)
-        return tiene_permiso
-
-    def admin_tipo_contenido(self):
-
-        """
-        Este método retorna si el usuario actual es administrador de tipo de contenido.
-        :return: Se retorna un bool
-        """
-
-        system = Categoria.objects.get(nombre="System")
-        permiso = "Administrar tipo de contenido"
-        tiene_permiso = self.tiene_permiso_en_categoria(permiso, system)
-        return tiene_permiso
-
-    def user_is_autor(self):
-
-        """
-        Este método retorna si el usuario actual es autor.
-        :return: Se retorna un bool
-        """
-
-        categorias = Categoria.objects.all()
-        for categoria in categorias:
-            if categoria.nombre != "System" and self.tiene_permiso_en_categoria("Crear contenido", categoria):
-                return True
-        return False
-
-    def is_publicador(self):
-
-        """
-        Este método retorna si el usuario actual es publicador.
-        :return: Se retorna un bool
-        """
-
-        categorias = Categoria.objects.all()
-        for categoria in categorias:
-            if self.tiene_permiso_en_categoria("Publicar contenido", categoria):
-                return True
-        return False
-
-    def is_editor(self):
-
-        """
-        Este método retorna si el usuario actual es editor.
-        :return: Se retorna un bool
-        """
-
-        categorias = Categoria.objects.all()
-        for categoria in categorias:
-            if self.tiene_permiso_en_categoria("Editar contenido", categoria):
-                return True
-        return False
-    
     def is_autor_in_categoria(self, categoria):
         """
         Este método retorna si el usuario actual tiene el rol Autor en una categoría dada.
@@ -135,19 +48,6 @@ class User(AbstractUser):
         for userCategoria in userCategorias:
             if userCategoria.categoria == categoria:
                 if userCategoria.rol.nombre == "Autor":
-                    return True
-        return False
-    
-    def is_admin(self):
-        """
-        Este método retorna si el usuario actual es administrador en la categoria System
-        :return: Se retorna un bool
-        """
-        system = Categoria.objects.get(nombre="System")
-        userCategorias = UserCategoria.objects.filter(user=self)
-        for userCategoria in userCategorias:
-            if userCategoria.categoria == system:
-                if userCategoria.rol.nombre == "Administrador":
                     return True
         return False
     
@@ -171,13 +71,11 @@ class User(AbstractUser):
     
     @classmethod
     def obtener_usuarios_sin_permiso(cls, permiso):
-            
         """
         Este método retorna los usuarios que no tienen un permiso dado.
         :param permiso: Permiso que se desea verificar (str)
         :return: Se retorna un QuerySet
         """
-    
         usuarios = User.objects.all()
         usuarios_sin_permiso = []
         for usuario in usuarios:
@@ -191,6 +89,64 @@ class User(AbstractUser):
         :return: Se retorna un bool
         """
         return self.tiene_permiso_en_categoria("Asignar roles", None)
+    
+    def tiene_permiso_administrar_tipoContenido(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Administrar tipo de contenido" en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.
+        :return: Se retorna un bool
+        """
+        system = Categoria.objects.get(nombre="System")
+        return self.tiene_permiso_en_categoria("Administrar tipo de contenido", system)
+    
+    def tiene_permiso_administrar_roles(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Administrar roles" en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.
+        :return: Se retorna un bool
+        """
+        system = Categoria.objects.get(nombre="System")
+        return self.tiene_permiso_en_categoria("Administrar roles", system)
+    
+    def tiene_permiso_administrar_categorias(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Administrar categorías" en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.
+        :return: Se retorna un bool
+        """
+        system = Categoria.objects.get(nombre="System")
+        return self.tiene_permiso_en_categoria("Administrar categorias", system)
+    
+    def tiene_permiso_visualizar_kanban(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Visualizar kanban" en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.
+        :return: Se retorna un bool
+        """
+        system = Categoria.objects.get(nombre="System")
+        return self.tiene_permiso_en_categoria("Visualizar Kanban", system)
+    
+    def tiene_permiso_crear_contenido(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Crear contenido" en alguna categoría.
+        :return: Se retorna un bool
+        """
+        return self.tiene_permiso_en_categoria("Crear contenido", None)
+    
+    def tiene_permiso_eliminar_contenido(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Eliminar contenido" en alguna categoría.
+        :return: Se retorna un bool
+        """
+        return self.tiene_permiso_en_categoria("Eliminar contenido", None)
+    
+    def tiene_permiso_editar_contenido(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Editar contenido" en alguna categoría.
+        """
+        return self.tiene_permiso_en_categoria("Editar contenido", None)
+    
+    def tiene_permiso_publicar_contenido(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Publicar contenido" en alguna categoría.
+        """
+        return self.tiene_permiso_en_categoria("Publicar contenido", None)
 
 class UserCategoria(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

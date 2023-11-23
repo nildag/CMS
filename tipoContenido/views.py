@@ -1,32 +1,28 @@
 from django.shortcuts import render
-
-# Create your views here.
 from .models import tipoContenido
 from django.shortcuts import render, redirect
 from .forms import tipoContenidoForm
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required
 
-
-def user_admin_tipoContenido(user):
+def tiene_permiso_administrar_tipoContenido(user):
     """
-    Función que comprueba si el usuario es administrador de tipo de contenido (tiene el permiso "Administrar tipo de contenido").
-
+    Función que comprueba si el usuario tiene el permiso "Administrar tipo de contenido".
     :param user: El usuario a comprobar (User).
-    :return: True si es administrador de tipo de contenido, False en caso contrario.
+    :return: True si tiene el permiso, False en caso contrario.
     """
-    return user.admin_tipo_contenido
-
+    return user.tiene_permiso_administrar_tipoContenido()
 
 @login_required
-@user_passes_test(user_admin_tipoContenido)
+@user_passes_test(tiene_permiso_administrar_tipoContenido)
 def crearTipoContenido(request):
+
     """
     Vista para crear un nuevo tipo de contenido.
-
     :param request: La solicitud HTTP.
     :return: La página de creación de tipo de contenido o redirecciona a la lista de tipo de contenido si se crea con éxito.
     """
+
     if request.method == 'POST':
         form = tipoContenidoForm(request.POST)
         if form.is_valid():
@@ -37,9 +33,8 @@ def crearTipoContenido(request):
 
     return render(request, 'tipoContenido/crear_tipo_de_contenido.html', {'form': form})
 
-
 @login_required
-@user_passes_test(user_admin_tipoContenido)
+@user_passes_test(tiene_permiso_administrar_tipoContenido)
 def verTipoContenido(request):
     """
     Vista para mostrar la lista de tipos de contenido.
@@ -50,9 +45,8 @@ def verTipoContenido(request):
     tipoDContenido = tipoContenido.obtener_todos()
     return render(request, 'tipoContenido/ver_tipo_de_contenido.html', {'tipoContenido': tipoDContenido})
 
-
 @login_required
-@user_passes_test(user_admin_tipoContenido)
+@user_passes_test(tiene_permiso_administrar_tipoContenido)
 def borrarTipoContenido(request, tipoContenidoId):
     """
     Vista para eliminar un tipo de contenido.
@@ -70,9 +64,8 @@ def borrarTipoContenido(request, tipoContenidoId):
     return render(request, 'tipoContenido/ver_tipo_de_contenido.html',
                   {'tipoContenido': tipoDContenido.obtener_todos()})
 
-
 @login_required
-@user_passes_test(user_admin_tipoContenido)
+@user_passes_test(tiene_permiso_administrar_tipoContenido)
 def editarTipoContenido(request, tipoContenidoId):
     """
     Vista para editar un tipo de contenido existente.
@@ -91,4 +84,3 @@ def editarTipoContenido(request, tipoContenidoId):
     else:
         form = tipoContenidoForm(instance=tipoDContenido)
     return render(request, 'tipoContenido/crear_tipo_de_contenido.html', {'form': form})
-
