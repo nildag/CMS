@@ -14,22 +14,22 @@
             </ul>
         </div>
 
-        {% if user.user_is_autor or user.admin_categorias or user.admin_asigRoles or user.is_admin%}
+        {% if user.tiene_permiso_crear_contenido or user.tiene_permiso_administrar_categorias or user.tiene_permiso_asignar_roles or user.tiene_permiso_visualizar_kanban%}
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Acciones Rápidas</h5>
                     <ul>
-                        {% if user.user_is_autor %}
+                        {% if user.tiene_permiso_crear_contenido %}
                         <li><a href="{% url 'contenido:crear_contenido' %}">Crear nuevo contenido</a></li>
                         {% endif %}
-                        {% if user.admin_categorias %}
+                        {% if user.tiene_permiso_administrar_categorias %}
                         <li><a href="{% url 'categorias:ver_categorias' %}">Administrar categorías</a></li>
                         {% endif %}
-                        {% if user.is_admin %}
+                        {% if user.tiene_permiso_visualizar_kanban %}
                         <li><a href="{% url 'contenido:kanban' %}">Tablero Kanban</a></li>
                         {% endif %}
-                        {% if user.admin_asigRoles %}
+                        {% if user.tiene_permiso_asignar_roles %}
                         <li><a href="{% url 'usuario:verUsuarios' %}">Ver usuarios</a></li>
                         {% endif %}
                     </ul>
