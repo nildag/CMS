@@ -20,23 +20,32 @@ class User(AbstractUser):
     registrado = models.BooleanField(default=True)
 
     def __str__(self):
-
         """
         Este método retorna los datos del usuario.
         :return: Se retorna un str
         """
-
         return f"{self.username} : {self.first_name} : {self.last_name} : {self.email}"
 
     @classmethod
     def getAll(cls):
-
         """
         Este método retorna todos los usuarios que existen en el sistema.
         :return: Se retorna un QuerySet
         """
-
         return User.objects.all()
+    
+    def obtener_categorias_por_permiso(self, permiso):
+        """
+        Este método retorna las categorías en las que el usuario tiene un permiso dado pasado como parámetro.
+        :param permiso: Permiso que se desea verificar (str)
+        :return: Se retorna un QuerySet
+        """
+        categorias = Categoria.objects.all()
+        categorias_con_permiso = []
+        for categoria in categorias:
+            if self.tiene_permiso_en_categoria(permiso, categoria):
+                categorias_con_permiso.append(categoria)
+        return categorias_con_permiso
     
     def is_autor_in_categoria(self, categoria):
         """
@@ -52,14 +61,12 @@ class User(AbstractUser):
         return False
     
     def tiene_permiso_en_categoria(self, permiso, categoria):
-
         """
         Este método retorna si el usuario actual tiene un permiso dado en una categoría dada. Si se recibe null en categoria, se verifica en todas las categorías.
         :param permiso: Permiso que se desea verificar (str)
         :param categoria: Categoría en la que se desea verificar el permiso (Categoria)
         :return: Se retorna un bool
         """
-
         userCategorias = UserCategoria.objects.filter(user=self)
         for userCategoria in userCategorias:
             if categoria is None or userCategoria.categoria == categoria:

@@ -39,15 +39,23 @@ def verUsuarios(request):
 def listaUserCategoria(request, idUsuario):
     """
     Vista para mostrar una lista de categorías y roles asignados a un usuario específico.
-
     :param request: La solicitud HTTP.
     :param idUsuario: El ID del usuario.
     :return: La página de lista de categorías y roles para el usuario especificado.
     """
+    system = Categoria.objects.get(nombre="System")
+
+    if request.user.tiene_permiso_en_categoria("Asignar roles", system):
+        categoriasAsignarRoles = Categoria.objects.all()
+    else:
+        categoriasAsignarRoles = request.user.obtener_categorias_por_permiso("Asignar roles")
+
     usuario = User.objects.get(id=idUsuario)
     userCategoriasRoles = UserCategoria.objects.filter(user=usuario)
+    userCategoriasRoles = userCategoriasRoles.filter(categoria__in=categoriasAsignarRoles)
     # Ordenamos por el nombre de la categoría
     userCategoriasRoles = userCategoriasRoles.order_by('categoria__nombre')
+
     return render(request, 'usuario/listaUserCategoria.html', {'userCategoriasRoles': userCategoriasRoles, 'usuario': usuario})
 
 @user_passes_test(tiene_permiso_asignar_roles)

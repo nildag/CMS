@@ -16,13 +16,11 @@ def tiene_permiso_administrar_tipoContenido(user):
 @login_required
 @user_passes_test(tiene_permiso_administrar_tipoContenido)
 def crearTipoContenido(request):
-
     """
     Vista para crear un nuevo tipo de contenido.
     :param request: La solicitud HTTP.
     :return: La página de creación de tipo de contenido o redirecciona a la lista de tipo de contenido si se crea con éxito.
     """
-
     if request.method == 'POST':
         form = tipoContenidoForm(request.POST)
         if form.is_valid():
@@ -38,7 +36,6 @@ def crearTipoContenido(request):
 def verTipoContenido(request):
     """
     Vista para mostrar la lista de tipos de contenido.
-
     :param request: La solicitud HTTP.
     :return: La página de lista de tipos de contenido.
     """
@@ -50,7 +47,6 @@ def verTipoContenido(request):
 def borrarTipoContenido(request, tipoContenidoId):
     """
     Vista para eliminar un tipo de contenido.
-
     :param request: La solicitud HTTP.
     :param tipoContenidoId: El ID del tipo de contenido a eliminar.
     :return: La página de lista de tipos de contenido o redirecciona a la lista de tipos de contenido si se elimina con éxito.
@@ -69,7 +65,6 @@ def borrarTipoContenido(request, tipoContenidoId):
 def editarTipoContenido(request, tipoContenidoId):
     """
     Vista para editar un tipo de contenido existente.
-
     :param request: La solicitud HTTP.
     :param tipoContenidoId: El ID del tipo de contenido a editar.
     :return: La página de edición de tipos de contenido o redirecciona a la lista de tipos de contenido si se edita con éxito.
