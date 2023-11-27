@@ -106,6 +106,7 @@
                                     {% endif %}
                                     {% if user.tiene_permiso_visualizar_kanban %}
                                     <li><a class="dropdown-item" href="{% url 'contenido:kanban' %}">Kanban</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'contenido:reportes' %}">Reportes</a></li>
                                     {% endif %}
                                     {% if user.tiene_permiso_asignar_roles %}
                                     <li><a class="dropdown-item" href="{% url 'usuario:verUsuarios' %}">Usuarios</a></li>

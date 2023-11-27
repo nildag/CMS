@@ -13,6 +13,10 @@ from contenido.models import Valoracion
 from django.db.models import Q
 from notify.signals import notificar
 from django.utils import timezone
+import pandas as pd
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 def tiene_permiso_visualizar_kanban(user):
     """
@@ -392,6 +396,82 @@ def kanbanView(request):
         tablero_kanban[categoria][estado].append(contenido)
 
     return render(request, 'contenido/kanban.html', {'tablero_kanban': tablero_kanban})
+
+login_required
+@user_passes_test(tiene_permiso_visualizar_kanban)
+def reportesView(request):
+    """
+    Vista de Reportes para mostrar reportes de datos de la aplicación.
+    Esta vista recopila todos los datos de la base de datos y los organiza en un reporte.
+    Los datos se agrupan por categoría y estado para su visualización.
+    Args:
+        request (HttpRequest): La solicitud HTTP que desencadenó esta vista.
+    Returns:
+        HttpResponse: Una respuesta HTTP que renderiza la plantilla 'contenido/reportes.html' con
+        los datos organizados en forma de reporte.
+    Raises:
+        N/A
+    Example:
+        Ejemplo de uso en una URL de Django:
+        ```
+        path('reportes/', views.reportesView, name='reportes'),
+        ```
+    """
+    # Obtén todos los contenidos de tu base de datos
+    contenidos = Contenido.objects.all()
+    # Reporte 1: Genera un reporte del numero de contenido por categoria
+    reporte = {}
+    for contenido in contenidos:
+        categoria = contenido.categoria.nombre
+        if categoria not in reporte:
+            reporte[categoria] = 0
+        reporte[categoria] += 1
+    
+    # Genera un gráfico de pastel
+    df = pd.DataFrame.from_dict(reporte, orient='index', columns=['Cantidad'])
+    plt.figure(figsize=(8, 8))
+    plt.pie(df['Cantidad'], labels=df.index, autopct='%1.1f%%', startangle=90)
+    plt.title('Número de Contenidos por Categoría')
+    plt.axis('equal')  # Asegura que el gráfico de pastel sea un círculo.
+    
+    # Convierte el gráfico en una imagen para mostrar en el HTML
+    img_data = BytesIO()
+    plt.savefig(img_data, format='png')
+    img_data.seek(0)
+    img_base64 = base64.b64encode(img_data.read()).decode()
+    img_src = f'data:image/png;base64,{img_base64}'
+
+
+
+    #Reporte 2: Genera un reporte del promedio de puntuacion por categoria
+    reporte_puntuacion = {}
+    for contenido in contenidos:
+        categoria = contenido.categoria.nombre
+        if categoria not in reporte_puntuacion:
+            reporte_puntuacion[categoria] = 0
+        reporte_puntuacion[categoria] += contenido.puntuacion
+
+    for categoria in reporte_puntuacion:
+        reporte_puntuacion[categoria] = reporte_puntuacion[categoria] / reporte[categoria]
+
+    # Reporte 3: Genera un reporte del contenido mas valorado por categoria
+    reporte_valoracion = {}
+    for contenido in contenidos:
+        categoria = contenido.categoria.nombre
+        if categoria not in reporte_valoracion:
+            reporte_valoracion[categoria] = 0
+        reporte_valoracion[categoria] = max(reporte_valoracion[categoria], contenido.puntuacion)
+
+    # Reporte 4: Genera un reporte del contenido del promedio de vistas por categoria
+    reporte_vistas = {}
+    for contenido in contenidos:
+        categoria = contenido.categoria.nombre
+        if categoria not in reporte_vistas:
+            reporte_vistas[categoria] = 0
+        reporte_vistas[categoria] += contenido.numero_vistas
+
+    #return
+    return render(request, 'contenido/reportes.html', {'reporte': reporte,'img_src': img_src,'reporte_puntuacion': reporte_puntuacion, 'reporte_valoracion': reporte_valoracion, 'reporte_vistas': reporte_vistas})
 
 @login_required
 @user_passes_test(tiene_permiso_publicar_contenido)

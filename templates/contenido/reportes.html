@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Agrega estilos según sea necesario */
+    </style>
+</head>
+<body>
+    <div class="container mt-3">
+        <h1 class="text-center">Reportes</h1>
+
+        <!-- Agrega un elemento select (lista desplegable) -->
+        <label for="informe-selector">Selecciona un informe:</label>
+        <select id="informe-selector">
+            <option value="reporte">Número de Contenidos por Categoría</option>
+            <option value="reporte_puntuacion">Promedio de Puntuación por Categoría</option>
+            <option value="reporte_valoracion">Contenido Más Valorado por Categoría</option>
+            <option value="reporte_vistas">Promedio de Vistas por Categoría</option>
+        </select>
+
+        <!-- Reporte de número de contenidos por categoría con gráfico de pastel -->
+        <div class="mt-4" id="reporte">
+            <h2>Número de Contenidos por Categoría</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <ul>
+                        {% for categoria, cantidad in reporte.items %}
+                            <li>{{ categoria }}: {{ cantidad }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <img src="{{ img_src }}" alt="Gráfico de Pastel">
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporte de promedio de puntuación por categoría -->
+        <div class="mt-4" id="reporte_puntuacion" style="display: none;">
+            <h2>Promedio de Puntuación por Categoría</h2>
+            <ul>
+                {% for categoria, promedio in reporte_puntuacion.items %}
+                    <li>{{ categoria }}: {{ promedio|floatformat:2 }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Reporte de contenido más valorado por categoría -->
+        <div class="mt-4" id="reporte_valoracion" style="display: none;">
+            <h2>Contenido Más Valorado por Categoría</h2>
+            <ul>
+                {% for categoria, valoracion in reporte_valoracion.items %}
+                    <li>{{ categoria }}: {{ valoracion|floatformat:2 }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Reporte de promedio de vistas por categoría -->
+        <div class="mt-4" id="reporte_vistas" style="display: none;">
+            <h2>Promedio de Vistas por Categoría</h2>
+            <ul>
+                {% for categoria, vistas in reporte_vistas.items %}
+                    <li>{{ categoria }}: {{ vistas }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Script de JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        // Función para mostrar el informe seleccionado
+        function mostrarInforme() {
+            var informeSeleccionado = document.getElementById("informe-selector").value;
+
+            // Oculta todos los informes
+            var informes = ["reporte", "reporte_puntuacion", "reporte_valoracion", "reporte_vistas"];
+            for (var i = 0; i < informes.length; i++) {
+                var informe = informes[i];
+                document.getElementById(informe).style.display = "none";
+            }
+
+            // Muestra el informe seleccionado
+            document.getElementById(informeSeleccionado).style.display = "block";
+        }
+
+        // Asocia la función mostrarInforme al evento de cambio en la lista desplegable
+        document.getElementById("informe-selector").addEventListener("change", mostrarInforme);
+
+        mostrarInforme();
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+{% endblock %}
