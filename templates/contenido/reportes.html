@@ -16,59 +16,24 @@
         <!-- Agrega un elemento select (lista desplegable) -->
         <label for="informe-selector">Selecciona un informe:</label>
         <select id="informe-selector">
-            <option value="reporte">Número de Contenidos por Categoría</option>
-            <option value="reporte_puntuacion">Promedio de Puntuación por Categoría</option>
-            <option value="reporte_valoracion">Contenido Más Valorado por Categoría</option>
-            <option value="reporte_vistas">Promedio de Vistas por Categoría</option>
+            <option value="reporte1">Número de Contenidos por Categoría</option>
+
         </select>
 
-        <!-- Reporte de número de contenidos por categoría con gráfico de pastel -->
-        <div class="mt-4" id="reporte">
-            <h2>Número de Contenidos por Categoría</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <ul>
-                        {% for categoria, cantidad in reporte.items %}
-                            <li>{{ categoria }}: {{ cantidad }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <img src="{{ img_src }}" alt="Gráfico de Pastel">
-                </div>
+            <!-- Reporte 1: Número de contenidos por categoría con gráfico de pastel -->
+            <div class="mt-4" id="reporte1" style="text-align: center;">
+                <h2>Número de Contenidos por Categoría</h2>
+                <div class="row" style="display: inline-block;">
+                    <div class="col-md-6" style="text-align: left;">
+                        <ul>
+                            {% for categoria, cantidad in reporte.items %}
+                                <li>{{ categoria }}: {{ cantidad }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                <div class="col-md-6" style="margin-top: 10px;">
+                        <img src="{{ img_src1 }}" alt="Gráfico de Pastel" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
             </div>
-        </div>
-
-        <!-- Reporte de promedio de puntuación por categoría -->
-        <div class="mt-4" id="reporte_puntuacion" style="display: none;">
-            <h2>Promedio de Puntuación por Categoría</h2>
-            <ul>
-                {% for categoria, promedio in reporte_puntuacion.items %}
-                    <li>{{ categoria }}: {{ promedio|floatformat:2 }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Reporte de contenido más valorado por categoría -->
-        <div class="mt-4" id="reporte_valoracion" style="display: none;">
-            <h2>Contenido Más Valorado por Categoría</h2>
-            <ul>
-                {% for categoria, valoracion in reporte_valoracion.items %}
-                    <li>{{ categoria }}: {{ valoracion|floatformat:2 }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <!-- Reporte de promedio de vistas por categoría -->
-        <div class="mt-4" id="reporte_vistas" style="display: none;">
-            <h2>Promedio de Vistas por Categoría</h2>
-            <ul>
-                {% for categoria, vistas in reporte_vistas.items %}
-                    <li>{{ categoria }}: {{ vistas }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
     </div>
 
     <!-- Script de JavaScript -->

@@ -420,15 +420,15 @@ def reportesView(request):
     # Obtén todos los contenidos de tu base de datos
     contenidos = Contenido.objects.all()
     # Reporte 1: Genera un reporte del numero de contenido por categoria
-    reporte = {}
+    reporte1 = {}
     for contenido in contenidos:
         categoria = contenido.categoria.nombre
-        if categoria not in reporte:
-            reporte[categoria] = 0
-        reporte[categoria] += 1
+        if categoria not in reporte1:
+            reporte1[categoria] = 0
+        reporte1[categoria] += 1
     
     # Genera un gráfico de pastel
-    df = pd.DataFrame.from_dict(reporte, orient='index', columns=['Cantidad'])
+    df = pd.DataFrame.from_dict(reporte1, orient='index', columns=['Cantidad'])
     plt.figure(figsize=(8, 8))
     plt.pie(df['Cantidad'], labels=df.index, autopct='%1.1f%%', startangle=90)
     plt.title('Número de Contenidos por Categoría')
@@ -439,39 +439,11 @@ def reportesView(request):
     plt.savefig(img_data, format='png')
     img_data.seek(0)
     img_base64 = base64.b64encode(img_data.read()).decode()
-    img_src = f'data:image/png;base64,{img_base64}'
-
-
-
-    #Reporte 2: Genera un reporte del promedio de puntuacion por categoria
-    reporte_puntuacion = {}
-    for contenido in contenidos:
-        categoria = contenido.categoria.nombre
-        if categoria not in reporte_puntuacion:
-            reporte_puntuacion[categoria] = 0
-        reporte_puntuacion[categoria] += contenido.puntuacion
-
-    for categoria in reporte_puntuacion:
-        reporte_puntuacion[categoria] = reporte_puntuacion[categoria] / reporte[categoria]
-
-    # Reporte 3: Genera un reporte del contenido mas valorado por categoria
-    reporte_valoracion = {}
-    for contenido in contenidos:
-        categoria = contenido.categoria.nombre
-        if categoria not in reporte_valoracion:
-            reporte_valoracion[categoria] = 0
-        reporte_valoracion[categoria] = max(reporte_valoracion[categoria], contenido.puntuacion)
-
-    # Reporte 4: Genera un reporte del contenido del promedio de vistas por categoria
-    reporte_vistas = {}
-    for contenido in contenidos:
-        categoria = contenido.categoria.nombre
-        if categoria not in reporte_vistas:
-            reporte_vistas[categoria] = 0
-        reporte_vistas[categoria] += contenido.numero_vistas
+    img_src1 = f'data:image/png;base64,{img_base64}'
 
     #return
-    return render(request, 'contenido/reportes.html', {'reporte': reporte,'img_src': img_src,'reporte_puntuacion': reporte_puntuacion, 'reporte_valoracion': reporte_valoracion, 'reporte_vistas': reporte_vistas})
+    #return render(request, 'contenido/reportes.html', {'reporte': reporte,'img_src': img_src,'reporte_puntuacion': reporte_puntuacion, 'reporte_valoracion': reporte_valoracion, 'reporte_vistas': reporte_vistas})
+    return render(request, 'contenido/reportes.html', {'reporte1': reporte1,'img_src1': img_src1})
 
 @login_required
 @user_passes_test(tiene_permiso_publicar_contenido)
