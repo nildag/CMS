@@ -1,17 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        <h2 class="mt-4 mb-3">Notificaciones</h2>
-        <ul class="list-group">
-            {% for notify in notify %}
-                <li class="list-group-item {% if not notify.read %}list-group-item-warning{% endif %}">
-                    {{ notify.actor.get_full_name|default:notify.actor }} ha creado un artículo para editar: "{{ notify.verbo }}"
-                    <span>
-                        el {{ notify.timestamp }}
-                    </span>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+<div class="container">
+    <h2 class="mt-4 mb-3">Notificaciones</h2>
+    <ul class="list-group">
+        {% for notify in notify %}
+        <li class="list-group-item {% if not notify.read %}list-group-item-warning{% endif %}">
+            {% if notify.tipo_accion == 'Edicion' %}
+            {{ notify.actor.get_full_name|default:notify.actor }} ha solicitado edición de un artículo: "{{ notify.verbo }}"
+            {% elif notify.tipo_accion == 'Publicacion' %}
+            {{ notify.actor.get_full_name|default:notify.actor }} ha enviado un artículo para revision: "{{ notify.verbo }}"
+            {% else %}
+            {{ notify.actor.get_full_name|default:notify.actor }} ha realizado una acción: "{{ notify.verbo }}"
+            {% endif %}
+            <span>
+            el {{ notify.timestamp }}
+        </span>
+        </li>
+        {% endfor %}
+
+    </ul>
+</div>
 {% endblock %}

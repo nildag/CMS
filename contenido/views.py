@@ -308,10 +308,10 @@ def aEdicion(request, id):
         usercategoria__rol__nombre="Editor",
         usercategoria__categoria=categoria
     )
-    print(contenido)
+    #print(contenido)
     new_notifications = []
     for user in users_with_editor_role:
-        notification = notificar.send(sender=contenido.autor, verb=contenido.titulo, destiny=user, timestamp=timezone.now(),categoria_destino=categoria)
+        notification = notificar.send(sender=contenido.autor, verb=contenido.titulo, destiny=user, timestamp=timezone.now(),categoria_destino=categoria,tipo_accion='Edicion')
         new_notifications.extend(notification)
 
 
@@ -332,6 +332,20 @@ def aPublicacion(request, id):
     contenido = Contenido.objects.get(id=id)
     contenido.estado = 'Publicacion'
     contenido.save()
+
+    # Notificar a los usuarios publicadores en la categoría del contenido
+    categoria = contenido.categoria  # Obtener la categoría del contenido
+    users_with_publicador_role = User.objects.filter(
+        usercategoria__rol__nombre="Publicador",
+        usercategoria__categoria=categoria
+    )
+
+    new_notifications = []
+    for user in users_with_publicador_role:
+        notification = notificar.send(sender=contenido.autor, verb=contenido.titulo, destiny=user,
+                                      timestamp=timezone.now(), categoria_destino=categoria, tipo_accion='Publicacion')
+        new_notifications.extend(notification)
+
 
     user = User.objects.get(id=request.user.id)
     categorias = UserCategoria.objects.filter(user=user, rol__nombre='Editor').values_list('categoria__id', flat=True)

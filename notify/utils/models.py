@@ -80,6 +80,7 @@ class AbstractNotificacion(models.Model):
     eliminado = models.BooleanField(default=False)
 
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
+    tipo_accion = models.CharField(max_length=50, blank=True, null=True)
 
     objects = NotificationQueryset.as_manager()
 
@@ -98,6 +99,7 @@ def notify_signals(verb, **kwargs):
     :param kwargs:
     :return:
     """
+    print("Notificación generada:", verb)
     #destiny = kwargs.pop('destiny')
     actor = kwargs.pop('sender')
 
@@ -108,11 +110,19 @@ def notify_signals(verb, **kwargs):
     levels = kwargs.pop('level', Notify.Levels.info)
 
     categoria_destino = kwargs.pop('categoria_destino', None)
+    tipo_accion = kwargs.pop('tipo_accion', None)
+
+    str_tipo_accion = ""
+
+    if tipo_accion== "Edicion":
+        str_tipo_accion = "Editor"
+    elif tipo_accion == "Publicacion":
+        str_tipo_accion = "Publicador"
 
     if categoria_destino:
         # Obtén a los usuarios editores de la categoría
         users_with_editor_role = User.objects.filter(
-            usercategoria__rol__nombre="Editor",
+            usercategoria__rol__nombre=str_tipo_accion,
             usercategoria__categoria=categoria_destino
         )
 
@@ -126,6 +136,7 @@ def notify_signals(verb, **kwargs):
                 publico=publico,
                 timestamp=timestamp,
                 level=levels,
+                tipo_accion=tipo_accion,
             )
             notification.save()
             new_notify.append(notification)
