@@ -17,6 +17,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+from collections import defaultdict
 
 def tiene_permiso_visualizar_kanban(user):
     """
@@ -421,11 +422,14 @@ def reportesView(request):
     contenidos = Contenido.objects.all()
     # Reporte 1: Genera un reporte del numero de contenido por categoria
     reporte1 = {}
+    reporte_contenidos_por_categoria = defaultdict(list)
     for contenido in contenidos:
         categoria = contenido.categoria.nombre
         if categoria not in reporte1:
             reporte1[categoria] = 0
         reporte1[categoria] += 1
+        reporte_contenidos_por_categoria[categoria].append(contenido.titulo)
+
     
     # Genera un gráfico de pastel
     df = pd.DataFrame.from_dict(reporte1, orient='index', columns=['Cantidad'])
@@ -442,8 +446,7 @@ def reportesView(request):
     img_src1 = f'data:image/png;base64,{img_base64}'
 
     #return
-    #return render(request, 'contenido/reportes.html', {'reporte': reporte,'img_src': img_src,'reporte_puntuacion': reporte_puntuacion, 'reporte_valoracion': reporte_valoracion, 'reporte_vistas': reporte_vistas})
-    return render(request, 'contenido/reportes.html', {'reporte1': reporte1,'img_src1': img_src1})
+    return render(request, 'contenido/reportes.html', {'reporte1': reporte1,'img_src1': img_src1,'reporte_contenidos_por_categoria': dict(reporte_contenidos_por_categoria)})
 
 @login_required
 @user_passes_test(tiene_permiso_publicar_contenido)
