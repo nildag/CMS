@@ -1,3 +1,4 @@
+<!-- Archivo: cms/templates/contenido/reportes.html -->
 {% extends 'base.html' %}
 {% block content %}
 
@@ -12,13 +13,14 @@
 
         <!-- Agrega un elemento select (lista desplegable) -->
         <div class="mt-4" id="elegirReporte" style="text-align: center;">
-            <label for="informe-selector" style="text-align: center;">Selecciona un informe:</label>
-            <select id="informe-selector">
-                <option value="reporte1">Número de Contenidos por Categoría</option>
-
-            </select>
-            <button id="exportar-pdf-btn">Exportar a PDF</button>
-        </div>
+    <label for="informe-selector" style="text-align: center;">Selecciona un informe:</label>
+    <select id="informe-selector">
+        <option value="reporte1">Número de Contenidos por Categoría</option>
+        <option value="reporte2">Rendimiento de Contenido por Categoría</option>
+        <!-- Agrega más opciones según sea necesario -->
+    </select>
+    <button id="exportar-pdf-btn">Exportar a PDF</button>
+</div>
         <!-- Reporte 1: Número de contenidos por categoría con gráfico de pastel -->
         <div class="mt-4" id="reporte1" style="text-align: center;">
             <h2>Número de Contenidos por Categoría</h2>
@@ -40,38 +42,45 @@
                 </div>
             </div>
         </div>
-
+        <!-- Sección para mostrar el informe de rendimiento de contenido por categoría -->
+        <div class="mt-4" id="reporte2" style="text-align: center;">
+            <h2>Rendimiento de Contenido por Categoría</h2>
+            <div class="row" style="display: inline-block; text-align: center;">
+                <div class="col-md-12" style="display: inline-block; margin-top: 10px;">
+                    <img src="{{ img_src }}" alt="Gráfico de Barras" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Script de JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script>
-       // Función para exportar el contenido a PDF
+    <!-- Scripts de JavaScript y bibliotecas -->
+<!-- Scripts de JavaScript y bibliotecas -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Utiliza la versión clásica de jsPDF cargada de forma síncrona -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+    // Función para exportar el contenido a PDF
     function exportarAPDF() {
-        // Crea un objeto jsPDF
-        var pdf = new jsPDF();
+    var pdf = new jsPDF();
 
-        // Obtiene el contenido del div que deseas exportar
-        var informeSeleccionado = document.getElementById("informe-selector").value;
-        var contenidoDiv = document.getElementById(informeSeleccionado);
+    var informeSeleccionado = document.getElementById("informe-selector").value;
+    var contenidoDiv = document.getElementById(informeSeleccionado);
 
-        // Agrega el contenido del div al PDF
-        pdf.fromHTML(contenidoDiv, 15, 15);
+    var contenidoHTML = contenidoDiv.innerHTML;
 
+    pdf.fromHTML(contenidoHTML, 15, 15).then(function () {
         // Guarda o descarga el PDF
         pdf.save('reporte.pdf');
-    }
-
+    });
+}
     // Función para mostrar el informe seleccionado
     function mostrarInforme() {
         var informeSeleccionado = document.getElementById("informe-selector").value;
 
         // Oculta todos los informes
-        var informes = ["reporte", "reporte_puntuacion", "reporte_valoracion", "reporte_vistas"];
+        var informes = ["reporte1", "reporte2"]; // Añade los reportes del 1 al 6
         for (var i = 0; i < informes.length; i++) {
             var informe = informes[i];
             document.getElementById(informe).style.display = "none";

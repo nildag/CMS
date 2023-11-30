@@ -463,6 +463,48 @@ def reportesView(request):
     return render(request, 'contenido/reportes.html', {'reporte1': reporte1,'img_src1': img_src1,'reporte_contenidos_por_categoria': dict(reporte_contenidos_por_categoria)})
 
 @login_required
+@user_passes_test(tiene_permiso_visualizar_kanban)
+def reporteRendimiento(request):
+    """
+    Vista para generar el Reporte de Rendimiento de Contenido por Categoría.
+    Requiere autenticación.
+    Args:
+        request: Objeto de solicitud HTTP.
+    Returns:
+        HttpResponse: Respuesta HTTP que renderiza el informe en forma de gráfico.
+    """
+    # Obtén todos los contenidos de tu base de datos
+    contenidos = Contenido.objects.all()
+
+    # Genera el informe de rendimiento (puedes modificar esta función según tus necesidades)
+    reporte_rendimiento = generar_reporte_rendimiento(contenidos)
+
+    # Extrae la información necesaria para el gráfico
+    categorias = list(reporte_rendimiento.keys())
+    contenido_mas_popular = [info['mas_popular'] for info in reporte_rendimiento.values()]
+    contenido_menos_popular = [info['menos_popular'] for info in reporte_rendimiento.values()]
+
+    # Crea el gráfico
+    plt.figure(figsize=(10, 6))
+    plt.barh(categorias, contenido_mas_popular, label='Más Popular')
+    plt.barh(categorias, contenido_menos_popular, label='Menos Popular')
+    plt.xlabel('Cantidad de Vistas')
+    plt.title('Rendimiento de Contenido por Categoría')
+    plt.legend()
+
+    # Convierte el gráfico en una imagen para mostrar en el HTML
+    img_data = BytesIO()
+    #plt.savefig(img_data, format='png')
+    plt.savefig(img_data, format='jpeg')
+    plt.close()
+    img_data.seek(0)
+    img_base64 = base64.b64encode(img_data.read()).decode()
+    img_src = f'data:image/png;base64,{img_base64}'
+
+    # Renderiza la plantilla general y pasa la información necesaria en el contexto
+    return render(request, 'contenido/reportes.html', {'img_src': img_src})
+
+@login_required
 @user_passes_test(tiene_permiso_publicar_contenido)
 def rechazar_contenido(request, id):
     """
