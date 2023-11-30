@@ -15,8 +15,10 @@
         <div class="mt-4" id="elegirReporte" style="text-align: center;">
     <label for="informe-selector" style="text-align: center;">Selecciona un informe:</label>
     <select id="informe-selector">
-        <option value="reporte1">Número de Contenidos por Categoría</option>
-        <option value="reporte2">Rendimiento de Contenido por Categoría</option>
+        <option value="reporte1">Cantidad total de contenidos publicados por Categoría</option>
+        <option value="reporte2">Promedio de puntuacion de las valoraciones por categoria</option>
+        <option value="reporte3">Valoracion promedio mas alta de algun contenido en cada categoria</option>
+        <option value="reporte4">Promedio de vistas por categoria</option>
         <!-- Agrega más opciones según sea necesario -->
     </select>
     <button id="exportar-pdf-btn">Exportar a PDF</button>
@@ -42,15 +44,44 @@
                 </div>
             </div>
         </div>
-        <!-- Sección para mostrar el informe de rendimiento de contenido por categoría -->
+
+        <!-- Reporte 2: Promedio de puntuación por categoría -->
         <div class="mt-4" id="reporte2" style="text-align: center;">
-            <h2>Rendimiento de Contenido por Categoría</h2>
-            <div class="row" style="display: inline-block; text-align: center;">
-                <div class="col-md-12" style="display: inline-block; margin-top: 10px;">
-                    <img src="{{ img_src }}" alt="Gráfico de Barras" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-                </div>
+            <h2>Promedio de Puntuación por Categoría</h2>
+            <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+            <ul>
+                {% for categoria, promedio in reporte2.items %}
+                    <li>{{ categoria }}: {{ promedio|floatformat:2 }}</li>
+                {% endfor %}
+            </ul>
             </div>
         </div>
+
+        <!-- Reporte 3: Contenido más valorado por categoría -->
+        <div class="mt-4" id="reporte3" style="text-align: center;">
+            <h2>Contenido Más Valorado por Categoría</h2>
+            <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+            <ul>
+                {% for categoria, valoracion in reporte3.items %}
+                    <li>{{ categoria }}: {{ valoracion|floatformat:2 }}</li>
+                {% endfor %}
+            </ul>
+            </div>
+        </div>
+
+        <!-- Reporte 4: Promedio de vistas por categoría -->
+        <div class="mt-4" id="reporte4" style="text-align: center;">
+            <h2>Promedio de Vistas por Categoría</h2>
+            <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+            <ul>
+                {% for categoria, vistas in reporte4.items %}
+                    <li>{{ categoria }}: {{ vistas }}</li>
+                {% endfor %}
+            </ul>
+            </div>
+        </div>
+        
+
     </div>
 
     <!-- Scripts de JavaScript y bibliotecas -->
@@ -80,7 +111,7 @@
         var informeSeleccionado = document.getElementById("informe-selector").value;
 
         // Oculta todos los informes
-        var informes = ["reporte1", "reporte2"]; // Añade los reportes del 1 al 6
+        var informes = ["reporte1", "reporte2", "reporte3", "reporte4"]; // Añade los reportes del 1 al 6
         for (var i = 0; i < informes.length; i++) {
             var informe = informes[i];
             document.getElementById(informe).style.display = "none";
