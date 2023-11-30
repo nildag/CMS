@@ -196,10 +196,19 @@ def listaTodos(request):
     """
     contenido = Contenido.objects.all()
     contenido = contenido.filter(estado='Publicado')
-    
-    categorias = Categoria.objects.all()  # Obtener todas las categorías
-    tipos_contenido = tipoContenido.objects.all()  # Obtener todos los tipos de contenido
-    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias, 'tipos_contenido': tipos_contenido})
+    categorias = Categoria.objects.all()
+    tipos_contenido = tipoContenido.objects.all()
+
+    if request.user and request.user.is_authenticated:
+        usuario = User.objects.get(id=request.user.id)
+        if usuario and usuario.tiene_permiso_deshabilitar_contenido():
+            categorias_deshabilitar = usuario.obtener_categorias_por_permiso('Deshabilitar contenido')
+        else:
+            categorias_deshabilitar = []
+    else:
+        categorias_deshabilitar = []
+        
+    return render(request, 'contenido/listaTodos.html', {'contenidos': contenido, 'categorias': categorias, 'tipos_contenido': tipos_contenido, 'categorias_deshabilitar': categorias_deshabilitar})
 
 @login_required
 @user_passes_test(tiene_permiso_publicar_contenido)
@@ -514,3 +523,15 @@ def rechazar_contenido(request, id):
     contenido = Contenido.for_categorias(categorias)
     contenido = contenido.filter(estado='Publicacion')
     return render(request, 'contenido/listaPublicador.html', {'contenidos': contenido})
+
+def deshabilitar_contenido(request, id):
+    """
+    Función que sirve para cambiar el estado de un contenido a "Deshabilitado"
+    :param request: Objeto de solicitud HTTP.
+    :id: id del contenido a cambiar de estado
+    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.
+    """
+    contenido = Contenido.objects.get(id=id)
+    contenido.estado = 'Deshabilitado'
+    contenido.save()
+    return redirect('contenido:lista_todos')

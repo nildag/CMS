@@ -45,7 +45,7 @@
         "fields": {
             "nombre": "Administrador de categoria",
             "descripcion": "Encargado de la administracion y asignacion de los roles a los usuario en su categoria",
-            "permisos": [10],
+            "permisos": [10, 14],
 			"last_modification": "2023-10-10T12:34:56.789012Z"
         }
     },

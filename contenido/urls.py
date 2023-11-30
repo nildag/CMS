@@ -20,4 +20,5 @@ urlpatterns = [
     path('kanban/', views.kanbanView, name='kanban'),
     path('reportes/', views.reportesView, name='reportes'),
     path('rechazar/<int:id>/', views.rechazar_contenido, name='rechazar_contenido'),
+    path('deshabilitarContenido/<int:id>/', views.deshabilitar_contenido, name='deshabilitar_contenido'),
 ]

@@ -89,5 +89,12 @@
 		"fields": {
 			"nombre": "Generar y visualizar reportes"
 		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 14,
+		"fields": {
+			"nombre": "Deshabilitar contenido"
+		}
 	}
 ]

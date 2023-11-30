@@ -154,6 +154,12 @@ class User(AbstractUser):
         Este método retorna si el usuario actual tiene el permiso "Publicar contenido" en alguna categoría.
         """
         return self.tiene_permiso_en_categoria("Publicar contenido", None)
+    
+    def tiene_permiso_deshabilitar_contenido(self):
+        """
+        Este método retorna si el usuario actual tiene el permiso "Deshabilitar contenido" en alguna categoría.
+        """
+        return self.tiene_permiso_en_categoria("Deshabilitar contenido", None)
 
 class UserCategoria(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
