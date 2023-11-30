@@ -34,7 +34,7 @@
             Puntuación Promedio: {{ contenido.puntuacion | floatformat:2 }} en {{ contenido.numero_valoraciones }} voto/s
         </p>
 
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and contenido.estado == "Publicado"%}
        <p>Tu valoración</p>
         <form method="post" action="{% url 'contenido:valorar_contenido' contenido.id %}" id="rating-form">
             {% csrf_token %}

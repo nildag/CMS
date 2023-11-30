@@ -15,17 +15,22 @@
         <div class="mt-4" id="elegirReporte" style="text-align: center;">
             <label for="informe-selector" style="text-align: center;">Selecciona un informe:</label>
             <select id="informe-selector">
-            <option value="reporte1">Cantidad total de contenidos publicados por Categoría</option>
-            <option value="reporte2">Promedio de puntuacion de las valoraciones por categoria</option>
-            <option value="reporte3">Valoracion promedio mas alta de algun contenido en cada categoria</option>
+            <option value="reporte1">Cantidad total de contenidos publicados por categoría</option>
+            <option value="reporte2">Promedio de puntuacion de las valoraciones por categoría</option>
+            <option value="reporte3">Valoracion promedio mas alta de un contenido por cada categoria</option>
             <option value="reporte4">Vistas por categoria</option>
                 <!-- Agrega más opciones según sea necesario -->
             </select>
-            <button id="exportar-pdf-btn">Exportar a PDF</button>
+            <button type="button" id="exportar-pdf-btn" class="btn-danger">Exportar a PDF</button>
+            <!-- <button id="exportar-pdf-btn">Exportar a PDF</button> -->
         </div>
         <!-- Reporte 1: Número de contenidos por categoría con gráfico de pastel -->
         <div class="mt-4" id="reporte1" style="text-align: center;">
-            <h2>Número de Contenidos por Categoría</h2>
+            <h2>Cantidad total de contenidos publicados por categoría</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra la cantidad total de contenidos publicados por categoría.<br>
+                Se representa con un gráfico de pastel mostrando el porcentaje de contenidos por categoría.
+            </p>
             <div class="row" style="display: inline-block; text-align: center;">
                 <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
                     <ul>
@@ -45,19 +50,30 @@
             </div>
         </div>
 
-        <!-- Reporte 2: Promedio de puntuación por categoría -->
+       <!-- Reporte 2: Genera un reporte del promedio de puntuación de todos los contenidos de cada categoría -->
         <div class="mt-4" id="reporte2" style="text-align: center;">
-            <h2>Promedio de Puntuación por Categoría</h2>
-            <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
-            <ul>
-                {% for categoria, promedio in reporte2.items %}
-                    <li>{{ categoria }}: {{ promedio|floatformat:2 }}</li>
-                {% endfor %}
-            </ul>
+            <h2>Promedio de puntuación de las valoraciones por categoría</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra el promedio de puntuación de las valoraciones por categoría.<br>
+                Se representa con un gráfico de pastel mostrando el porcentaje de contenidos por categoría.
+            </p>
+            <div class="row" style="display: inline-block; text-align: center;">
+                <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+                    <ul>
+                        {% for categoria, promedio in promedio_puntuacion_por_categoria.items %}
+                            <li>
+                                <strong>{{ categoria }}:</strong> {{ promedio|floatformat:2 }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-6" style="display: inline-block; margin-top: 10px;">
+                    <img src="{{ img_src2 }}" alt="Gráfico de Barras" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                </div>
             </div>
         </div>
 
-        <!-- Reporte 3: Contenido más valorado por categoría -->
+        <!-- Reporte 3: Genera un reporte del contenido mejor valorado por categoria -->
         <div class="mt-4" id="reporte3" style="text-align: center;">
             <h2>Contenido Más Valorado por Categoría</h2>
             <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
@@ -69,7 +85,7 @@
             </div>
         </div>
 
-        <!-- Reporte 4: Promedio de vistas por categoría -->
+        <!-- Reporte 4: Cantidad total de vistas de los contenidos de cada categoría -->
         <div class="mt-4" id="reporte4" style="text-align: center;">
             <h2>Promedio de Vistas por Categoría</h2>
             <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
@@ -92,7 +108,7 @@
 
     <script>
         // Función para exportar el contenido a PDF
-        function exportarAPDF() {
+        function exportarAPDF() { 
             var pdf = new jsPDF();
 
             var informeSeleccionado = document.getElementById("informe-selector").value;
@@ -100,7 +116,7 @@
 
             if (contenidoDiv) {
                 var contenidoHTML = contenidoDiv.innerHTML;
-
+            
                 // Utiliza la función fromHTML con un callback
                 pdf.fromHTML(contenidoHTML, 15, 15, {}, function () {
                     // Guarda o descarga el PDF después de que la operación asincrónica esté completa

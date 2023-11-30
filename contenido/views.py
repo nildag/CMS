@@ -443,7 +443,7 @@ def reportesView(request):
     """
     # Obtén todos los contenidos de tu base de datos
     contenidos = Contenido.objects.all()
-    # Reporte 1: Genera un reporte del numero de contenido por categoria
+    # Reporte 1: Número de contenidos por categoría con gráfico de pastel
     reporte1 = {}
     reporte_contenidos_por_categoria = defaultdict(list)
     for contenido in contenidos:
@@ -469,7 +469,8 @@ def reportesView(request):
     img_base64 = base64.b64encode(img_data.read()).decode()
     img_src1 = f'data:image/png;base64,{img_base64}'
 
-    #Reporte 2: Genera un reporte del promedio de puntuacion por categoria
+    #Reporte 2: Genera un reporte del promedio de puntuacion de todos los contenidos de cada categoria
+    """
     reporte2 = {}
     for contenido in contenidos:
         categoria = contenido.categoria.nombre
@@ -478,8 +479,50 @@ def reportesView(request):
         reporte2[categoria] += contenido.puntuacion
     for categoria in reporte2:
         reporte2[categoria] = reporte2[categoria] / reporte1[categoria]
+    """
+
+    reporte2 = {}
+    for contenido in contenidos:
+        categoria = contenido.categoria.nombre
+        if categoria not in reporte2:
+            reporte2[categoria] = {'total_puntuacion': 0, 'numero_contenidos': 0}
+        reporte2[categoria]['total_puntuacion'] += contenido.puntuacion
+        reporte2[categoria]['numero_contenidos'] += 1
+
+    #calcula el promedio de puntuacion de cada categoria
+    promedio_puntuacion_por_categoria = {}
+    for categoria in reporte2:
+        promedio_puntuacion_por_categoria[categoria] = reporte2[categoria]['total_puntuacion'] / reporte2[categoria]['numero_contenidos']
     
-    # Reporte 3: Genera un reporte del contenido mas valorado por categoria
+    # Genera un los indices para el grafico de barras
+    categorias = list(promedio_puntuacion_por_categoria.keys())
+    promedios = list(promedio_puntuacion_por_categoria.values())
+
+    # Genera un gráfico de barras
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.bar(categorias, promedios)
+    ax.set_title('Promedio de Puntuación por Categoría')
+    ax.set_xlabel('Categoría')
+    ax.set_ylabel('Promedio de Puntuación')
+    ax.set_xticklabels(categorias, rotation=45, ha='right')
+    ax.set_ylim(0, 5)
+    ax.set_yticks([0, 1, 2, 3, 4, 5])
+    ax.grid(True)
+    fig.tight_layout()
+
+    # Mostrar el grafico de barras
+    plt.tight_layout()
+    plt.show()
+
+    # Convierte el gráfico en una imagen para mostrar en el HTML
+    img_data = BytesIO()
+    fig.savefig(img_data, format='png')
+    img_data.seek(0)
+    img_base64 = base64.b64encode(img_data.read()).decode()
+    img_src2 = f'data:image/png;base64,{img_base64}'
+
+
+    # Reporte 3: Genera un reporte del contenido mejor valorado por categoria
     reporte3 = {}
     for contenido in contenidos:
         categoria = contenido.categoria.nombre
@@ -487,7 +530,7 @@ def reportesView(request):
             reporte3[categoria] = 0
         reporte3[categoria] = max(reporte3[categoria], contenido.puntuacion)
     
-    # Reporte 4: Genera un reporte del contenido del promedio de vistas por categoria
+    # Reporte 4: Cantidad total de vistas de los contenidos de cada categoría
     reporte4 = {}
     for contenido in contenidos:
         categoria = contenido.categoria.nombre
@@ -498,9 +541,10 @@ def reportesView(request):
 
     #return
     return render(request, 'contenido/reportes.html', {'reporte1': reporte1,'img_src1': img_src1,'reporte_contenidos_por_categoria': dict(reporte_contenidos_por_categoria),
-                                                        'reporte2': reporte2,'reporte3': reporte3,'reporte4': reporte4,
-                                                        'reporte3_contenidos_por_categoria': dict(reporte_contenidos_por_categoria),
-                                                        'reporte4_contenidos_por_categoria': dict(reporte_contenidos_por_categoria)
+                                                        'reporte2': reporte2,'img_src2': img_src2, 'promedio_puntuacion_por_categoria': promedio_puntuacion_por_categoria,
+                                                        'reporte3': reporte3,
+                                                        'reporte4': reporte4,
+                                                        
                                                         })
 
 
