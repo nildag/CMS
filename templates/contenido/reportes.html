@@ -13,16 +13,16 @@
 
         <!-- Agrega un elemento select (lista desplegable) -->
         <div class="mt-4" id="elegirReporte" style="text-align: center;">
-    <label for="informe-selector" style="text-align: center;">Selecciona un informe:</label>
-    <select id="informe-selector">
-        <option value="reporte1">Cantidad total de contenidos publicados por Categoría</option>
-        <option value="reporte2">Promedio de puntuacion de las valoraciones por categoria</option>
-        <option value="reporte3">Valoracion promedio mas alta de algun contenido en cada categoria</option>
-        <option value="reporte4">Promedio de vistas por categoria</option>
-        <!-- Agrega más opciones según sea necesario -->
-    </select>
-    <button id="exportar-pdf-btn">Exportar a PDF</button>
-</div>
+            <label for="informe-selector" style="text-align: center;">Selecciona un informe:</label>
+            <select id="informe-selector">
+            <option value="reporte1">Cantidad total de contenidos publicados por Categoría</option>
+            <option value="reporte2">Promedio de puntuacion de las valoraciones por categoria</option>
+            <option value="reporte3">Valoracion promedio mas alta de algun contenido en cada categoria</option>
+            <option value="reporte4">Vistas por categoria</option>
+                <!-- Agrega más opciones según sea necesario -->
+            </select>
+            <button id="exportar-pdf-btn">Exportar a PDF</button>
+        </div>
         <!-- Reporte 1: Número de contenidos por categoría con gráfico de pastel -->
         <div class="mt-4" id="reporte1" style="text-align: center;">
             <h2>Número de Contenidos por Categoría</h2>
@@ -85,50 +85,56 @@
     </div>
 
     <!-- Scripts de JavaScript y bibliotecas -->
-<!-- Scripts de JavaScript y bibliotecas -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Utiliza la versión clásica de jsPDF cargada de forma síncrona -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
-    // Función para exportar el contenido a PDF
-    function exportarAPDF() {
-    var pdf = new jsPDF();
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    var informeSeleccionado = document.getElementById("informe-selector").value;
-    var contenidoDiv = document.getElementById(informeSeleccionado);
+    <script>
+        // Función para exportar el contenido a PDF
+        function exportarAPDF() {
+            var pdf = new jsPDF();
 
-    var contenidoHTML = contenidoDiv.innerHTML;
+            var informeSeleccionado = document.getElementById("informe-selector").value;
+            var contenidoDiv = document.getElementById(informeSeleccionado);
 
-    pdf.fromHTML(contenidoHTML, 15, 15).then(function () {
-        // Guarda o descarga el PDF
-        pdf.save('reporte.pdf');
-    });
-}
-    // Función para mostrar el informe seleccionado
-    function mostrarInforme() {
-        var informeSeleccionado = document.getElementById("informe-selector").value;
+            if (contenidoDiv) {
+                var contenidoHTML = contenidoDiv.innerHTML;
 
-        // Oculta todos los informes
-        var informes = ["reporte1", "reporte2", "reporte3", "reporte4"]; // Añade los reportes del 1 al 6
-        for (var i = 0; i < informes.length; i++) {
-            var informe = informes[i];
-            document.getElementById(informe).style.display = "none";
+                // Utiliza la función fromHTML con un callback
+                pdf.fromHTML(contenidoHTML, 15, 15, {}, function () {
+                    // Guarda o descarga el PDF después de que la operación asincrónica esté completa
+                    pdf.save('reporte.pdf');
+                });
+            } else {
+                console.error("El div seleccionado no existe");
+            }
         }
 
-        // Muestra el informe seleccionado
-        document.getElementById(informeSeleccionado).style.display = "block";
-    }
 
-    // Asocia la función mostrarInforme al evento de cambio en la lista desplegable
-    document.getElementById("informe-selector").addEventListener("change", mostrarInforme);
+        // Función para mostrar el informe seleccionado
+        function mostrarInforme() {
+            var informeSeleccionado = document.getElementById("informe-selector").value;
 
-    // Asocia la función exportarAPDF al evento de clic en el botón
-    document.getElementById("exportar-pdf-btn").addEventListener("click", exportarAPDF);
+            // Oculta todos los informes
+            var informes = ["reporte1", "reporte2", "reporte3", "reporte4"]; // Añade los reportes del 1 al 6
+            for (var i = 0; i < informes.length; i++) {
+                var informe = informes[i];
+                document.getElementById(informe).style.display = "none";
+            }
 
-    mostrarInforme();
-</script>
+            // Muestra el informe seleccionado
+            document.getElementById(informeSeleccionado).style.display = "block";
+        }
+
+        // Asocia la función mostrarInforme al evento de cambio en la lista desplegable
+        document.getElementById("informe-selector").addEventListener("change", mostrarInforme);
+
+        // Asocia la función exportarAPDF al evento de clic en el botón
+        document.getElementById("exportar-pdf-btn").addEventListener("click", exportarAPDF);
+
+        mostrarInforme();
+    </script>
 </body>
 </html>
 
