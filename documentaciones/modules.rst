@@ -1,4 +1,4 @@
-cms
+CMS
 ===
 
 .. toctree::
@@ -9,6 +9,7 @@ cms
    contenido
    home
    manage
+   notify
    permiso
    rol
    tipoContenido

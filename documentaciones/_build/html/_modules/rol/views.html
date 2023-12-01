@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rol.views &mdash; documentación de CMS web - 1.0.0</title>
+  <title>rol.views &mdash; documentación de CMS web - 1.0</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,7 +12,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="../../_static/documentation_options.js?v=4936afed"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/translations.js?v=efdbd0b9"></script>
@@ -42,7 +42,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">cms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">CMS</a></li>
 </ul>
 
         </div>
@@ -76,28 +76,24 @@
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">user_passes_test</span>
 <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
 
-
-<div class="viewcode-block" id="user_admin_roles">
-<a class="viewcode-back" href="../../rol.html#rol.views.user_admin_roles">[documentos]</a>
-<span class="k">def</span> <span class="nf">user_admin_roles</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<div class="viewcode-block" id="tiene_permiso_administrar_roles">
+<a class="viewcode-back" href="../../rol.html#rol.views.tiene_permiso_administrar_roles">[documentos]</a>
+<span class="k">def</span> <span class="nf">tiene_permiso_administrar_roles</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Función que comprueba si el usuario es administrador de roles (tiene el permiso &quot;Administrar roles&quot;).</span>
-
+<span class="sd">    Función que comprueba si el usuario tiene el permiso &quot;Administrar roles&quot;.</span>
 <span class="sd">    :param user: El usuario a comprobar (User).</span>
-<span class="sd">    :return: True si es administrador de roles, False en caso contrario.</span>
+<span class="sd">    :return: True si tiene el permiso, False en caso contrario.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">admin_roles</span></div>
-
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">tiene_permiso_administrar_roles</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="crear_rol">
 <a class="viewcode-back" href="../../rol.html#rol.views.crear_rol">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_roles</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_administrar_roles</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">crear_rol</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para crear un nuevo rol.</span>
-
 <span class="sd">    :param request: La solicitud HTTP.</span>
 <span class="sd">    :return: La página de creación de roles o redirecciona a la lista de roles si se crea con éxito.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -111,15 +107,13 @@
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;rol/crearRol.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></div>
 
 
-
 <div class="viewcode-block" id="lista_roles">
 <a class="viewcode-back" href="../../rol.html#rol.views.lista_roles">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_roles</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_administrar_roles</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">lista_roles</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para mostrar la lista de roles.</span>
-
 <span class="sd">    :param request: La solicitud HTTP.</span>
 <span class="sd">    :return: La página de lista de roles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -128,15 +122,13 @@
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;rol/lista_roles.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;roles&#39;</span><span class="p">:</span> <span class="n">roles</span><span class="p">})</span></div>
 
 
-
 <div class="viewcode-block" id="borrar_rol">
 <a class="viewcode-back" href="../../rol.html#rol.views.borrar_rol">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_roles</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_administrar_roles</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">borrar_rol</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">rol_id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para eliminar un rol.</span>
-
 <span class="sd">    :param request: La solicitud HTTP.</span>
 <span class="sd">    :param rol_id: El ID del rol a eliminar.</span>
 <span class="sd">    :return: La página de lista de roles o redirecciona a la lista de roles si se elimina con éxito.</span>
@@ -150,11 +142,10 @@
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;rol/lista_roles.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;roles&#39;</span><span class="p">:</span> <span class="n">Rol</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()})</span></div>
 
 
-
 <div class="viewcode-block" id="lista_permisos">
 <a class="viewcode-back" href="../../rol.html#rol.views.lista_permisos">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_roles</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_administrar_roles</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">lista_permisos</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">rol_id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para mostrar los permisos de un rol.</span>
@@ -167,15 +158,13 @@
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;rol/lista_permisos.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;rol&#39;</span><span class="p">:</span> <span class="n">rol</span><span class="p">})</span></div>
 
 
-
 <div class="viewcode-block" id="editar_rol">
 <a class="viewcode-back" href="../../rol.html#rol.views.editar_rol">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_admin_roles</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_administrar_roles</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">editar_rol</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">rol_id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para editar un rol existente.</span>
-
 <span class="sd">    :param request: La solicitud HTTP.</span>
 <span class="sd">    :param rol_id: El ID del rol a editar.</span>
 <span class="sd">    :return: La página de edición de roles o redirecciona a la lista de roles si se edita con éxito.</span>

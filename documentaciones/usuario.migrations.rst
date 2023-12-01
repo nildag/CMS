@@ -20,6 +20,14 @@ usuario.migrations.0002\_user\_registrado module
    :undoc-members:
    :show-inheritance:
 
+usuario.migrations.0003\_post module
+------------------------------------
+
+.. automodule:: usuario.migrations.0003_post
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

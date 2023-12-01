@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>contenido.views &mdash; documentación de CMS web - 1.0.0</title>
+  <title>contenido.views &mdash; documentación de CMS web - 1.0</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,7 +12,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="../../_static/documentation_options.js?v=4936afed"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/translations.js?v=efdbd0b9"></script>
@@ -42,7 +42,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">cms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">CMS</a></li>
 </ul>
 
         </div>
@@ -70,10 +70,17 @@
            <div itemprop="articleBody">
              
   <h1>Código fuente para contenido.views</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span></span><span class="kn">from</span> <span class="nn">django.contrib.admin.models</span> <span class="kn">import</span> <span class="n">LogEntry</span><span class="p">,</span> <span class="n">ADDITION</span><span class="p">,</span> <span class="n">CHANGE</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.models</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">reverse</span>
+
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Contenido</span>
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Categoria</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">tipoContenido</span>
 <span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">ContenidoForm</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">EditorContenidoForm</span>
 <span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">UserCategoria</span>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
 <span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
@@ -81,68 +88,114 @@
 <span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">User</span>
 <span class="kn">from</span> <span class="nn">contenido.models</span> <span class="kn">import</span> <span class="n">Valoracion</span>
 <span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Q</span>
+<span class="kn">from</span> <span class="nn">notify.signals</span> <span class="kn">import</span> <span class="n">notificar</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<div class="viewcode-block" id="user_autor">
-<a class="viewcode-back" href="../../contenido.html#contenido.views.user_autor">[documentos]</a>
-<span class="k">def</span> <span class="nf">user_autor</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
-
+<div class="viewcode-block" id="tiene_permiso_visualizar_kanban">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.tiene_permiso_visualizar_kanban">[documentos]</a>
+<span class="k">def</span> <span class="nf">tiene_permiso_visualizar_kanban</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Funcion que comprueba si el usuario es autor (tiene el permiso &quot;Crear contenido&quot;)</span>
+<span class="sd">    Funcion que comprueba si el usuario tiene el permiso &quot;Visualizar Kanban&quot; en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.</span>
 <span class="sd">    :param user: usuario a comprobar (User)</span>
-<span class="sd">    :return: True si es autor, False en caso contrario</span>
+<span class="sd">    :return: True tiene el permiso, False en caso contrario (Boolean)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">tiene_permiso_visualizar_kanban</span><span class="p">()</span></div>
 
-    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">user_is_autor</span><span class="p">(</span><span class="n">user</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="user_editor">
-<a class="viewcode-back" href="../../contenido.html#contenido.views.user_editor">[documentos]</a>
-<span class="k">def</span> <span class="nf">user_editor</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
-
+<div class="viewcode-block" id="tiene_permiso_crear_contenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.tiene_permiso_crear_contenido">[documentos]</a>
+<span class="k">def</span> <span class="nf">tiene_permiso_crear_contenido</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Funcion que comprueba si el usuario es editor (tiene el permiso &quot;Editar contenido&quot;)</span>
+<span class="sd">    Funcion que comprueba si el usuario tiene el permiso &quot;Crear contenido&quot; en alguna categoria</span>
 <span class="sd">    :param user: usuario a comprobar (User)</span>
-<span class="sd">    :return: True si es editor, False en caso contrario</span>
+<span class="sd">    :return: True tiene el permiso, False en caso contrario (Boolean)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">tiene_permiso_crear_contenido</span><span class="p">()</span></div>
 
-    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">is_editor</span><span class="p">(</span><span class="n">user</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="user_publicador">
-<a class="viewcode-back" href="../../contenido.html#contenido.views.user_publicador">[documentos]</a>
-<span class="k">def</span> <span class="nf">user_publicador</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
-
+<div class="viewcode-block" id="tiene_permiso_eliminar_contenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.tiene_permiso_eliminar_contenido">[documentos]</a>
+<span class="k">def</span> <span class="nf">tiene_permiso_eliminar_contenido</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Funcion que comprueba si el usuario es publicador (tiene el permiso &quot;Publicar contenido&quot;)</span>
+<span class="sd">    Funcion que comprueba si el usuario tiene el permiso &quot;Eliminar contenido&quot; en alguna categoria</span>
 <span class="sd">    :param user: usuario a comprobar (User)</span>
-<span class="sd">    :return: True si es publicador, False en caso contrario</span>
+<span class="sd">    :return: True tiene el permiso, False en caso contrario (Boolean)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">tiene_permiso_eliminar_contenido</span><span class="p">()</span></div>
 
-    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">is_publicador</span><span class="p">(</span><span class="n">user</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="tiene_permiso_editar_contenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.tiene_permiso_editar_contenido">[documentos]</a>
+<span class="k">def</span> <span class="nf">tiene_permiso_editar_contenido</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funcion que comprueba si el usuario tiene el permiso &quot;Editar contenido&quot; en alguna categoria</span>
+<span class="sd">    :param user: usuario a comprobar (User)</span>
+<span class="sd">    :return: True tiene el permiso, False en caso contrario (Boolean)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">tiene_permiso_editar_contenido</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="tiene_permiso_publicar_contenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.tiene_permiso_publicar_contenido">[documentos]</a>
+<span class="k">def</span> <span class="nf">tiene_permiso_publicar_contenido</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funcion que comprueba si el usuario tiene el permiso &quot;Publicar contenido&quot; en alguna categoria</span>
+<span class="sd">    :param user: usuario a comprobar (User)</span>
+<span class="sd">    :return: True tiene el permiso, False en caso contrario (Boolean)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">tiene_permiso_publicar_contenido</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="tiene_permiso_crear_o_editar_contenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.tiene_permiso_crear_o_editar_contenido">[documentos]</a>
+<span class="k">def</span> <span class="nf">tiene_permiso_crear_o_editar_contenido</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funcion que comprueba si el usuario tiene el permiso &quot;Crear contenido&quot; o &quot;Editar contenido&quot; en alguna categoria</span>
+<span class="sd">    :param user: usuario a comprobar (User)</span>
+<span class="sd">    :return: True tiene el permiso, False en caso contrario (Boolean)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">tiene_permiso_crear_contenido</span><span class="p">()</span> <span class="ow">or</span> <span class="n">user</span><span class="o">.</span><span class="n">tiene_permiso_editar_contenido</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="crearContenido">
 <a class="viewcode-back" href="../../contenido.html#contenido.views.crearContenido">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_autor</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_crear_contenido</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">crearContenido</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para crear nuevo contenido. Requiere autenticación.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        request: Objeto de solicitud HTTP.</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de creación.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">categorias_autor</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Autor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">categorias_autor</span><span class="o">=</span><span class="n">categorias_autor</span><span class="p">)</span>
+        <span class="n">form</span><span class="o">.</span><span class="n">autor</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+        
         <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
             <span class="n">contenido</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="n">contenido</span><span class="o">.</span><span class="n">autor</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span>
+            <span class="n">contenido</span><span class="o">.</span><span class="n">tipo_contenido</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s1">&#39;tipo_contenido&#39;</span><span class="p">]</span>
             <span class="n">contenido</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="c1"># Registrar el cambio</span>
+            <span class="n">LogEntry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">log_action</span><span class="p">(</span>
+                <span class="n">user_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">content_type_id</span><span class="o">=</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">contenido</span><span class="p">)</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">object_id</span><span class="o">=</span><span class="n">contenido</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">object_repr</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">contenido</span><span class="p">),</span>
+                <span class="n">action_flag</span><span class="o">=</span><span class="n">ADDITION</span><span class="p">,</span>
+            <span class="p">)</span>
+
             <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;contenido:lista_contenido&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">categorias_autor</span><span class="o">=</span><span class="n">categorias_autor</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
@@ -153,42 +206,62 @@
 <div class="viewcode-block" id="editarContenido">
 <a class="viewcode-back" href="../../contenido.html#contenido.views.editarContenido">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_autor</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_crear_o_editar_contenido</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">editarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para editar contenido existente. Requiere autenticación.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        request: Objeto de solicitud HTTP.</span>
 <span class="sd">        id (int): ID del contenido a editar.</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        HttpResponse: Respuesta HTTP que redirige a la lista de contenidos o muestra el formulario de edición.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">categorias_autor</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Autor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">contenido</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Contenido</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">contenido</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">categorias_autor</span><span class="o">=</span><span class="n">categorias_autor</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
-            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;contenido:lista_contenido&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">is_autor_in_categoria</span><span class="p">(</span><span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="p">):</span>
+        <span class="n">categorias_autor</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Autor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">contenido</span><span class="p">,</span> <span class="n">categorias_autor</span><span class="o">=</span><span class="n">categorias_autor</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">categorias_autor</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">is_autor_in_categoria</span><span class="p">(</span><span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="p">):</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">contenido</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">categorias_autor</span><span class="o">=</span><span class="n">categorias_autor</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">EditorContenidoForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">contenido</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">is_autor_in_categoria</span><span class="p">(</span><span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="p">):</span>
+                <span class="n">contenido</span><span class="o">.</span><span class="n">tipo_contenido</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s1">&#39;tipo_contenido&#39;</span><span class="p">]</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+            <span class="c1"># Registrar el cambio</span>
+            <span class="n">LogEntry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">log_action</span><span class="p">(</span>
+                <span class="n">user_id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">content_type_id</span><span class="o">=</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">contenido</span><span class="p">)</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">object_id</span><span class="o">=</span><span class="n">contenido</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="n">object_repr</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">contenido</span><span class="p">),</span>
+                <span class="n">action_flag</span><span class="o">=</span><span class="n">CHANGE</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">is_autor_in_categoria</span><span class="p">(</span><span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;contenido:lista_contenido&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;contenido:lista_editor&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span><span class="o">.</span><span class="n">is_autor_in_categoria</span><span class="p">(</span><span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="p">):</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">ContenidoForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">contenido</span><span class="p">,</span> <span class="n">categorias_autor</span><span class="o">=</span><span class="n">categorias_autor</span><span class="p">,</span> <span class="n">autor</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">EditorContenidoForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">contenido</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/editarContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="eliminarContenido">
 <a class="viewcode-back" href="../../contenido.html#contenido.views.eliminarContenido">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_autor</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_eliminar_contenido</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">eliminarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para eliminar contenido existente. Requiere autenticación.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        request: Objeto de solicitud HTTP.</span>
 <span class="sd">        id (int): ID del contenido a eliminar.</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        HttpResponse: Respuesta HTTP que redirige a la lista de contenidos.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -200,14 +273,13 @@
 <div class="viewcode-block" id="confirmarEliminarContenido">
 <a class="viewcode-back" href="../../contenido.html#contenido.views.confirmarEliminarContenido">[documentos]</a>
 <span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_eliminar_contenido</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">confirmarEliminarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para confirmar la eliminación de un contenido existente. Requiere autenticación.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        request: Objeto de solicitud HTTP.</span>
 <span class="sd">        id (int): ID del contenido a confirmar la eliminación.</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        HttpResponse: Respuesta HTTP que muestra la página de confirmación de eliminación.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -218,17 +290,16 @@
 <div class="viewcode-block" id="listaContenido">
 <a class="viewcode-back" href="../../contenido.html#contenido.views.listaContenido">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_autor</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_crear_contenido</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">listaContenido</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para listar los contenidos de un usuario</span>
 <span class="sd">    :param request: Objeto de solicitud HTTP.</span>
 <span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
     <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="c1">#contenido = contenido.filter(estado=&#39;Borrador&#39;)</span>
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
 
 
@@ -237,36 +308,51 @@
 <span class="k">def</span> <span class="nf">verContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para ver un contenido específico. No requiere autenticación.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        request: Objeto de solicitud HTTP.</span>
 <span class="sd">        id (int): ID del contenido a visualizar.</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        HttpResponse: Respuesta HTTP que muestra la página del contenido específico.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/verContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenido&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+    <span class="k">if</span> <span class="n">contenido</span><span class="o">.</span><span class="n">estado</span> <span class="o">==</span> <span class="s1">&#39;Publicado&#39;</span><span class="p">:</span>
+        <span class="n">contenido</span><span class="o">.</span><span class="n">numero_vistas</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="n">historial_url</span> <span class="o">=</span> <span class="n">reverse</span><span class="p">(</span><span class="s1">&#39;contenido:historial_cambios&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">contenido</span><span class="o">.</span><span class="n">id</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/verContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenido&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">,</span> <span class="s1">&#39;historial_url&#39;</span><span class="p">:</span><span class="n">historial_url</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="listaTodos">
 <a class="viewcode-back" href="../../contenido.html#contenido.views.listaTodos">[documentos]</a>
 <span class="k">def</span> <span class="nf">listaTodos</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para mostrar la lista de contenidos de todos los usuarios.</span>
 <span class="sd">    :param request: Objeto de solicitud HTTP.</span>
 <span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaTodos.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">estado</span><span class="o">=</span><span class="s1">&#39;Publicado&#39;</span><span class="p">)</span>
+    <span class="n">categorias</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">tipos_contenido</span> <span class="o">=</span> <span class="n">tipoContenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">:</span>
+        <span class="n">usuario</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">usuario</span> <span class="ow">and</span> <span class="n">usuario</span><span class="o">.</span><span class="n">tiene_permiso_deshabilitar_contenido</span><span class="p">():</span>
+            <span class="n">categorias_deshabilitar</span> <span class="o">=</span> <span class="n">usuario</span><span class="o">.</span><span class="n">obtener_categorias_por_permiso</span><span class="p">(</span><span class="s1">&#39;Deshabilitar contenido&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">categorias_deshabilitar</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">categorias_deshabilitar</span> <span class="o">=</span> <span class="p">[]</span>
+        
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaTodos.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">,</span> <span class="s1">&#39;categorias&#39;</span><span class="p">:</span> <span class="n">categorias</span><span class="p">,</span> <span class="s1">&#39;tipos_contenido&#39;</span><span class="p">:</span> <span class="n">tipos_contenido</span><span class="p">,</span> <span class="s1">&#39;categorias_deshabilitar&#39;</span><span class="p">:</span> <span class="n">categorias_deshabilitar</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="listaPublicador">
 <a class="viewcode-back" href="../../contenido.html#contenido.views.listaPublicador">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_publicador</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_publicar_contenido</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">listaPublicador</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -278,24 +364,24 @@
     <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
     <span class="n">categorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Publicador&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_categorias</span><span class="p">(</span><span class="n">categorias</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">estado</span><span class="o">=</span><span class="s1">&#39;Publicacion&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaPublicador.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="listaEditor">
 <a class="viewcode-back" href="../../contenido.html#contenido.views.listaEditor">[documentos]</a>
 <span class="nd">@login_required</span>
-<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">user_editor</span><span class="p">)</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_editar_contenido</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">listaEditor</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
-
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para mostrar la lista de contenidos de los usuarios editores.</span>
 <span class="sd">    :param request: Objeto de solicitud HTTP.</span>
 <span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
     <span class="n">categorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Editor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_categorias</span><span class="p">(</span><span class="n">categorias</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">estado</span><span class="o">=</span><span class="s1">&#39;Edicion&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaEditor.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
 
 
@@ -305,11 +391,9 @@
 <span class="k">def</span> <span class="nf">valorarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para valorar un contenido específico. Requiere autenticación.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        request: Objeto de solicitud HTTP.</span>
 <span class="sd">        id (int): ID del contenido a valorar.</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        HttpResponse: Redirige a la página del contenido valorado o muestra un mensaje de error.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -343,16 +427,13 @@
         <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/valorarContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenido&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
 
 
-
 <div class="viewcode-block" id="buscarContenido">
 <a class="viewcode-back" href="../../contenido.html#contenido.views.buscarContenido">[documentos]</a>
 <span class="k">def</span> <span class="nf">buscarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Vista para buscar contenidos por título de contenido o nombre de categoría.</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">        request: Objeto de solicitud HTTP.</span>
-
 <span class="sd">    Returns:</span>
 <span class="sd">        HttpResponse: Respuesta HTTP que muestra los resultados de la búsqueda.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -366,6 +447,512 @@
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaTodos.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenidos</span><span class="p">,</span> <span class="s1">&#39;categorias&#39;</span><span class="p">:</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()})</span></div>
+
+
+<div class="viewcode-block" id="aEdicion">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.aEdicion">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_crear_contenido</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">aEdicion</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Función que sirve para cambiar el estado de un contenido a &quot;Edicion&quot;</span>
+<span class="sd">    :param request: Objeto de solicitud HTTP.</span>
+<span class="sd">    :id: id del contenido a cambiar de estado</span>
+<span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">estado</span> <span class="o">=</span> <span class="s1">&#39;Edicion&#39;</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="c1"># Notificar a los usuarios editores en la categoría del contenido</span>
+    <span class="n">categoria</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span>  <span class="c1"># Obtener la categoría del contenido</span>
+    <span class="n">users_with_editor_role</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">usercategoria__rol__nombre</span><span class="o">=</span><span class="s2">&quot;Editor&quot;</span><span class="p">,</span>
+        <span class="n">usercategoria__categoria</span><span class="o">=</span><span class="n">categoria</span>
+    <span class="p">)</span>
+    <span class="c1">#print(contenido)</span>
+    <span class="n">new_notifications</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users_with_editor_role</span><span class="p">:</span>
+        <span class="n">notification</span> <span class="o">=</span> <span class="n">notificar</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">contenido</span><span class="o">.</span><span class="n">autor</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="n">contenido</span><span class="o">.</span><span class="n">titulo</span><span class="p">,</span> <span class="n">destiny</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">timestamp</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span><span class="n">categoria_destino</span><span class="o">=</span><span class="n">categoria</span><span class="p">,</span><span class="n">tipo_accion</span><span class="o">=</span><span class="s1">&#39;Edicion&#39;</span><span class="p">)</span>
+        <span class="n">new_notifications</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">notification</span><span class="p">)</span>
+
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_user</span><span class="p">(</span><span class="n">user</span><span class="p">)</span>
+    <span class="c1">#contenido = contenido.filter(estado=&#39;Borrador&#39;)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="aPublicacion">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.aPublicacion">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_editar_contenido</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">aPublicacion</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Función que sirve para cambiar el estado de un contenido a &quot;Publicacion&quot;</span>
+<span class="sd">    :param request: Objeto de solicitud HTTP.</span>
+<span class="sd">    :id: id del contenido a cambiar de estado</span>
+<span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">estado</span> <span class="o">=</span> <span class="s1">&#39;Publicacion&#39;</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="c1"># Notificar a los usuarios publicadores en la categoría del contenido</span>
+    <span class="n">categoria</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span>  <span class="c1"># Obtener la categoría del contenido</span>
+    <span class="n">users_with_publicador_role</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">usercategoria__rol__nombre</span><span class="o">=</span><span class="s2">&quot;Publicador&quot;</span><span class="p">,</span>
+        <span class="n">usercategoria__categoria</span><span class="o">=</span><span class="n">categoria</span>
+    <span class="p">)</span>
+
+    <span class="n">new_notifications</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users_with_publicador_role</span><span class="p">:</span>
+        <span class="n">notification</span> <span class="o">=</span> <span class="n">notificar</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sender</span><span class="o">=</span><span class="n">contenido</span><span class="o">.</span><span class="n">autor</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="n">contenido</span><span class="o">.</span><span class="n">titulo</span><span class="p">,</span> <span class="n">destiny</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                                      <span class="n">timestamp</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">categoria_destino</span><span class="o">=</span><span class="n">categoria</span><span class="p">,</span> <span class="n">tipo_accion</span><span class="o">=</span><span class="s1">&#39;Publicacion&#39;</span><span class="p">)</span>
+        <span class="n">new_notifications</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">notification</span><span class="p">)</span>
+
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">categorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Editor&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_categorias</span><span class="p">(</span><span class="n">categorias</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">estado</span><span class="o">=</span><span class="s1">&#39;Edicion&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaEditor.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="publicarContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.publicarContenido">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_publicar_contenido</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">publicarContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Función que sirve para cambiar el estado de un contenido a &quot;Publicado&quot;</span>
+<span class="sd">    :param request: Objeto de solicitud HTTP.</span>
+<span class="sd">    :id: id del contenido a cambiar de estado</span>
+<span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">estado</span> <span class="o">=</span> <span class="s1">&#39;Publicado&#39;</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">categorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Publicador&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_categorias</span><span class="p">(</span><span class="n">categorias</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">estado</span><span class="o">=</span><span class="s1">&#39;Publicacion&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaPublicador.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="kanbanView">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.kanbanView">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_visualizar_kanban</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">kanbanView</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista de Kanban para mostrar contenidos organizados por categoría y estado.</span>
+<span class="sd">    Esta vista recopila todos los contenidos de la base de datos y los organiza en un tablero Kanban.</span>
+<span class="sd">    Los contenidos se agrupan por categoría y estado para su visualización.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        request (HttpRequest): La solicitud HTTP que desencadenó esta vista.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: Una respuesta HTTP que renderiza la plantilla &#39;contenido/kanban.html&#39; con</span>
+<span class="sd">        los contenidos organizados en forma de tablero Kanban.</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        N/A</span>
+<span class="sd">    Example:</span>
+<span class="sd">        Ejemplo de uso en una URL de Django:</span>
+<span class="sd">        ```</span>
+<span class="sd">        path(&#39;kanban/&#39;, views.kanbanView, name=&#39;kanban&#39;),</span>
+<span class="sd">        ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Obtén todos los contenidos de tu base de datos</span>
+    <span class="n">contenidos</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+    <span class="c1"># Organiza los contenidos en un diccionario por categoría y estado</span>
+    <span class="n">tablero_kanban</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">contenido</span> <span class="ow">in</span> <span class="n">contenidos</span><span class="p">:</span>
+        <span class="n">categoria</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="o">.</span><span class="n">nombre</span>
+        <span class="n">estado</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">estado</span>
+
+        <span class="k">if</span> <span class="n">categoria</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tablero_kanban</span><span class="p">:</span>
+            <span class="n">tablero_kanban</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">estado</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tablero_kanban</span><span class="p">[</span><span class="n">categoria</span><span class="p">]:</span>
+            <span class="n">tablero_kanban</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="n">estado</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">tablero_kanban</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="n">estado</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">contenido</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/kanban.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;tablero_kanban&#39;</span><span class="p">:</span> <span class="n">tablero_kanban</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="reportesView">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.reportesView">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_visualizar_kanban</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">reportesView</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Vista de Reportes para mostrar reportes de datos de la aplicación.</span>
+<span class="sd">    Esta vista recopila todos los datos de la base de datos y los organiza en un reporte.</span>
+<span class="sd">    Los datos se agrupan por categoría y estado para su visualización.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        request (HttpRequest): La solicitud HTTP que desencadenó esta vista.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        HttpResponse: Una respuesta HTTP que renderiza la plantilla &#39;contenido/reportes.html&#39; con</span>
+<span class="sd">        los datos organizados en forma de reporte.</span>
+<span class="sd">    Raises:</span>
+<span class="sd">        N/A</span>
+<span class="sd">    Example:</span>
+<span class="sd">        Ejemplo de uso en una URL de Django:</span>
+<span class="sd">        ```</span>
+<span class="sd">        path(&#39;reportes/&#39;, views.reportesView, name=&#39;reportes&#39;),</span>
+<span class="sd">        ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Obtén todos los contenidos de tu base de datos</span>
+    <span class="n">contenidos</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="c1"># Reporte 1: Número de contenidos por categoría con gráfico de pastel</span>
+    <span class="n">reporte1</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">reporte_contenidos_por_categoria</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">contenido</span> <span class="ow">in</span> <span class="n">contenidos</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">contenido</span><span class="o">.</span><span class="n">estado</span> <span class="o">==</span> <span class="s1">&#39;Publicado&#39;</span><span class="p">:</span>
+            <span class="n">categoria</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="o">.</span><span class="n">nombre</span>
+            <span class="k">if</span> <span class="n">categoria</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reporte1</span><span class="p">:</span>
+                <span class="n">reporte1</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">reporte1</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">reporte_contenidos_por_categoria</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">contenido</span><span class="o">.</span><span class="n">titulo</span><span class="p">)</span>
+
+    
+    <span class="c1"># Genera un gráfico de pastel</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">reporte1</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cantidad&#39;</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Cantidad&#39;</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.1f%%</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">startangle</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Número de Contenidos por Categoría&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>  <span class="c1"># Asegura que el gráfico de pastel sea un círculo.</span>
+    
+    <span class="c1"># Convierte el gráfico en una imagen para mostrar en el HTML</span>
+    <span class="n">img_data</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+    <span class="n">img_data</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">img_base64</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">img_data</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="n">img_src1</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;data:image/png;base64,</span><span class="si">{</span><span class="n">img_base64</span><span class="si">}</span><span class="s1">&#39;</span>
+
+    <span class="c1">#Reporte 2: Genera un reporte del promedio de puntuacion de todos los contenidos de cada categoria</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    reporte2 = {}</span>
+<span class="sd">    for contenido in contenidos:</span>
+<span class="sd">        categoria = contenido.categoria.nombre</span>
+<span class="sd">        if categoria not in reporte2:</span>
+<span class="sd">            reporte2[categoria] = 0</span>
+<span class="sd">        reporte2[categoria] += contenido.puntuacion</span>
+<span class="sd">    for categoria in reporte2:</span>
+<span class="sd">        reporte2[categoria] = reporte2[categoria] / reporte1[categoria]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">reporte2</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">contenido</span> <span class="ow">in</span> <span class="n">contenidos</span><span class="p">:</span>
+        <span class="n">categoria</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="o">.</span><span class="n">nombre</span>
+        <span class="k">if</span> <span class="n">categoria</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reporte2</span><span class="p">:</span>
+            <span class="n">reporte2</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;total_puntuacion&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;numero_contenidos&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="n">reporte2</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="s1">&#39;total_puntuacion&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">puntuacion</span>
+        <span class="n">reporte2</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="s1">&#39;numero_contenidos&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1">#calcula el promedio de puntuacion de cada categoria</span>
+    <span class="n">promedio_puntuacion_por_categoria</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">reporte2</span><span class="p">:</span>
+        <span class="n">promedio_puntuacion_por_categoria</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="o">=</span> <span class="n">reporte2</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="s1">&#39;total_puntuacion&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">reporte2</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="s1">&#39;numero_contenidos&#39;</span><span class="p">]</span>
+    
+    <span class="c1"># Genera un los indices para el grafico de barras</span>
+    <span class="n">categorias</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">promedio_puntuacion_por_categoria</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">promedios</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">promedio_puntuacion_por_categoria</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+    <span class="c1"># Genera un gráfico de barras</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">anchobarra</span> <span class="o">=</span> <span class="mf">0.30</span>
+    <span class="n">barras</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">categorias</span><span class="p">,</span> <span class="n">promedios</span><span class="p">,</span><span class="n">anchobarra</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">barra</span> <span class="ow">in</span> <span class="n">barras</span><span class="p">:</span>
+        <span class="n">altura</span> <span class="o">=</span> <span class="n">barra</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">barra</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">barra</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">altura</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">altura</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Promedio de Puntuación por Categoría&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Categoría&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Promedio de Puntuación&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">categorias</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Mostrar el grafico de barras</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1"># Convierte el gráfico en una imagen para mostrar en el HTML</span>
+    <span class="n">img_data</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+    <span class="n">img_data</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">img_base64</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">img_data</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="n">img_src2</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;data:image/png;base64,</span><span class="si">{</span><span class="n">img_base64</span><span class="si">}</span><span class="s1">&#39;</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    # Reporte 3: Genera un reporte del contenido mejor valorado por categoria</span>
+<span class="sd">    reporte3 = {}</span>
+<span class="sd">    for contenido in contenidos:</span>
+<span class="sd">        categoria = contenido.categoria.nombre</span>
+<span class="sd">        if categoria not in reporte3:</span>
+<span class="sd">            reporte3[categoria] = 0</span>
+<span class="sd">        reporte3[categoria] = max(reporte3[categoria], contenido.puntuacion)</span>
+<span class="sd">  &quot;&quot;&quot;</span>  
+    <span class="c1"># Reporte 3: Genera un reporte del contenido mejor valorado por categoría</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    Se genera un reporte del contenido mejor y peor valorado por categoría, para esto</span>
+<span class="sd">    se calcula un puntaje del 1 al 10, donde 10 es el mejor valorado y 1 el peor valorado.</span>
+<span class="sd">    El puntaje se calcula como el promedio de la puntuación del contenido y el número de vistas relativas</span>
+<span class="sd">    (número de vistas del contenido / número de vistas de todos los contenidos de la categoría)</span>
+<span class="sd">    Donde la puntuación del contenido se calcula como el promedio de todas las valoraciones del contenido</span>
+<span class="sd">    y el número de vistas relativas se calcula como el número de vistas del contenido dividido entre el número</span>
+<span class="sd">    de vistas de todos los contenidos de la categoría. Tanto el puntaje como la cantidad de vistas relativas</span>
+<span class="sd">    tiene un peso del 50% en el cálculo del puntaje final.</span>
+<span class="sd">    Finalmente se representa el contenido mejor y peor valorado por categoría en un gráfico de barras.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reporte3</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Nuevo criterio de calidad (50% promedio de valoración + 50% vistas relativas)</span>
+    <span class="k">for</span> <span class="n">contenido</span> <span class="ow">in</span> <span class="n">contenidos</span><span class="p">:</span>
+        <span class="n">categoria</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="o">.</span><span class="n">nombre</span>
+        <span class="c1"># Calcula el promedio de puntuación del contenido y conviértelo a float</span>
+        <span class="n">promedio_puntuacion</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">contenido</span><span class="o">.</span><span class="n">puntuacion</span> <span class="o">/</span> <span class="n">reporte1</span><span class="p">[</span><span class="n">categoria</span><span class="p">])</span> <span class="k">if</span> <span class="n">reporte1</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="c1"># Calcula el número de vistas relativas</span>
+        <span class="n">vistas_relativas</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">numero_vistas</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">contenido</span><span class="o">.</span><span class="n">numero_vistas</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">contenidos</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">categoria</span> <span class="o">==</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="p">)</span>
+
+        <span class="c1"># Calcula el puntaje de calidad</span>
+        <span class="n">calidad</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="p">(</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">promedio_puntuacion</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vistas_relativas</span><span class="p">)))</span>
+
+        <span class="c1"># Almacena el contenido con mayor y menor calidad por categoría</span>
+        <span class="k">if</span> <span class="n">categoria</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reporte3</span> <span class="ow">or</span> <span class="n">calidad</span> <span class="o">&gt;</span> <span class="n">reporte3</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;calidad&#39;</span><span class="p">]:</span>
+            <span class="n">reporte3</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;titulo&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="o">.</span><span class="n">titulo</span><span class="p">,</span> <span class="s1">&#39;calidad&#39;</span><span class="p">:</span> <span class="n">calidad</span><span class="p">}}</span>
+        <span class="k">if</span> <span class="s1">&#39;peor_valorado&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reporte3</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="ow">or</span> <span class="n">calidad</span> <span class="o">&lt;</span> <span class="n">reporte3</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;calidad&#39;</span><span class="p">]:</span>
+            <span class="n">reporte3</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;titulo&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="o">.</span><span class="n">titulo</span><span class="p">,</span> <span class="s1">&#39;calidad&#39;</span><span class="p">:</span> <span class="n">calidad</span><span class="p">}</span>
+
+    <span class="c1"># Genera un gráfico de barras similar al reporte 5</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">categorias</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">reporte3</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">mejor_valorado</span> <span class="o">=</span> <span class="p">[</span><span class="n">reporte3</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;calidad&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">categorias</span><span class="p">]</span>
+    <span class="n">peor_valorado</span> <span class="o">=</span> <span class="p">[</span><span class="n">reporte3</span><span class="p">[</span><span class="n">categoria</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;calidad&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">categorias</span><span class="p">]</span>
+    <span class="n">columnas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">categorias</span><span class="p">))</span>
+    <span class="n">anchobarra</span> <span class="o">=</span> <span class="mf">0.30</span>
+
+    <span class="c1"># Grafico de barras para el contenido mejor valorado</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">columnas</span> <span class="o">-</span> <span class="n">anchobarra</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">mejor_valorado</span><span class="p">,</span> <span class="n">anchobarra</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Mejor Valorado&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Grafico de barras para el contenido peor valorado</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">columnas</span> <span class="o">+</span> <span class="n">anchobarra</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">peor_valorado</span><span class="p">,</span> <span class="n">anchobarra</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Peor Valorado&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Contenido con mejor/peor puntuación general por categoría&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Categoría&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Calidad&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">columnas</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">categorias</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+    <span class="c1"># Mostrar el gráfico de barras</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1"># Convierte el gráfico en una imagen para mostrar en el HTML</span>
+    <span class="n">img_data</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+    <span class="n">img_data</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">img_base64</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">img_data</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="n">img_src3</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;data:image/png;base64,</span><span class="si">{</span><span class="n">img_base64</span><span class="si">}</span><span class="s1">&#39;</span>
+
+
+
+    <span class="c1"># Reporte 4: Cantidad total de vistas de los contenidos de cada categoría</span>
+    <span class="n">reporte4</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">contenido</span> <span class="ow">in</span> <span class="n">contenidos</span><span class="p">:</span>
+        <span class="n">categoria</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="o">.</span><span class="n">nombre</span>
+        <span class="k">if</span> <span class="n">categoria</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reporte4</span><span class="p">:</span>
+            <span class="n">reporte4</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">reporte4</span><span class="p">[</span><span class="n">categoria</span><span class="p">]</span> <span class="o">+=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">numero_vistas</span>
+
+
+    <span class="c1"># Reporte 5: Rendimiento de los contenidos del Autor</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; -Promedio de valoraciones de todos sus contenidos publicados</span>
+<span class="sd">    -Titulo, categoría, cantidad de vistas, fecha y valoración de su contenido más valorado/popular</span>
+<span class="sd">    -Titulo, categoría, cantidad de vistas, fecha y valoración de su contenido menos valorado/popular    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">reporte5</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="n">usuario</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">email</span>
+        <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;total_puntuacion&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;numero_contenidos&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                         <span class="s1">&#39;mejor_valorado&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;titulo&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;categoria&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;cantidad_vistas&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;fecha&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;valoracion&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">)},</span>
+                         <span class="s1">&#39;peor_valorado&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;titulo&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;categoria&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;cantidad_vistas&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;fecha&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;valoracion&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)}}</span>
+
+        <span class="k">for</span> <span class="n">contenido</span> <span class="ow">in</span> <span class="n">contenidos</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">contenido</span><span class="o">.</span><span class="n">autor</span> <span class="o">==</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">contenido</span><span class="o">.</span><span class="n">estado</span> <span class="o">==</span> <span class="s1">&#39;Publicado&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">usuario</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reporte5</span><span class="p">:</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;total_puntuacion&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;numero_contenidos&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;mejor_valorado&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;titulo&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;categoria&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;cantidad_vistas&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;fecha&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;valoracion&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;-inf&#39;</span><span class="p">)},</span> <span class="s1">&#39;peor_valorado&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;titulo&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;categoria&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;cantidad_vistas&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;fecha&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;valoracion&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)}}</span>
+                <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;total_puntuacion&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">puntuacion</span>
+                <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;numero_contenidos&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">contenido</span><span class="o">.</span><span class="n">puntuacion</span> <span class="o">&gt;</span> <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;valoracion&#39;</span><span class="p">]:</span>
+                    <span class="c1"># Actualiza el mejor valorado</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;titulo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">titulo</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;categoria&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="o">.</span><span class="n">nombre</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;cantidad_vistas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">numero_vistas</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;fecha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">fecha_creacion</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;valoracion&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">puntuacion</span>
+
+                <span class="k">if</span> <span class="n">contenido</span><span class="o">.</span><span class="n">puntuacion</span> <span class="o">&lt;</span> <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;valoracion&#39;</span><span class="p">]:</span>
+                    <span class="c1"># Actualiza el peor valorado</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;titulo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">titulo</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;categoria&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">categoria</span><span class="o">.</span><span class="n">nombre</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;cantidad_vistas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">numero_vistas</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;fecha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">fecha_creacion</span>
+                    <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;valoracion&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">puntuacion</span>
+
+    <span class="c1">#calcula el promedio de puntuacion de cada autor</span>
+    <span class="n">promedio_puntuacion_por_autor</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">usuario</span> <span class="ow">in</span> <span class="n">reporte5</span><span class="p">:</span>
+        <span class="n">total_puntuacion</span> <span class="o">=</span> <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;total_puntuacion&#39;</span><span class="p">]</span>
+        <span class="n">numero_contenidos</span> <span class="o">=</span> <span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;numero_contenidos&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Verificación para evitar la división por cero</span>
+        <span class="n">promedio_puntuacion_por_autor</span><span class="p">[</span><span class="n">usuario</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_puntuacion</span> <span class="o">/</span> <span class="n">numero_contenidos</span> <span class="k">if</span> <span class="n">numero_contenidos</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+    <span class="c1"># Filtra solo los usuarios que tienen contenido</span>
+    <span class="n">usuarios_con_contenido</span> <span class="o">=</span> <span class="p">[</span><span class="n">usuario</span> <span class="k">for</span> <span class="n">usuario</span> <span class="ow">in</span> <span class="n">promedio_puntuacion_por_autor</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">promedio_puntuacion_por_autor</span><span class="p">[</span><span class="n">usuario</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">usuarios</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">usuarios_con_contenido</span><span class="p">))</span>
+    <span class="n">promedios</span> <span class="o">=</span> <span class="p">[</span><span class="n">promedio_puntuacion_por_autor</span><span class="p">[</span><span class="n">usuario</span><span class="p">]</span> <span class="k">for</span> <span class="n">usuario</span> <span class="ow">in</span> <span class="n">usuarios_con_contenido</span><span class="p">]</span>
+    <span class="n">mejor_valorado</span> <span class="o">=</span> <span class="p">[</span><span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;valoracion&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">usuario</span> <span class="ow">in</span> <span class="n">usuarios_con_contenido</span><span class="p">]</span>
+    <span class="n">peor_valorado</span> <span class="o">=</span> <span class="p">[</span><span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;valoracion&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">usuario</span> <span class="ow">in</span> <span class="n">usuarios_con_contenido</span><span class="p">]</span>
+
+
+    <span class="c1"># Genera un gráfico de barras</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">columnas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">usuarios</span><span class="p">))</span>
+    <span class="n">anchobarra</span> <span class="o">=</span> <span class="mf">0.20</span>
+
+    <span class="c1"># Lista para almacenar las alturas de las barras para el contenido mejor valorado y peor valorado</span>
+    <span class="n">alturas_mejor_valorado</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">alturas_peor_valorado</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">usuario</span> <span class="ow">in</span> <span class="n">usuarios</span><span class="p">:</span>
+        <span class="n">alturas_mejor_valorado</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;mejor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;valoracion&#39;</span><span class="p">])</span>
+        <span class="n">alturas_peor_valorado</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reporte5</span><span class="p">[</span><span class="n">usuario</span><span class="p">][</span><span class="s1">&#39;peor_valorado&#39;</span><span class="p">][</span><span class="s1">&#39;valoracion&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Llena con ceros para los autores que no tienen información de mejor o peor valorado</span>
+    <span class="n">alturas_mejor_valorado</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">valor</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">valor</span> <span class="k">for</span> <span class="n">valor</span> <span class="ow">in</span> <span class="n">alturas_mejor_valorado</span><span class="p">]</span>
+    <span class="n">alturas_peor_valorado</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">if</span> <span class="n">valor</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">valor</span> <span class="k">for</span> <span class="n">valor</span> <span class="ow">in</span> <span class="n">alturas_peor_valorado</span><span class="p">]</span>
+
+    <span class="c1">#grafico de barras para el contenido mejor valorado</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">columnas</span> <span class="o">-</span> <span class="n">anchobarra</span><span class="p">,</span> <span class="n">alturas_mejor_valorado</span><span class="p">,</span> <span class="n">anchobarra</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Mejor Valorado&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+    
+    <span class="c1">#grafico de barras para el contenido peor valorado</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">columnas</span><span class="p">,</span> <span class="n">alturas_peor_valorado</span><span class="p">,</span> <span class="n">anchobarra</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Peor Valorado&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Contenido con mejor/peor promedio de valoraciones por autor&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Autor&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Promedio de Puntuación&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">columnas</span> <span class="o">-</span> <span class="n">anchobarra</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">usuarios</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    
+    <span class="c1"># Mostrar el grafico de barras</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1"># Convierte el gráfico en una imagen para mostrar en el HTML</span>
+    <span class="n">img_data</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;png&#39;</span><span class="p">)</span>
+    <span class="n">img_data</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">img_base64</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">img_data</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="n">img_src5</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;data:image/png;base64,</span><span class="si">{</span><span class="n">img_base64</span><span class="si">}</span><span class="s1">&#39;</span>
+
+   
+    <span class="c1">#return</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/reportes.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;reporte1&#39;</span><span class="p">:</span> <span class="n">reporte1</span><span class="p">,</span> <span class="s1">&#39;img_src1&#39;</span><span class="p">:</span> <span class="n">img_src1</span><span class="p">,</span><span class="s1">&#39;reporte_contenidos_por_categoria&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">reporte_contenidos_por_categoria</span><span class="p">),</span>
+                                                        <span class="s1">&#39;reporte2&#39;</span><span class="p">:</span> <span class="n">reporte2</span><span class="p">,</span> <span class="s1">&#39;img_src2&#39;</span><span class="p">:</span> <span class="n">img_src2</span><span class="p">,</span> <span class="s1">&#39;promedio_puntuacion_por_categoria&#39;</span><span class="p">:</span> <span class="n">promedio_puntuacion_por_categoria</span><span class="p">,</span>
+                                                        <span class="s1">&#39;reporte3&#39;</span><span class="p">:</span> <span class="n">reporte3</span><span class="p">,</span>  <span class="s1">&#39;img_src3&#39;</span><span class="p">:</span> <span class="n">img_src3</span><span class="p">,</span>
+                                                        <span class="s1">&#39;reporte4&#39;</span><span class="p">:</span> <span class="n">reporte4</span><span class="p">,</span>
+                                                        <span class="s1">&#39;reporte5&#39;</span><span class="p">:</span> <span class="n">reporte5</span><span class="p">,</span> <span class="s1">&#39;img_src5&#39;</span><span class="p">:</span> <span class="n">img_src5</span><span class="p">,</span> <span class="s1">&#39;promedio_puntuacion_por_autor&#39;</span><span class="p">:</span> <span class="n">promedio_puntuacion_por_autor</span>
+                                                        
+                                                        <span class="p">})</span></div>
+
+                                                        
+
+
+
+<div class="viewcode-block" id="rechazar_contenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.rechazar_contenido">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_publicar_contenido</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">rechazar_contenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Función que sirve para cambiar el estado de un contenido a &quot;Rechazado&quot;</span>
+<span class="sd">    :param request: Objeto de solicitud HTTP.</span>
+<span class="sd">    :id: id del contenido a cambiar de estado</span>
+<span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">estado</span> <span class="o">=</span> <span class="s1">&#39;Rechazado&#39;</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+    <span class="n">categorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">rol__nombre</span><span class="o">=</span><span class="s1">&#39;Publicador&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s1">&#39;categoria__id&#39;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">for_categorias</span><span class="p">(</span><span class="n">categorias</span><span class="p">)</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">contenido</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">estado</span><span class="o">=</span><span class="s1">&#39;Publicacion&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/listaPublicador.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenidos&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="deshabilitar_contenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.deshabilitar_contenido">[documentos]</a>
+<span class="k">def</span> <span class="nf">deshabilitar_contenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Función que sirve para cambiar el estado de un contenido a &quot;Deshabilitado&quot;</span>
+<span class="sd">    :param request: Objeto de solicitud HTTP.</span>
+<span class="sd">    :id: id del contenido a cambiar de estado</span>
+<span class="sd">    :return: HttpResponse: Respuesta HTTP que muestra la lista de contenidos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">Contenido</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">estado</span> <span class="o">=</span> <span class="s1">&#39;Deshabilitado&#39;</span>
+    <span class="n">contenido</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s1">&#39;contenido:lista_todos&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="historialCambiosContenido">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.historialCambiosContenido">[documentos]</a>
+<span class="k">def</span> <span class="nf">historialCambiosContenido</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Contenido</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+    <span class="n">historial_cambios</span> <span class="o">=</span> <span class="n">LogEntry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">content_type_id</span><span class="o">=</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">contenido</span><span class="p">)</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="n">object_id</span><span class="o">=</span><span class="n">contenido</span><span class="o">.</span><span class="n">id</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/historialCambiosContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenido&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">,</span> <span class="s1">&#39;historial_cambios&#39;</span><span class="p">:</span> <span class="n">historial_cambios</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="historial_cambios">
+<a class="viewcode-back" href="../../contenido.html#contenido.views.historial_cambios">[documentos]</a>
+<span class="nd">@login_required</span>
+<span class="nd">@user_passes_test</span><span class="p">(</span><span class="n">tiene_permiso_editar_contenido</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">historial_cambios</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">contenido_id</span><span class="p">):</span>
+    <span class="n">contenido</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">Contenido</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">contenido_id</span><span class="p">)</span>
+    <span class="n">historial_cambios</span> <span class="o">=</span> <span class="n">LogEntry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+        <span class="n">content_type__app_label</span><span class="o">=</span><span class="s1">&#39;contenido&#39;</span><span class="p">,</span>
+        <span class="n">content_type__model</span><span class="o">=</span><span class="s1">&#39;contenido&#39;</span><span class="p">,</span>
+        <span class="n">object_id</span><span class="o">=</span><span class="n">contenido_id</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s1">&#39;contenido/historialCambiosContenido.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;contenido&#39;</span><span class="p">:</span> <span class="n">contenido</span><span class="p">,</span> <span class="s1">&#39;historial_cambios&#39;</span><span class="p">:</span> <span class="n">historial_cambios</span><span class="p">})</span></div>
 
 </pre></div>
 

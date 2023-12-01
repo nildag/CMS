@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Índice &mdash; documentación de CMS web - 1.0.0</title>
+  <title>Índice &mdash; documentación de CMS web - 1.0</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,7 +12,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="_static/documentation_options.js?v=4936afed"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/translations.js?v=efdbd0b9"></script>
@@ -42,7 +42,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="modules.html">cms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">CMS</a></li>
 </ul>
 
         </div>
@@ -81,6 +81,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -97,17 +98,45 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="usuario.html#usuario.models.User.admin_asigRoles">admin_asigRoles() (método de usuario.models.User)</a>
+      <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.Meta.abstract">abstract (atributo de notify.utils.models.AbstractNotificacion.Meta)</a>
 </li>
-      <li><a href="usuario.html#usuario.models.User.admin_categorias">admin_categorias() (método de usuario.models.User)</a>
+      <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion">AbstractNotificacion (clase en notify.utils.models)</a>
 </li>
-      <li><a href="usuario.html#usuario.models.User.admin_roles">admin_roles() (método de usuario.models.User)</a>
+      <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.Levels">AbstractNotificacion.Levels (clase en notify.utils.models)</a>
 </li>
+      <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.Meta">AbstractNotificacion.Meta (clase en notify.utils.models)</a>
+</li>
+      <li><a href="notify.utils.html#notify.utils.models.AbstractNotificationManager">AbstractNotificationManager (clase en notify.utils.models)</a>
+</li>
+      <li><a href="notify.utils.html#notify.utils.admin.AbstractNotifyAdmin">AbstractNotifyAdmin (clase en notify.utils.admin)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.actor">actor (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.actor">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
+      <li><a href="notify.html#notify.models.Notification.actor_content_type">actor_content_type (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.actor_content_type">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="usuario.html#usuario.models.User.admin_tipo_contenido">admin_tipo_contenido() (método de usuario.models.User)</a>
+      <li><a href="notify.html#notify.models.Notification.actor_content_type_id">actor_content_type_id (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.actor_content_type_id">(atributo de notify.utils.models.AbstractNotificacion)</a>
 </li>
+      </ul></li>
       <li><a href="home.html#home.views.administrar">administrar() (en el módulo home.views)</a>
+</li>
+      <li><a href="contenido.html#contenido.views.aEdicion">aEdicion() (en el módulo contenido.views)</a>
+</li>
+      <li><a href="contenido.html#contenido.views.aPublicacion">aPublicacion() (en el módulo contenido.views)</a>
+</li>
+      <li><a href="tipoContenido.html#tipoContenido.signals.asignar_tipo_por_defecto_a_contenidos">asignar_tipo_por_defecto_a_contenidos() (en el módulo tipoContenido.signals)</a>
 </li>
       <li><a href="contenido.html#contenido.models.Contenido.autor">autor (atributo de contenido.models.Contenido)</a>
 </li>
@@ -123,6 +152,8 @@
 
       <ul>
         <li><a href="contenido.html#contenido.forms.ContenidoForm.base_fields">(atributo de contenido.forms.ContenidoForm)</a>
+</li>
+        <li><a href="contenido.html#contenido.forms.EditorContenidoForm.base_fields">(atributo de contenido.forms.EditorContenidoForm)</a>
 </li>
         <li><a href="rol.html#rol.forms.RolForm.base_fields">(atributo de rol.forms.RolForm)</a>
 </li>
@@ -147,6 +178,8 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="contenido.html#contenido.models.Contenido.cambios">cambios (atributo de contenido.models.Contenido)</a>
+</li>
       <li><a href="contenido.html#contenido.models.Contenido.categoria">categoria (atributo de contenido.models.Contenido)</a>
 
       <ul>
@@ -296,14 +329,6 @@
         <li><a href="contenido.html#module-contenido.apps">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="contenido.html#contenido.models.Contenido.Contenido">Contenido.Contenido (clase en contenido.models)</a>
-</li>
-      <li><a href="contenido.html#contenido.models.Contenido.Contenido.DoesNotExist">Contenido.Contenido.DoesNotExist</a>
-</li>
-      <li><a href="contenido.html#contenido.models.Contenido.Contenido.MultipleObjectsReturned">Contenido.Contenido.MultipleObjectsReturned</a>
-</li>
       <li><a href="contenido.html#contenido.models.Contenido.DoesNotExist">Contenido.DoesNotExist</a>
 </li>
       <li>
@@ -320,6 +345,8 @@
         <li><a href="contenido.migrations.html#module-contenido.migrations">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     contenido.migrations.0001_initial
 
@@ -360,6 +387,48 @@
 
       <ul>
         <li><a href="contenido.migrations.html#module-contenido.migrations.0006_contenido_numero_valoraciones_contenido_puntuacion_and_more">module</a>
+</li>
+      </ul></li>
+      <li>
+    contenido.migrations.0007_contenido_estado
+
+      <ul>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0007_contenido_estado">module</a>
+</li>
+      </ul></li>
+      <li>
+    contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo
+
+      <ul>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo">module</a>
+</li>
+      </ul></li>
+      <li>
+    contenido.migrations.0009_contenido_tipo_contenido
+
+      <ul>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0009_contenido_tipo_contenido">module</a>
+</li>
+      </ul></li>
+      <li>
+    contenido.migrations.0010_alter_contenido_tipo_contenido
+
+      <ul>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0010_alter_contenido_tipo_contenido">module</a>
+</li>
+      </ul></li>
+      <li>
+    contenido.migrations.0011_alter_contenido_tipo_contenido
+
+      <ul>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0011_alter_contenido_tipo_contenido">module</a>
+</li>
+      </ul></li>
+      <li>
+    contenido.migrations.0012_contenido_fecha_modificacion_and_more
+
+      <ul>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0012_contenido_fecha_modificacion_and_more">module</a>
 </li>
       </ul></li>
       <li>
@@ -404,6 +473,8 @@
       <li><a href="categorias.html#categorias.models.Categoria.contenido_set">contenido_set (atributo de categorias.models.Categoria)</a>
 
       <ul>
+        <li><a href="tipoContenido.html#tipoContenido.models.tipoContenido.contenido_set">(atributo de tipoContenido.models.tipoContenido)</a>
+</li>
         <li><a href="usuario.html#usuario.models.User.contenido_set">(atributo de usuario.models.User)</a>
 </li>
       </ul></li>
@@ -412,6 +483,10 @@
       <li><a href="contenido.html#contenido.forms.ContenidoForm.Meta">ContenidoForm.Meta (clase en contenido.forms)</a>
 </li>
       <li><a href="contenido.html#contenido.test_models.ContenidoModelTest">ContenidoModelTest (clase en contenido.test_models)</a>
+</li>
+      <li><a href="usuario.html#usuario.models.User.contenidos_modificados">contenidos_modificados (atributo de usuario.models.User)</a>
+</li>
+      <li><a href="notify.html#notify.views.NotificationList.context_object_name">context_object_name (atributo de notify.views.NotificationList)</a>
 </li>
       <li><a href="home.html#home.apps.CoreConfig">CoreConfig (clase en home.apps)</a>
 </li>
@@ -447,6 +522,8 @@
 
       <ul>
         <li><a href="contenido.html#contenido.forms.ContenidoForm.declared_fields">(atributo de contenido.forms.ContenidoForm)</a>
+</li>
+        <li><a href="contenido.html#contenido.forms.EditorContenidoForm.declared_fields">(atributo de contenido.forms.EditorContenidoForm)</a>
 </li>
         <li><a href="rol.html#rol.forms.RolForm.declared_fields">(atributo de rol.forms.RolForm)</a>
 </li>
@@ -486,6 +563,26 @@
 </li>
         <li><a href="contenido.migrations.html#contenido.migrations.0006_contenido_numero_valoraciones_contenido_puntuacion_and_more.Migration.dependencies">(atributo de contenido.migrations.0006_contenido_numero_valoraciones_contenido_puntuacion_and_more.Migration)</a>
 </li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0007_contenido_estado.Migration.dependencies">(atributo de contenido.migrations.0007_contenido_estado.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo.Migration.dependencies">(atributo de contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0009_contenido_tipo_contenido.Migration.dependencies">(atributo de contenido.migrations.0009_contenido_tipo_contenido.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0010_alter_contenido_tipo_contenido.Migration.dependencies">(atributo de contenido.migrations.0010_alter_contenido_tipo_contenido.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0011_alter_contenido_tipo_contenido.Migration.dependencies">(atributo de contenido.migrations.0011_alter_contenido_tipo_contenido.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0012_contenido_fecha_modificacion_and_more.Migration.dependencies">(atributo de contenido.migrations.0012_contenido_fecha_modificacion_and_more.Migration)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0001_initial.Migration.dependencies">(atributo de notify.migrations.0001_initial.Migration)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0002_alter_notification_destiny.Migration.dependencies">(atributo de notify.migrations.0002_alter_notification_destiny.Migration)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0003_alter_notification_destiny.Migration.dependencies">(atributo de notify.migrations.0003_alter_notification_destiny.Migration)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0004_notification_tipo_accion.Migration.dependencies">(atributo de notify.migrations.0004_notification_tipo_accion.Migration)</a>
+</li>
         <li><a href="permiso.migrations.html#permiso.migrations.0001_initial.Migration.dependencies">(atributo de permiso.migrations.0001_initial.Migration)</a>
 </li>
         <li><a href="rol.migrations.html#rol.migrations.0001_initial.Migration.dependencies">(atributo de rol.migrations.0001_initial.Migration)</a>
@@ -496,9 +593,13 @@
 </li>
         <li><a href="tipoContenido.migrations.html#tipoContenido.migrations.0001_initial.Migration.dependencies">(atributo de tipoContenido.migrations.0001_initial.Migration)</a>
 </li>
+        <li><a href="tipoContenido.migrations.html#tipoContenido.migrations.0002_alter_tipocontenido_descripcion.Migration.dependencies">(atributo de tipoContenido.migrations.0002_alter_tipocontenido_descripcion.Migration)</a>
+</li>
         <li><a href="usuario.migrations.html#usuario.migrations.0001_initial.Migration.dependencies">(atributo de usuario.migrations.0001_initial.Migration)</a>
 </li>
         <li><a href="usuario.migrations.html#usuario.migrations.0002_user_registrado.Migration.dependencies">(atributo de usuario.migrations.0002_user_registrado.Migration)</a>
+</li>
+        <li><a href="usuario.migrations.html#usuario.migrations.0003_post.Migration.dependencies">(atributo de usuario.migrations.0003_post.Migration)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -511,6 +612,22 @@
         <li><a href="tipoContenido.html#tipoContenido.models.tipoContenido.descripcion">(atributo de tipoContenido.models.tipoContenido)</a>
 </li>
       </ul></li>
+      <li><a href="contenido.html#contenido.views.deshabilitar_contenido">deshabilitar_contenido() (en el módulo contenido.views)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.destiny">destiny (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.destiny">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
+      <li><a href="notify.html#notify.models.Notification.destiny_id">destiny_id (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.destiny_id">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
+      <li><a href="notify.html#notify.views.NotificationList.dispatch">dispatch() (método de notify.views.NotificationList)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -529,14 +646,24 @@
 </li>
       <li><a href="usuario.html#usuario.views.editarUserCategoria">editarUserCategoria() (en el módulo usuario.views)</a>
 </li>
+      <li><a href="contenido.html#contenido.forms.EditorContenidoForm">EditorContenidoForm (clase en contenido.forms)</a>
+</li>
+      <li><a href="contenido.html#contenido.forms.EditorContenidoForm.Meta">EditorContenidoForm.Meta (clase en contenido.forms)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.eliminado">eliminado (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.eliminado">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="categorias.html#categorias.models.Categoria.eliminar">eliminar() (método de categorias.models.Categoria)</a>
 
       <ul>
         <li><a href="tipoContenido.html#tipoContenido.models.tipoContenido.eliminar">(método de tipoContenido.models.tipoContenido)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="categorias.html#categorias.models.Categoria.eliminar_por_nombre">eliminar_por_nombre() (método de clase de categorias.models.Categoria)</a>
 
       <ul>
@@ -551,6 +678,8 @@
 </li>
       <li><a href="usuario.html#usuario.models.User.emailaddress_set">emailaddress_set (atributo de usuario.models.User)</a>
 </li>
+      <li><a href="contenido.html#contenido.models.Contenido.estado">estado (atributo de contenido.models.Contenido)</a>
+</li>
       <li><a href="usuario.html#usuario.forms.UserCategoriaForm.Meta.exclude">exclude (atributo de usuario.forms.UserCategoriaForm.Meta)</a>
 </li>
   </ul></td>
@@ -563,10 +692,14 @@
 </li>
       <li><a href="contenido.html#contenido.models.Contenido.fecha_creacion">fecha_creacion (atributo de contenido.models.Contenido)</a>
 </li>
+      <li><a href="contenido.html#contenido.models.Contenido.fecha_modificacion">fecha_modificacion (atributo de contenido.models.Contenido)</a>
+</li>
       <li><a href="categorias.html#categorias.forms.CategoriaForm.Meta.fields">fields (atributo de categorias.forms.CategoriaForm.Meta)</a>
 
       <ul>
         <li><a href="contenido.html#contenido.forms.ContenidoForm.Meta.fields">(atributo de contenido.forms.ContenidoForm.Meta)</a>
+</li>
+        <li><a href="contenido.html#contenido.forms.EditorContenidoForm.Meta.fields">(atributo de contenido.forms.EditorContenidoForm.Meta)</a>
 </li>
         <li><a href="rol.html#rol.forms.RolForm.Meta.fields">(atributo de rol.forms.RolForm.Meta)</a>
 </li>
@@ -589,18 +722,54 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.html#notify.models.Notification.get_level_display">get_level_display() (método de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.get_level_display">(método de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
       <li><a href="usuario.html#usuario.models.User.get_next_by_date_joined">get_next_by_date_joined() (método de usuario.models.User)</a>
 </li>
       <li><a href="contenido.html#contenido.models.Valoracion.get_next_by_fecha">get_next_by_fecha() (método de contenido.models.Valoracion)</a>
 </li>
       <li><a href="contenido.html#contenido.models.Contenido.get_next_by_fecha_creacion">get_next_by_fecha_creacion() (método de contenido.models.Contenido)</a>
 </li>
+      <li><a href="contenido.html#contenido.models.Contenido.get_next_by_fecha_modificacion">get_next_by_fecha_modificacion() (método de contenido.models.Contenido)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.get_next_by_timestamp">get_next_by_timestamp() (método de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.get_next_by_timestamp">(método de notify.utils.models.AbstractNotificacion)</a>
+</li>
+        <li><a href="usuario.html#usuario.models.Post.get_next_by_timestamp">(método de usuario.models.Post)</a>
+</li>
+      </ul></li>
       <li><a href="usuario.html#usuario.models.User.get_previous_by_date_joined">get_previous_by_date_joined() (método de usuario.models.User)</a>
 </li>
       <li><a href="contenido.html#contenido.models.Valoracion.get_previous_by_fecha">get_previous_by_fecha() (método de contenido.models.Valoracion)</a>
 </li>
       <li><a href="contenido.html#contenido.models.Contenido.get_previous_by_fecha_creacion">get_previous_by_fecha_creacion() (método de contenido.models.Contenido)</a>
 </li>
+      <li><a href="contenido.html#contenido.models.Contenido.get_previous_by_fecha_modificacion">get_previous_by_fecha_modificacion() (método de contenido.models.Contenido)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.get_previous_by_timestamp">get_previous_by_timestamp() (método de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.get_previous_by_timestamp">(método de notify.utils.models.AbstractNotificacion)</a>
+</li>
+        <li><a href="usuario.html#usuario.models.Post.get_previous_by_timestamp">(método de usuario.models.Post)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.utils.html#notify.utils.admin.AbstractNotifyAdmin.get_queryset">get_queryset() (método de notify.utils.admin.AbstractNotifyAdmin)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificationManager.get_queryset">(método de notify.utils.models.AbstractNotificationManager)</a>
+</li>
+        <li><a href="notify.html#notify.views.NotificationList.get_queryset">(método de notify.views.NotificationList)</a>
+</li>
+      </ul></li>
       <li><a href="permiso.html#permiso.models.Permiso.getAll">getAll() (método de clase de permiso.models.Permiso)</a>
 
       <ul>
@@ -609,8 +778,6 @@
         <li><a href="usuario.html#usuario.models.User.getAll">(método de clase de usuario.models.User)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="categorias.html#categorias.models.Categoria.getById">getById() (método de clase de categorias.models.Categoria)</a>
 
       <ul>
@@ -633,6 +800,10 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="contenido.html#contenido.views.historial_cambios">historial_cambios() (en el módulo contenido.views)</a>
+</li>
+      <li><a href="contenido.html#contenido.views.historialCambiosContenido">historialCambiosContenido() (en el módulo contenido.views)</a>
+</li>
       <li>
     home
 
@@ -697,9 +868,9 @@
       <ul>
         <li><a href="contenido.html#contenido.models.Contenido.id">(atributo de contenido.models.Contenido)</a>
 </li>
-        <li><a href="contenido.html#contenido.models.Contenido.Contenido.id">(atributo de contenido.models.Contenido.Contenido)</a>
-</li>
         <li><a href="contenido.html#contenido.models.Valoracion.id">(atributo de contenido.models.Valoracion)</a>
+</li>
+        <li><a href="notify.html#notify.models.Notification.id">(atributo de notify.models.Notification)</a>
 </li>
         <li><a href="permiso.html#permiso.models.Permiso.id">(atributo de permiso.models.Permiso)</a>
 </li>
@@ -707,19 +878,27 @@
 </li>
         <li><a href="tipoContenido.html#tipoContenido.models.tipoContenido.id">(atributo de tipoContenido.models.tipoContenido)</a>
 </li>
+        <li><a href="usuario.html#usuario.models.Post.id">(atributo de usuario.models.Post)</a>
+</li>
         <li><a href="usuario.html#usuario.models.User.id">(atributo de usuario.models.User)</a>
 </li>
         <li><a href="usuario.html#usuario.models.UserCategoria.id">(atributo de usuario.models.UserCategoria)</a>
 </li>
       </ul></li>
+      <li><a href="usuario.html#usuario.models.Post.image">image (atributo de usuario.models.Post)</a>
+</li>
       <li><a href="usuario.html#usuario.views.index">index() (en el módulo usuario.views)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.Levels.info">info (atributo de notify.utils.models.AbstractNotificacion.Levels)</a>
+</li>
       <li><a href="categorias.migrations.html#categorias.migrations.0001_initial.Migration.initial">initial (atributo de categorias.migrations.0001_initial.Migration)</a>
 
       <ul>
         <li><a href="contenido.migrations.html#contenido.migrations.0001_initial.Migration.initial">(atributo de contenido.migrations.0001_initial.Migration)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0001_initial.Migration.initial">(atributo de notify.migrations.0001_initial.Migration)</a>
 </li>
         <li><a href="permiso.migrations.html#permiso.migrations.0001_initial.Migration.initial">(atributo de permiso.migrations.0001_initial.Migration)</a>
 </li>
@@ -732,13 +911,19 @@
       </ul></li>
       <li><a href="usuario.html#usuario.models.User.is_active">is_active (atributo de usuario.models.User)</a>
 </li>
-      <li><a href="usuario.html#usuario.models.User.is_editor">is_editor() (método de usuario.models.User)</a>
-</li>
-      <li><a href="usuario.html#usuario.models.User.is_publicador">is_publicador() (método de usuario.models.User)</a>
+      <li><a href="usuario.html#usuario.models.User.is_autor_in_categoria">is_autor_in_categoria() (método de usuario.models.User)</a>
 </li>
       <li><a href="usuario.html#usuario.models.User.is_staff">is_staff (atributo de usuario.models.User)</a>
 </li>
       <li><a href="usuario.html#usuario.models.User.is_superuser">is_superuser (atributo de usuario.models.User)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="contenido.html#contenido.views.kanbanView">kanbanView() (en el módulo contenido.views)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -750,6 +935,8 @@
 
       <ul>
         <li><a href="contenido.html#contenido.forms.ContenidoForm.Meta.labels">(atributo de contenido.forms.ContenidoForm.Meta)</a>
+</li>
+        <li><a href="contenido.html#contenido.forms.EditorContenidoForm.Meta.labels">(atributo de contenido.forms.EditorContenidoForm.Meta)</a>
 </li>
         <li><a href="rol.html#rol.forms.RolForm.Meta.labels">(atributo de rol.forms.RolForm.Meta)</a>
 </li>
@@ -764,8 +951,20 @@
 </li>
       <li><a href="usuario.html#usuario.models.User.last_name">last_name (atributo de usuario.models.User)</a>
 </li>
+      <li><a href="notify.utils.html#notify.utils.models.NotificationQueryset.leido">leido() (método de notify.utils.models.NotificationQueryset)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.level">level (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.level">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.utils.html#notify.utils.admin.AbstractNotifyAdmin.list_display">list_display (atributo de notify.utils.admin.AbstractNotifyAdmin)</a>
+</li>
+      <li><a href="notify.utils.html#notify.utils.admin.AbstractNotifyAdmin.list_filter">list_filter (atributo de notify.utils.admin.AbstractNotifyAdmin)</a>
+</li>
       <li><a href="rol.html#rol.views.lista_permisos">lista_permisos() (en el módulo rol.views)</a>
 </li>
       <li><a href="rol.html#rol.views.lista_roles">lista_roles() (en el módulo rol.views)</a>
@@ -797,10 +996,18 @@
         <li><a href="manage.html#module-manage">module</a>
 </li>
       </ul></li>
+      <li><a href="notify.utils.html#notify.utils.models.NotificationQueryset.marcar_todo_como_leido">marcar_todo_como_leido() (método de notify.utils.models.NotificationQueryset)</a>
+</li>
+      <li><a href="notify.utils.html#notify.utils.models.NotificationQueryset.marcar_todo_como_no_leido">marcar_todo_como_no_leido() (método de notify.utils.models.NotificationQueryset)</a>
+</li>
       <li><a href="categorias.html#categorias.forms.CategoriaForm.media">media (categorias.forms.CategoriaForm propiedad)</a>
 
       <ul>
         <li><a href="contenido.html#contenido.forms.ContenidoForm.media">(contenido.forms.ContenidoForm propiedad)</a>
+</li>
+        <li><a href="contenido.html#contenido.forms.EditorContenidoForm.media">(contenido.forms.EditorContenidoForm propiedad)</a>
+</li>
+        <li><a href="notify.utils.html#notify.utils.admin.AbstractNotifyAdmin.media">(notify.utils.admin.AbstractNotifyAdmin propiedad)</a>
 </li>
         <li><a href="rol.html#rol.forms.RolForm.media">(rol.forms.RolForm propiedad)</a>
 </li>
@@ -824,6 +1031,26 @@
 </li>
         <li><a href="contenido.migrations.html#contenido.migrations.0006_contenido_numero_valoraciones_contenido_puntuacion_and_more.Migration">(clase en contenido.migrations.0006_contenido_numero_valoraciones_contenido_puntuacion_and_more)</a>
 </li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0007_contenido_estado.Migration">(clase en contenido.migrations.0007_contenido_estado)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo.Migration">(clase en contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0009_contenido_tipo_contenido.Migration">(clase en contenido.migrations.0009_contenido_tipo_contenido)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0010_alter_contenido_tipo_contenido.Migration">(clase en contenido.migrations.0010_alter_contenido_tipo_contenido)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0011_alter_contenido_tipo_contenido.Migration">(clase en contenido.migrations.0011_alter_contenido_tipo_contenido)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0012_contenido_fecha_modificacion_and_more.Migration">(clase en contenido.migrations.0012_contenido_fecha_modificacion_and_more)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0001_initial.Migration">(clase en notify.migrations.0001_initial)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0002_alter_notification_destiny.Migration">(clase en notify.migrations.0002_alter_notification_destiny)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0003_alter_notification_destiny.Migration">(clase en notify.migrations.0003_alter_notification_destiny)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0004_notification_tipo_accion.Migration">(clase en notify.migrations.0004_notification_tipo_accion)</a>
+</li>
         <li><a href="permiso.migrations.html#permiso.migrations.0001_initial.Migration">(clase en permiso.migrations.0001_initial)</a>
 </li>
         <li><a href="rol.migrations.html#rol.migrations.0001_initial.Migration">(clase en rol.migrations.0001_initial)</a>
@@ -834,15 +1061,23 @@
 </li>
         <li><a href="tipoContenido.migrations.html#tipoContenido.migrations.0001_initial.Migration">(clase en tipoContenido.migrations.0001_initial)</a>
 </li>
+        <li><a href="tipoContenido.migrations.html#tipoContenido.migrations.0002_alter_tipocontenido_descripcion.Migration">(clase en tipoContenido.migrations.0002_alter_tipocontenido_descripcion)</a>
+</li>
         <li><a href="usuario.migrations.html#usuario.migrations.0001_initial.Migration">(clase en usuario.migrations.0001_initial)</a>
 </li>
         <li><a href="usuario.migrations.html#usuario.migrations.0002_user_registrado.Migration">(clase en usuario.migrations.0002_user_registrado)</a>
+</li>
+        <li><a href="usuario.migrations.html#usuario.migrations.0003_post.Migration">(clase en usuario.migrations.0003_post)</a>
 </li>
       </ul></li>
       <li><a href="categorias.html#categorias.forms.CategoriaForm.Meta.model">model (atributo de categorias.forms.CategoriaForm.Meta)</a>
 
       <ul>
         <li><a href="contenido.html#contenido.forms.ContenidoForm.Meta.model">(atributo de contenido.forms.ContenidoForm.Meta)</a>
+</li>
+        <li><a href="contenido.html#contenido.forms.EditorContenidoForm.Meta.model">(atributo de contenido.forms.EditorContenidoForm.Meta)</a>
+</li>
+        <li><a href="notify.html#notify.views.NotificationList.model">(atributo de notify.views.NotificationList)</a>
 </li>
         <li><a href="rol.html#rol.forms.RolForm.Meta.model">(atributo de rol.forms.RolForm.Meta)</a>
 </li>
@@ -905,6 +1140,18 @@
 </li>
         <li><a href="contenido.migrations.html#module-contenido.migrations.0006_contenido_numero_valoraciones_contenido_puntuacion_and_more">contenido.migrations.0006_contenido_numero_valoraciones_contenido_puntuacion_and_more</a>
 </li>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0007_contenido_estado">contenido.migrations.0007_contenido_estado</a>
+</li>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo">contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo</a>
+</li>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0009_contenido_tipo_contenido">contenido.migrations.0009_contenido_tipo_contenido</a>
+</li>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0010_alter_contenido_tipo_contenido">contenido.migrations.0010_alter_contenido_tipo_contenido</a>
+</li>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0011_alter_contenido_tipo_contenido">contenido.migrations.0011_alter_contenido_tipo_contenido</a>
+</li>
+        <li><a href="contenido.migrations.html#module-contenido.migrations.0012_contenido_fecha_modificacion_and_more">contenido.migrations.0012_contenido_fecha_modificacion_and_more</a>
+</li>
         <li><a href="contenido.html#module-contenido.models">contenido.models</a>
 </li>
         <li><a href="contenido.html#module-contenido.test_models">contenido.test_models</a>
@@ -930,6 +1177,34 @@
         <li><a href="home.html#module-home.views">home.views</a>
 </li>
         <li><a href="manage.html#module-manage">manage</a>
+</li>
+        <li><a href="notify.html#module-notify">notify</a>
+</li>
+        <li><a href="notify.html#module-notify.admin">notify.admin</a>
+</li>
+        <li><a href="notify.migrations.html#module-notify.migrations">notify.migrations</a>
+</li>
+        <li><a href="notify.migrations.html#module-notify.migrations.0001_initial">notify.migrations.0001_initial</a>
+</li>
+        <li><a href="notify.migrations.html#module-notify.migrations.0002_alter_notification_destiny">notify.migrations.0002_alter_notification_destiny</a>
+</li>
+        <li><a href="notify.migrations.html#module-notify.migrations.0003_alter_notification_destiny">notify.migrations.0003_alter_notification_destiny</a>
+</li>
+        <li><a href="notify.migrations.html#module-notify.migrations.0004_notification_tipo_accion">notify.migrations.0004_notification_tipo_accion</a>
+</li>
+        <li><a href="notify.html#module-notify.models">notify.models</a>
+</li>
+        <li><a href="notify.html#module-notify.signals">notify.signals</a>
+</li>
+        <li><a href="notify.html#module-notify.urls">notify.urls</a>
+</li>
+        <li><a href="notify.utils.html#module-notify.utils">notify.utils</a>
+</li>
+        <li><a href="notify.utils.html#module-notify.utils.admin">notify.utils.admin</a>
+</li>
+        <li><a href="notify.utils.html#module-notify.utils.models">notify.utils.models</a>
+</li>
+        <li><a href="notify.html#module-notify.views">notify.views</a>
 </li>
         <li><a href="permiso.html#module-permiso">permiso</a>
 </li>
@@ -983,7 +1258,13 @@
 </li>
         <li><a href="tipoContenido.migrations.html#module-tipoContenido.migrations.0001_initial">tipoContenido.migrations.0001_initial</a>
 </li>
+        <li><a href="tipoContenido.migrations.html#module-tipoContenido.migrations.0002_alter_tipocontenido_descripcion">tipoContenido.migrations.0002_alter_tipocontenido_descripcion</a>
+</li>
         <li><a href="tipoContenido.html#module-tipoContenido.models">tipoContenido.models</a>
+</li>
+        <li><a href="tipoContenido.html#module-tipoContenido.signals">tipoContenido.signals</a>
+</li>
+        <li><a href="tipoContenido.html#module-tipoContenido.test_tipo_contenido">tipoContenido.test_tipo_contenido</a>
 </li>
         <li><a href="tipoContenido.html#module-tipoContenido.tests">tipoContenido.tests</a>
 </li>
@@ -1004,6 +1285,8 @@
         <li><a href="usuario.migrations.html#module-usuario.migrations.0001_initial">usuario.migrations.0001_initial</a>
 </li>
         <li><a href="usuario.migrations.html#module-usuario.migrations.0002_user_registrado">usuario.migrations.0002_user_registrado</a>
+</li>
+        <li><a href="usuario.migrations.html#module-usuario.migrations.0003_post">usuario.migrations.0003_post</a>
 </li>
         <li><a href="usuario.html#module-usuario.models">usuario.models</a>
 </li>
@@ -1034,8 +1317,8 @@
         <li><a href="usuario.html#usuario.apps.UserConfig.name">(atributo de usuario.apps.UserConfig)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.utils.html#notify.utils.models.NotificationQueryset.no_leido">no_leido() (método de notify.utils.models.NotificationQueryset)</a>
+</li>
       <li><a href="categorias.html#categorias.models.Categoria.nombre">nombre (atributo de categorias.models.Categoria)</a>
 
       <ul>
@@ -1046,7 +1329,125 @@
         <li><a href="tipoContenido.html#tipoContenido.models.tipoContenido.nombre">(atributo de tipoContenido.models.tipoContenido)</a>
 </li>
       </ul></li>
+      <li><a href="usuario.html#usuario.models.User.notificacion">notificacion (atributo de usuario.models.User)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification">Notification (clase en notify.models)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.DoesNotExist">Notification.DoesNotExist</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.MultipleObjectsReturned">Notification.MultipleObjectsReturned</a>
+</li>
+      <li><a href="notify.html#notify.views.NotificationList">NotificationList (clase en notify.views)</a>
+</li>
+      <li><a href="notify.utils.html#notify.utils.models.NotificationQueryset">NotificationQueryset (clase en notify.utils.models)</a>
+</li>
+      <li>
+    notify
+
+      <ul>
+        <li><a href="notify.html#module-notify">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.admin
+
+      <ul>
+        <li><a href="notify.html#module-notify.admin">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.migrations
+
+      <ul>
+        <li><a href="notify.migrations.html#module-notify.migrations">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.migrations.0001_initial
+
+      <ul>
+        <li><a href="notify.migrations.html#module-notify.migrations.0001_initial">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    notify.migrations.0002_alter_notification_destiny
+
+      <ul>
+        <li><a href="notify.migrations.html#module-notify.migrations.0002_alter_notification_destiny">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.migrations.0003_alter_notification_destiny
+
+      <ul>
+        <li><a href="notify.migrations.html#module-notify.migrations.0003_alter_notification_destiny">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.migrations.0004_notification_tipo_accion
+
+      <ul>
+        <li><a href="notify.migrations.html#module-notify.migrations.0004_notification_tipo_accion">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.models
+
+      <ul>
+        <li><a href="notify.html#module-notify.models">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.signals
+
+      <ul>
+        <li><a href="notify.html#module-notify.signals">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.urls
+
+      <ul>
+        <li><a href="notify.html#module-notify.urls">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.utils
+
+      <ul>
+        <li><a href="notify.utils.html#module-notify.utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.utils.admin
+
+      <ul>
+        <li><a href="notify.utils.html#module-notify.utils.admin">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.utils.models
+
+      <ul>
+        <li><a href="notify.utils.html#module-notify.utils.models">module</a>
+</li>
+      </ul></li>
+      <li>
+    notify.views
+
+      <ul>
+        <li><a href="notify.html#module-notify.views">module</a>
+</li>
+      </ul></li>
+      <li><a href="usuario.html#usuario.models.notify_post">notify_post() (en el módulo usuario.models)</a>
+</li>
+      <li><a href="notify.utils.html#notify.utils.models.notify_signals">notify_signals() (en el módulo notify.utils.models)</a>
+</li>
       <li><a href="contenido.html#contenido.models.Contenido.numero_valoraciones">numero_valoraciones (atributo de contenido.models.Contenido)</a>
+</li>
+      <li><a href="contenido.html#contenido.models.Contenido.numero_vistas">numero_vistas (atributo de contenido.models.Contenido)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1054,14 +1455,20 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.html#notify.models.Notification.object_id_actor">object_id_actor (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.object_id_actor">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
       <li><a href="categorias.html#categorias.models.Categoria.objects">objects (atributo de categorias.models.Categoria)</a>
 
       <ul>
         <li><a href="contenido.html#contenido.models.Contenido.objects">(atributo de contenido.models.Contenido)</a>
 </li>
-        <li><a href="contenido.html#contenido.models.Contenido.Contenido.objects">(atributo de contenido.models.Contenido.Contenido)</a>
-</li>
         <li><a href="contenido.html#contenido.models.Valoracion.objects">(atributo de contenido.models.Valoracion)</a>
+</li>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.objects">(atributo de notify.utils.models.AbstractNotificacion)</a>
 </li>
         <li><a href="permiso.html#permiso.models.Permiso.objects">(atributo de permiso.models.Permiso)</a>
 </li>
@@ -1069,9 +1476,13 @@
 </li>
         <li><a href="tipoContenido.html#tipoContenido.models.tipoContenido.objects">(atributo de tipoContenido.models.tipoContenido)</a>
 </li>
+        <li><a href="usuario.html#usuario.models.Post.objects">(atributo de usuario.models.Post)</a>
+</li>
         <li><a href="usuario.html#usuario.models.UserCategoria.objects">(atributo de usuario.models.UserCategoria)</a>
 </li>
       </ul></li>
+      <li><a href="usuario.html#usuario.models.User.obtener_categorias_por_permiso">obtener_categorias_por_permiso() (método de usuario.models.User)</a>
+</li>
       <li><a href="categorias.html#categorias.models.Categoria.obtener_por_nombre">obtener_por_nombre() (método de clase de categorias.models.Categoria)</a>
 
       <ul>
@@ -1084,6 +1495,8 @@
         <li><a href="tipoContenido.html#tipoContenido.models.tipoContenido.obtener_todos">(método de clase de tipoContenido.models.tipoContenido)</a>
 </li>
       </ul></li>
+      <li><a href="usuario.html#usuario.models.User.obtener_usuarios_sin_permiso">obtener_usuarios_sin_permiso() (método de clase de usuario.models.User)</a>
+</li>
       <li><a href="categorias.migrations.html#categorias.migrations.0001_initial.Migration.operations">operations (atributo de categorias.migrations.0001_initial.Migration)</a>
 
       <ul>
@@ -1099,6 +1512,26 @@
 </li>
         <li><a href="contenido.migrations.html#contenido.migrations.0006_contenido_numero_valoraciones_contenido_puntuacion_and_more.Migration.operations">(atributo de contenido.migrations.0006_contenido_numero_valoraciones_contenido_puntuacion_and_more.Migration)</a>
 </li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0007_contenido_estado.Migration.operations">(atributo de contenido.migrations.0007_contenido_estado.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo.Migration.operations">(atributo de contenido.migrations.0008_contenido_numero_vistas_alter_contenido_titulo.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0009_contenido_tipo_contenido.Migration.operations">(atributo de contenido.migrations.0009_contenido_tipo_contenido.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0010_alter_contenido_tipo_contenido.Migration.operations">(atributo de contenido.migrations.0010_alter_contenido_tipo_contenido.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0011_alter_contenido_tipo_contenido.Migration.operations">(atributo de contenido.migrations.0011_alter_contenido_tipo_contenido.Migration)</a>
+</li>
+        <li><a href="contenido.migrations.html#contenido.migrations.0012_contenido_fecha_modificacion_and_more.Migration.operations">(atributo de contenido.migrations.0012_contenido_fecha_modificacion_and_more.Migration)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0001_initial.Migration.operations">(atributo de notify.migrations.0001_initial.Migration)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0002_alter_notification_destiny.Migration.operations">(atributo de notify.migrations.0002_alter_notification_destiny.Migration)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0003_alter_notification_destiny.Migration.operations">(atributo de notify.migrations.0003_alter_notification_destiny.Migration)</a>
+</li>
+        <li><a href="notify.migrations.html#notify.migrations.0004_notification_tipo_accion.Migration.operations">(atributo de notify.migrations.0004_notification_tipo_accion.Migration)</a>
+</li>
         <li><a href="permiso.migrations.html#permiso.migrations.0001_initial.Migration.operations">(atributo de permiso.migrations.0001_initial.Migration)</a>
 </li>
         <li><a href="rol.migrations.html#rol.migrations.0001_initial.Migration.operations">(atributo de rol.migrations.0001_initial.Migration)</a>
@@ -1109,9 +1542,13 @@
 </li>
         <li><a href="tipoContenido.migrations.html#tipoContenido.migrations.0001_initial.Migration.operations">(atributo de tipoContenido.migrations.0001_initial.Migration)</a>
 </li>
+        <li><a href="tipoContenido.migrations.html#tipoContenido.migrations.0002_alter_tipocontenido_descripcion.Migration.operations">(atributo de tipoContenido.migrations.0002_alter_tipocontenido_descripcion.Migration)</a>
+</li>
         <li><a href="usuario.migrations.html#usuario.migrations.0001_initial.Migration.operations">(atributo de usuario.migrations.0001_initial.Migration)</a>
 </li>
         <li><a href="usuario.migrations.html#usuario.migrations.0002_user_registrado.Migration.operations">(atributo de usuario.migrations.0002_user_registrado.Migration)</a>
+</li>
+        <li><a href="usuario.migrations.html#usuario.migrations.0003_post.Migration.operations">(atributo de usuario.migrations.0003_post.Migration)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -1161,8 +1598,6 @@
         <li><a href="permiso.migrations.html#module-permiso.migrations.0001_initial">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     permiso.models
 
@@ -1179,6 +1614,8 @@
         <li><a href="permiso.html#module-permiso.tests">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     permiso.urls
 
@@ -1197,8 +1634,24 @@
 </li>
       <li><a href="permiso.html#permiso.apps.PermisosConfig">PermisosConfig (clase en permiso.apps)</a>
 </li>
+      <li><a href="usuario.html#usuario.models.Post">Post (clase en usuario.models)</a>
+</li>
+      <li><a href="usuario.html#usuario.models.Post.DoesNotExist">Post.DoesNotExist</a>
+</li>
+      <li><a href="usuario.html#usuario.models.Post.MultipleObjectsReturned">Post.MultipleObjectsReturned</a>
+</li>
+      <li><a href="usuario.html#usuario.models.User.post_set">post_set (atributo de usuario.models.User)</a>
+</li>
       <li><a href="home.html#home.views.profile">profile() (en el módulo home.views)</a>
 </li>
+      <li><a href="contenido.html#contenido.views.publicarContenido">publicarContenido() (en el módulo contenido.views)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.publico">publico (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.publico">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
       <li><a href="contenido.html#contenido.models.Contenido.puntuacion">puntuacion (atributo de contenido.models.Contenido)</a>
 
       <ul>
@@ -1211,7 +1664,19 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.utils.html#notify.utils.admin.AbstractNotifyAdmin.raw_id_fields">raw_id_fields (atributo de notify.utils.admin.AbstractNotifyAdmin)</a>
+</li>
+      <li><a href="notify.html#notify.models.Notification.read">read (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.read">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
+      <li><a href="contenido.html#contenido.views.rechazar_contenido">rechazar_contenido() (en el módulo contenido.views)</a>
+</li>
       <li><a href="usuario.html#usuario.models.User.registrado">registrado (atributo de usuario.models.User)</a>
+</li>
+      <li><a href="contenido.html#contenido.views.reportesView">reportesView() (en el módulo contenido.views)</a>
 </li>
       <li>
     rol
@@ -1261,6 +1726,8 @@
         <li><a href="rol.migrations.html#module-rol.migrations.0001_initial">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     rol.migrations.0002_rol_last_modification
 
@@ -1268,8 +1735,6 @@
         <li><a href="rol.migrations.html#module-rol.migrations.0002_rol_last_modification">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     rol.migrations.0003_alter_rol_last_modification
 
@@ -1325,7 +1790,11 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="contenido.html#contenido.test_views.EditarContenidoViewTest.setUp">setUp() (método de contenido.test_views.EditarContenidoViewTest)</a>
+
+      <ul>
+        <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase.setUp">(método de tipoContenido.test_tipo_contenido.TipoContenidoTestCase)</a>
 </li>
+      </ul></li>
       <li><a href="contenido.html#contenido.test_models.ContenidoModelTest.setUpTestData">setUpTestData() (método de clase de contenido.test_models.ContenidoModelTest)</a>
 
       <ul>
@@ -1336,35 +1805,133 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="usuario.html#usuario.models.User.socialaccount_set">socialaccount_set (atributo de usuario.models.User)</a>
 </li>
+      <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.Levels.success">success (atributo de notify.utils.models.AbstractNotificacion.Levels)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.html#notify.views.NotificationList.template_name">template_name (atributo de notify.views.NotificationList)</a>
+</li>
       <li><a href="contenido.html#contenido.test_models.ContenidoModelTest.test_autor_label">test_autor_label() (método de contenido.test_models.ContenidoModelTest)</a>
 </li>
       <li><a href="contenido.html#contenido.test_models.ContenidoModelTest.test_categoria_label">test_categoria_label() (método de contenido.test_models.ContenidoModelTest)</a>
+</li>
+      <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase.test_crear_tipo_contenido">test_crear_tipo_contenido() (método de tipoContenido.test_tipo_contenido.TipoContenidoTestCase)</a>
 </li>
       <li><a href="contenido.html#contenido.test_models.ContenidoModelTest.test_cuerpo_label">test_cuerpo_label() (método de contenido.test_models.ContenidoModelTest)</a>
 </li>
       <li><a href="contenido.html#contenido.test_views.EditarContenidoViewTest.test_editar_contenido_view_GET">test_editar_contenido_view_GET() (método de contenido.test_views.EditarContenidoViewTest)</a>
 </li>
-      <li><a href="contenido.html#contenido.test_views.EditarContenidoViewTest.test_editar_contenido_view_POST_invalid">test_editar_contenido_view_POST_invalid() (método de contenido.test_views.EditarContenidoViewTest)</a>
-</li>
       <li><a href="contenido.html#contenido.test_views.EditarContenidoViewTest.test_editar_contenido_view_POST_valid">test_editar_contenido_view_POST_valid() (método de contenido.test_views.EditarContenidoViewTest)</a>
+</li>
+      <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase.test_eliminar_por_nombre">test_eliminar_por_nombre() (método de tipoContenido.test_tipo_contenido.TipoContenidoTestCase)</a>
+</li>
+      <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase.test_eliminar_tipo_contenido">test_eliminar_tipo_contenido() (método de tipoContenido.test_tipo_contenido.TipoContenidoTestCase)</a>
 </li>
       <li><a href="contenido.html#contenido.test_models.ContenidoModelTest.test_fecha_creacion_label">test_fecha_creacion_label() (método de contenido.test_models.ContenidoModelTest)</a>
 </li>
+      <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase.test_get_by_id">test_get_by_id() (método de tipoContenido.test_tipo_contenido.TipoContenidoTestCase)</a>
+</li>
+      <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase.test_nombre_unico">test_nombre_unico() (método de tipoContenido.test_tipo_contenido.TipoContenidoTestCase)</a>
+</li>
       <li><a href="contenido.html#contenido.test_models.ContenidoModelTest.test_object_name_is_title_and_author">test_object_name_is_title_and_author() (método de contenido.test_models.ContenidoModelTest)</a>
+</li>
+      <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase.test_obtener_por_nombre">test_obtener_por_nombre() (método de tipoContenido.test_tipo_contenido.TipoContenidoTestCase)</a>
+</li>
+      <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase.test_obtener_por_nombre_inexistente">test_obtener_por_nombre_inexistente() (método de tipoContenido.test_tipo_contenido.TipoContenidoTestCase)</a>
+</li>
+      <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase.test_obtener_todos">test_obtener_todos() (método de tipoContenido.test_tipo_contenido.TipoContenidoTestCase)</a>
 </li>
       <li><a href="contenido.html#contenido.test_models.ContenidoModelTest.test_titulo_label">test_titulo_label() (método de contenido.test_models.ContenidoModelTest)</a>
 </li>
       <li><a href="contenido.html#contenido.test_models.ContenidoModelTest.test_titulo_max_length">test_titulo_max_length() (método de contenido.test_models.ContenidoModelTest)</a>
 </li>
+      <li><a href="usuario.html#usuario.models.Post.text">text (atributo de usuario.models.Post)</a>
+</li>
       <li><a href="rol.html#rol.models.Rol.tiene_permiso">tiene_permiso() (método de rol.models.Rol)</a>
 </li>
+      <li><a href="categorias.html#categorias.views.tiene_permiso_administrar_categorias">tiene_permiso_administrar_categorias() (en el módulo categorias.views)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.User.tiene_permiso_administrar_categorias">(método de usuario.models.User)</a>
+</li>
+      </ul></li>
+      <li><a href="rol.html#rol.views.tiene_permiso_administrar_roles">tiene_permiso_administrar_roles() (en el módulo rol.views)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.User.tiene_permiso_administrar_roles">(método de usuario.models.User)</a>
+</li>
+      </ul></li>
+      <li><a href="tipoContenido.html#tipoContenido.views.tiene_permiso_administrar_tipoContenido">tiene_permiso_administrar_tipoContenido() (en el módulo tipoContenido.views)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.User.tiene_permiso_administrar_tipoContenido">(método de usuario.models.User)</a>
+</li>
+      </ul></li>
+      <li><a href="usuario.html#usuario.views.tiene_permiso_asignar_roles">tiene_permiso_asignar_roles() (en el módulo usuario.views)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.User.tiene_permiso_asignar_roles">(método de usuario.models.User)</a>
+</li>
+      </ul></li>
+      <li><a href="contenido.html#contenido.views.tiene_permiso_crear_contenido">tiene_permiso_crear_contenido() (en el módulo contenido.views)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.User.tiene_permiso_crear_contenido">(método de usuario.models.User)</a>
+</li>
+      </ul></li>
+      <li><a href="contenido.html#contenido.views.tiene_permiso_crear_o_editar_contenido">tiene_permiso_crear_o_editar_contenido() (en el módulo contenido.views)</a>
+</li>
+      <li><a href="usuario.html#usuario.models.User.tiene_permiso_deshabilitar_contenido">tiene_permiso_deshabilitar_contenido() (método de usuario.models.User)</a>
+</li>
+      <li><a href="contenido.html#contenido.views.tiene_permiso_editar_contenido">tiene_permiso_editar_contenido() (en el módulo contenido.views)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.User.tiene_permiso_editar_contenido">(método de usuario.models.User)</a>
+</li>
+      </ul></li>
+      <li><a href="contenido.html#contenido.views.tiene_permiso_eliminar_contenido">tiene_permiso_eliminar_contenido() (en el módulo contenido.views)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.User.tiene_permiso_eliminar_contenido">(método de usuario.models.User)</a>
+</li>
+      </ul></li>
       <li><a href="usuario.html#usuario.models.User.tiene_permiso_en_categoria">tiene_permiso_en_categoria() (método de usuario.models.User)</a>
+</li>
+      <li><a href="contenido.html#contenido.views.tiene_permiso_publicar_contenido">tiene_permiso_publicar_contenido() (en el módulo contenido.views)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.User.tiene_permiso_publicar_contenido">(método de usuario.models.User)</a>
+</li>
+      </ul></li>
+      <li><a href="contenido.html#contenido.views.tiene_permiso_visualizar_kanban">tiene_permiso_visualizar_kanban() (en el módulo contenido.views)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.User.tiene_permiso_visualizar_kanban">(método de usuario.models.User)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.html#notify.models.Notification.timestamp">timestamp (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.timestamp">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+        <li><a href="usuario.html#usuario.models.Post.timestamp">(atributo de usuario.models.Post)</a>
+</li>
+      </ul></li>
+      <li><a href="notify.html#notify.models.Notification.tipo_accion">tipo_accion (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.tipo_accion">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
+      <li><a href="contenido.html#contenido.models.Contenido.tipo_contenido">tipo_contenido (atributo de contenido.models.Contenido)</a>
+</li>
+      <li><a href="contenido.html#contenido.models.Contenido.tipo_contenido_id">tipo_contenido_id (atributo de contenido.models.Contenido)</a>
 </li>
       <li>
     tipoContenido
@@ -1389,8 +1956,6 @@
         <li><a href="tipoContenido.html#module-tipoContenido.apps">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="tipoContenido.html#tipoContenido.models.tipoContenido.DoesNotExist">tipoContenido.DoesNotExist</a>
 </li>
       <li>
@@ -1415,6 +1980,13 @@
 </li>
       </ul></li>
       <li>
+    tipoContenido.migrations.0002_alter_tipocontenido_descripcion
+
+      <ul>
+        <li><a href="tipoContenido.migrations.html#module-tipoContenido.migrations.0002_alter_tipocontenido_descripcion">module</a>
+</li>
+      </ul></li>
+      <li>
     tipoContenido.models
 
       <ul>
@@ -1423,6 +1995,20 @@
       </ul></li>
       <li><a href="tipoContenido.html#tipoContenido.models.tipoContenido.MultipleObjectsReturned">tipoContenido.MultipleObjectsReturned</a>
 </li>
+      <li>
+    tipoContenido.signals
+
+      <ul>
+        <li><a href="tipoContenido.html#module-tipoContenido.signals">module</a>
+</li>
+      </ul></li>
+      <li>
+    tipoContenido.test_tipo_contenido
+
+      <ul>
+        <li><a href="tipoContenido.html#module-tipoContenido.test_tipo_contenido">module</a>
+</li>
+      </ul></li>
       <li>
     tipoContenido.tests
 
@@ -1450,6 +2036,10 @@
 </li>
       <li><a href="tipoContenido.html#tipoContenido.forms.tipoContenidoForm.Meta">tipoContenidoForm.Meta (clase en tipoContenido.forms)</a>
 </li>
+      <li><a href="tipoContenido.html#tipoContenido.test_tipo_contenido.TipoContenidoTestCase">TipoContenidoTestCase (clase en tipoContenido.test_tipo_contenido)</a>
+</li>
+      <li><a href="usuario.html#usuario.models.Post.title">title (atributo de usuario.models.Post)</a>
+</li>
       <li><a href="contenido.html#contenido.models.Contenido.titulo">titulo (atributo de contenido.models.Contenido)</a>
 </li>
   </ul></td>
@@ -1458,33 +2048,25 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="usuario.html#usuario.models.UserCategoria.user">user (atributo de usuario.models.UserCategoria)</a>
+      <li><a href="usuario.html#usuario.models.Post.user">user (atributo de usuario.models.Post)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.UserCategoria.user">(atributo de usuario.models.UserCategoria)</a>
 </li>
+      </ul></li>
       <li><a href="usuario.html#usuario.models.User">User (clase en usuario.models)</a>
 </li>
       <li><a href="usuario.html#usuario.models.User.DoesNotExist">User.DoesNotExist</a>
 </li>
       <li><a href="usuario.html#usuario.models.User.MultipleObjectsReturned">User.MultipleObjectsReturned</a>
 </li>
-      <li><a href="usuario.html#usuario.views.user_admin_asigRoles">user_admin_asigRoles() (en el módulo usuario.views)</a>
+      <li><a href="usuario.html#usuario.models.Post.user_id">user_id (atributo de usuario.models.Post)</a>
+
+      <ul>
+        <li><a href="usuario.html#usuario.models.UserCategoria.user_id">(atributo de usuario.models.UserCategoria)</a>
 </li>
-      <li><a href="rol.html#rol.views.user_admin_roles">user_admin_roles() (en el módulo rol.views)</a>
-</li>
-      <li><a href="tipoContenido.html#tipoContenido.views.user_admin_tipoContenido">user_admin_tipoContenido() (en el módulo tipoContenido.views)</a>
-</li>
-      <li><a href="categorias.html#categorias.views.user_adminCategorias">user_adminCategorias() (en el módulo categorias.views)</a>
-</li>
-      <li><a href="contenido.html#contenido.views.user_autor">user_autor() (en el módulo contenido.views)</a>
-</li>
-      <li><a href="contenido.html#contenido.views.user_editor">user_editor() (en el módulo contenido.views)</a>
-</li>
-      <li><a href="usuario.html#usuario.models.UserCategoria.user_id">user_id (atributo de usuario.models.UserCategoria)</a>
-</li>
-      <li><a href="usuario.html#usuario.models.User.user_is_autor">user_is_autor() (método de usuario.models.User)</a>
-</li>
+      </ul></li>
       <li><a href="usuario.html#usuario.models.User.user_permissions">user_permissions (atributo de usuario.models.User)</a>
-</li>
-      <li><a href="contenido.html#contenido.views.user_publicador">user_publicador() (en el módulo contenido.views)</a>
 </li>
       <li><a href="usuario.html#usuario.models.UserCategoria">UserCategoria (clase en usuario.models)</a>
 </li>
@@ -1506,8 +2088,6 @@
 </li>
       <li><a href="usuario.html#usuario.apps.UserConfig">UserConfig (clase en usuario.apps)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="usuario.html#usuario.models.User.username">username (atributo de usuario.models.User)</a>
 </li>
       <li>
@@ -1526,6 +2106,8 @@
         <li><a href="usuario.html#module-usuario.admin">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     usuario.apps
 
@@ -1562,6 +2144,13 @@
 </li>
       </ul></li>
       <li>
+    usuario.migrations.0003_post
+
+      <ul>
+        <li><a href="usuario.migrations.html#module-usuario.migrations.0003_post">module</a>
+</li>
+      </ul></li>
+      <li>
     usuario.models
 
       <ul>
@@ -1584,6 +2173,10 @@
       </ul></li>
       <li><a href="contenido.html#contenido.models.Valoracion.usuario_id">usuario_id (atributo de contenido.models.Valoracion)</a>
 </li>
+      <li><a href="contenido.html#contenido.models.Contenido.usuario_modificador">usuario_modificador (atributo de contenido.models.Contenido)</a>
+</li>
+      <li><a href="contenido.html#contenido.models.Contenido.usuario_modificador_id">usuario_modificador_id (atributo de contenido.models.Contenido)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1602,10 +2195,16 @@
         <li><a href="usuario.html#usuario.models.User.valoracion_set">(atributo de usuario.models.User)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="contenido.html#contenido.views.valorarContenido">valorarContenido() (en el módulo contenido.views)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.html#notify.models.Notification.verbo">verbo (atributo de notify.models.Notification)</a>
+
+      <ul>
+        <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.verbo">(atributo de notify.utils.models.AbstractNotificacion)</a>
+</li>
+      </ul></li>
       <li><a href="categorias.html#categorias.views.verCategorias">verCategorias() (en el módulo categorias.views)</a>
 </li>
       <li><a href="contenido.html#contenido.views.verContenido">verContenido() (en el módulo contenido.views)</a>
@@ -1625,6 +2224,8 @@
       <ul>
         <li><a href="contenido.html#contenido.forms.ContenidoForm.Meta.widgets">(atributo de contenido.forms.ContenidoForm.Meta)</a>
 </li>
+        <li><a href="contenido.html#contenido.forms.EditorContenidoForm.Meta.widgets">(atributo de contenido.forms.EditorContenidoForm.Meta)</a>
+</li>
         <li><a href="rol.html#rol.forms.RolForm.Meta.widgets">(atributo de rol.forms.RolForm.Meta)</a>
 </li>
         <li><a href="tipoContenido.html#tipoContenido.forms.tipoContenidoForm.Meta.widgets">(atributo de tipoContenido.forms.tipoContenidoForm.Meta)</a>
@@ -1634,6 +2235,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="notify.utils.html#notify.utils.models.AbstractNotificacion.Levels.wrong">wrong (atributo de notify.utils.models.AbstractNotificacion.Levels)</a>
+</li>
       <li><a href="CMS.html#CMS.settings.WSGI_APPLICATION">WSGI_APPLICATION (en el módulo CMS.settings)</a>
 </li>
   </ul></td>

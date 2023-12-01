@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>usuario package &mdash; documentación de CMS web - 1.0.0</title>
+  <title>usuario package &mdash; documentación de CMS web - 1.0</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,7 +13,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="_static/documentation_options.js?v=4936afed"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/translations.js?v=efdbd0b9"></script>
@@ -45,12 +45,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">cms</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CMS</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="CMS.html">CMS package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="categorias.html">categorias package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contenido.html">contenido package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="home.html">home package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="manage.html">manage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notify.html">notify package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="permiso.html">permiso package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rol.html">rol package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tipoContenido.html">tipoContenido package</a></li>
@@ -70,8 +71,10 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-usuario.models">usuario.models module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#usuario.models.Post"><code class="docutils literal notranslate"><span class="pre">Post</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#usuario.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#usuario.models.UserCategoria"><code class="docutils literal notranslate"><span class="pre">UserCategoria</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usuario.models.notify_post"><code class="docutils literal notranslate"><span class="pre">notify_post()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-usuario.urls">usuario.urls module</a></li>
@@ -81,7 +84,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#usuario.views.eliminarUserCategoria"><code class="docutils literal notranslate"><span class="pre">eliminarUserCategoria()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#usuario.views.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#usuario.views.listaUserCategoria"><code class="docutils literal notranslate"><span class="pre">listaUserCategoria()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#usuario.views.user_admin_asigRoles"><code class="docutils literal notranslate"><span class="pre">user_admin_asigRoles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usuario.views.tiene_permiso_asignar_roles"><code class="docutils literal notranslate"><span class="pre">tiene_permiso_asignar_roles()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#usuario.views.verUsuarios"><code class="docutils literal notranslate"><span class="pre">verUsuarios()</span></code></a></li>
 </ul>
 </li>
@@ -106,7 +109,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="modules.html">cms</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">CMS</a></li>
       <li class="breadcrumb-item active">usuario package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/usuario.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
@@ -138,6 +141,14 @@
 <li class="toctree-l3"><a class="reference internal" href="usuario.migrations.html#usuario.migrations.0002_user_registrado.Migration"><code class="docutils literal notranslate"><span class="pre">Migration</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="usuario.migrations.html#usuario.migrations.0002_user_registrado.Migration.dependencies"><code class="docutils literal notranslate"><span class="pre">Migration.dependencies</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="usuario.migrations.html#usuario.migrations.0002_user_registrado.Migration.operations"><code class="docutils literal notranslate"><span class="pre">Migration.operations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usuario.migrations.html#module-usuario.migrations.0003_post">usuario.migrations.0003_post module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usuario.migrations.html#usuario.migrations.0003_post.Migration"><code class="docutils literal notranslate"><span class="pre">Migration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usuario.migrations.html#usuario.migrations.0003_post.Migration.dependencies"><code class="docutils literal notranslate"><span class="pre">Migration.dependencies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="usuario.migrations.html#usuario.migrations.0003_post.Migration.operations"><code class="docutils literal notranslate"><span class="pre">Migration.operations</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -177,7 +188,7 @@
 <span id="usuario-forms-module"></span><h2>usuario.forms module<a class="headerlink" href="#module-usuario.forms" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="usuario.forms.UserCategoriaForm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">usuario.forms.</span></span><span class="sig-name descname"><span class="pre">UserCategoriaForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id='id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class=&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/forms.html#UserCategoriaForm"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.forms.UserCategoriaForm" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">usuario.forms.</span></span><span class="sig-name descname"><span class="pre">UserCategoriaForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/forms.html#UserCategoriaForm"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.forms.UserCategoriaForm" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="usuario.forms.UserCategoriaForm.Meta">
@@ -233,6 +244,102 @@
 <section id="module-usuario.models">
 <span id="usuario-models-module"></span><h2>usuario.models module<a class="headerlink" href="#module-usuario.models" title="Link to this heading"></a></h2>
 <dl class="py class">
+<dt class="sig sig-object py" id="usuario.models.Post">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">usuario.models.</span></span><span class="sig-name descname"><span class="pre">Post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#Post"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.Post" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="usuario.models.Post.DoesNotExist">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#usuario.models.Post.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="usuario.models.Post.MultipleObjectsReturned">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#usuario.models.Post.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.Post.get_next_by_timestamp">
+<span class="sig-name descname"><span class="pre">get_next_by_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">timestamp&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#usuario.models.Post.get_next_by_timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.Post.get_previous_by_timestamp">
+<span class="sig-name descname"><span class="pre">get_previous_by_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">timestamp&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#usuario.models.Post.get_previous_by_timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.Post.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#usuario.models.Post.id" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.Post.image">
+<span class="sig-name descname"><span class="pre">image</span></span><a class="headerlink" href="#usuario.models.Post.image" title="Link to this definition"></a></dt>
+<dd><p>The descriptor for the file attribute on the model instance. Return a
+FieldFile when accessed so you can write code like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">myapp.models</span> <span class="kn">import</span> <span class="n">MyModel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span> <span class="o">=</span> <span class="n">MyModel</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">instance</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">size</span>
+</pre></div>
+</div>
+<p>Assign a file object on assignment so you can do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/path/to/hello.world&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">instance</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.Post.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;django.db.models.manager.Manager</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#usuario.models.Post.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.Post.text">
+<span class="sig-name descname"><span class="pre">text</span></span><a class="headerlink" href="#usuario.models.Post.text" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.Post.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#usuario.models.Post.timestamp" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.Post.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#usuario.models.Post.title" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.Post.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#usuario.models.Post.user" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.Post.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#usuario.models.Post.user_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="usuario.models.User">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">usuario.models.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractUser</span></code></p>
@@ -251,37 +358,24 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="usuario.models.User.admin_asigRoles">
-<span class="sig-name descname"><span class="pre">admin_asigRoles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.admin_asigRoles"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.admin_asigRoles" title="Link to this definition"></a></dt>
-<dd><p>Este método retorna si el usuario actual es administrador de asignación de roles.
-:return: Se retorna un bool</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="usuario.models.User.admin_categorias">
-<span class="sig-name descname"><span class="pre">admin_categorias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.admin_categorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.admin_categorias" title="Link to this definition"></a></dt>
-<dd><p>Este método retorna si el usuario actual es administrador de categorías.
-:return: Se retorna un bool</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="usuario.models.User.admin_roles">
-<span class="sig-name descname"><span class="pre">admin_roles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.admin_roles"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.admin_roles" title="Link to this definition"></a></dt>
-<dd><p>Este método retorna si el usuario actual es administrador de roles.
-:return: Se retorna un bool</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="usuario.models.User.admin_tipo_contenido">
-<span class="sig-name descname"><span class="pre">admin_tipo_contenido</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.admin_tipo_contenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.admin_tipo_contenido" title="Link to this definition"></a></dt>
-<dd><p>Este método retorna si el usuario actual es administrador de tipo de contenido.
-:return: Se retorna un bool</p>
-</dd></dl>
-
 <dl class="py attribute">
 <dt class="sig sig-object py" id="usuario.models.User.contenido_set">
 <span class="sig-name descname"><span class="pre">contenido_set</span></span><a class="headerlink" href="#usuario.models.User.contenido_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.User.contenidos_modificados">
+<span class="sig-name descname"><span class="pre">contenidos_modificados</span></span><a class="headerlink" href="#usuario.models.User.contenidos_modificados" title="Link to this definition"></a></dt>
 <dd><p>Accessor to the related objects manager on the reverse side of a
 many-to-one relation.</p>
 <p>In the example:</p>
@@ -378,16 +472,10 @@ object the first time, the query is executed.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="usuario.models.User.is_editor">
-<span class="sig-name descname"><span class="pre">is_editor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.is_editor"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.is_editor" title="Link to this definition"></a></dt>
-<dd><p>Este método retorna si el usuario actual es editor.
-:return: Se retorna un bool</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="usuario.models.User.is_publicador">
-<span class="sig-name descname"><span class="pre">is_publicador</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.is_publicador"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.is_publicador" title="Link to this definition"></a></dt>
-<dd><p>Este método retorna si el usuario actual es publicador.
+<dt class="sig sig-object py" id="usuario.models.User.is_autor_in_categoria">
+<span class="sig-name descname"><span class="pre">is_autor_in_categoria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">categoria</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.is_autor_in_categoria"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.is_autor_in_categoria" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el rol Autor en una categoría dada.
+:param categoria: Categoría en la que se desea verificar si el usuario es autor (Categoria)
 :return: Se retorna un bool</p>
 </dd></dl>
 
@@ -435,10 +523,56 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.User.notificacion">
+<span class="sig-name descname"><span class="pre">notificacion</span></span><a class="headerlink" href="#usuario.models.User.notificacion" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.obtener_categorias_por_permiso">
+<span class="sig-name descname"><span class="pre">obtener_categorias_por_permiso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">permiso</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.obtener_categorias_por_permiso"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.obtener_categorias_por_permiso" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna las categorías en las que el usuario tiene un permiso dado pasado como parámetro.
+:param permiso: Permiso que se desea verificar (str)
+:return: Se retorna un QuerySet</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.obtener_usuarios_sin_permiso">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">obtener_usuarios_sin_permiso</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">permiso</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.obtener_usuarios_sin_permiso"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.obtener_usuarios_sin_permiso" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna los usuarios que no tienen un permiso dado.
+:param permiso: Permiso que se desea verificar (str)
+:return: Se retorna un QuerySet</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="usuario.models.User.password">
 <span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#usuario.models.User.password" title="Link to this definition"></a></dt>
 <dd><p>A wrapper for a deferred-loading field. When the value is read from this
 object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="usuario.models.User.post_set">
+<span class="sig-name descname"><span class="pre">post_set</span></span><a class="headerlink" href="#usuario.models.User.post_set" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -480,18 +614,78 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_administrar_categorias">
+<span class="sig-name descname"><span class="pre">tiene_permiso_administrar_categorias</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_administrar_categorias"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_administrar_categorias" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Administrar categorías» en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.
+:return: Se retorna un bool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_administrar_roles">
+<span class="sig-name descname"><span class="pre">tiene_permiso_administrar_roles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_administrar_roles"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_administrar_roles" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Administrar roles» en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.
+:return: Se retorna un bool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_administrar_tipoContenido">
+<span class="sig-name descname"><span class="pre">tiene_permiso_administrar_tipoContenido</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_administrar_tipoContenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_administrar_tipoContenido" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Administrar tipo de contenido» en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.
+:return: Se retorna un bool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_asignar_roles">
+<span class="sig-name descname"><span class="pre">tiene_permiso_asignar_roles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_asignar_roles"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_asignar_roles" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Asignar roles»
+:return: Se retorna un bool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_crear_contenido">
+<span class="sig-name descname"><span class="pre">tiene_permiso_crear_contenido</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_crear_contenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_crear_contenido" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Crear contenido» en alguna categoría.
+:return: Se retorna un bool</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_deshabilitar_contenido">
+<span class="sig-name descname"><span class="pre">tiene_permiso_deshabilitar_contenido</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_deshabilitar_contenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_deshabilitar_contenido" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Deshabilitar contenido» en alguna categoría.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_editar_contenido">
+<span class="sig-name descname"><span class="pre">tiene_permiso_editar_contenido</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_editar_contenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_editar_contenido" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Editar contenido» en alguna categoría.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_eliminar_contenido">
+<span class="sig-name descname"><span class="pre">tiene_permiso_eliminar_contenido</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_eliminar_contenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_eliminar_contenido" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Eliminar contenido» en alguna categoría.
+:return: Se retorna un bool</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_en_categoria">
 <span class="sig-name descname"><span class="pre">tiene_permiso_en_categoria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">permiso</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categoria</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_en_categoria"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_en_categoria" title="Link to this definition"></a></dt>
-<dd><p>Este método retorna si el usuario actual tiene un permiso dado en una categoría dada.
+<dd><p>Este método retorna si el usuario actual tiene un permiso dado en una categoría dada. Si se recibe null en categoria, se verifica en todas las categorías.
 :param permiso: Permiso que se desea verificar (str)
 :param categoria: Categoría en la que se desea verificar el permiso (Categoria)
 :return: Se retorna un bool</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="usuario.models.User.user_is_autor">
-<span class="sig-name descname"><span class="pre">user_is_autor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.user_is_autor"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.user_is_autor" title="Link to this definition"></a></dt>
-<dd><p>Este método retorna si el usuario actual es autor.
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_publicar_contenido">
+<span class="sig-name descname"><span class="pre">tiene_permiso_publicar_contenido</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_publicar_contenido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_publicar_contenido" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Publicar contenido» en alguna categoría.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="usuario.models.User.tiene_permiso_visualizar_kanban">
+<span class="sig-name descname"><span class="pre">tiene_permiso_visualizar_kanban</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#User.tiene_permiso_visualizar_kanban"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.User.tiene_permiso_visualizar_kanban" title="Link to this definition"></a></dt>
+<dd><p>Este método retorna si el usuario actual tiene el permiso «Visualizar kanban» en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.
 :return: Se retorna un bool</p>
 </dd></dl>
 
@@ -641,6 +835,11 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="usuario.models.notify_post">
+<span class="sig-prename descclassname"><span class="pre">usuario.models.</span></span><span class="sig-name descname"><span class="pre">notify_post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/models.html#notify_post"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.models.notify_post" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 <section id="module-usuario.urls">
 <span id="usuario-urls-module"></span><h2>usuario.urls module<a class="headerlink" href="#module-usuario.urls" title="Link to this heading"></a></h2>
@@ -716,24 +915,16 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="usuario.views.listaUserCategoria">
 <span class="sig-prename descclassname"><span class="pre">usuario.views.</span></span><span class="sig-name descname"><span class="pre">listaUserCategoria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idUsuario</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/views.html#listaUserCategoria"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.views.listaUserCategoria" title="Link to this definition"></a></dt>
-<dd><p>Vista para mostrar una lista de categorías y roles asignados a un usuario específico.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>request</strong> – La solicitud HTTP.</p></li>
-<li><p><strong>idUsuario</strong> – El ID del usuario.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>La página de lista de categorías y roles para el usuario especificado.</p>
-</dd>
-</dl>
+<dd><p>Vista para mostrar una lista de categorías y roles asignados a un usuario específico.
+:param request: La solicitud HTTP.
+:param idUsuario: El ID del usuario.
+:return: La página de lista de categorías y roles para el usuario especificado.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="usuario.views.user_admin_asigRoles">
-<span class="sig-prename descclassname"><span class="pre">usuario.views.</span></span><span class="sig-name descname"><span class="pre">user_admin_asigRoles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/views.html#user_admin_asigRoles"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.views.user_admin_asigRoles" title="Link to this definition"></a></dt>
-<dd><p>Funcion que comprueba si el usuario es administrador de asignacion de roles (tiene el permiso «Asignar roles»)
+<dt class="sig sig-object py" id="usuario.views.tiene_permiso_asignar_roles">
+<span class="sig-prename descclassname"><span class="pre">usuario.views.</span></span><span class="sig-name descname"><span class="pre">tiene_permiso_asignar_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/views.html#tiene_permiso_asignar_roles"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.views.tiene_permiso_asignar_roles" title="Link to this definition"></a></dt>
+<dd><p>Funcion que comprueba si el usuario tiene el permiso «Asignar roles»
 :param user: usuario a comprobar (User)
 :return: True si es administrador de asignacion de roles, False en caso contrario</p>
 </dd></dl>
@@ -741,15 +932,9 @@ one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="usuario.views.verUsuarios">
 <span class="sig-prename descclassname"><span class="pre">usuario.views.</span></span><span class="sig-name descname"><span class="pre">verUsuarios</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/usuario/views.html#verUsuarios"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#usuario.views.verUsuarios" title="Link to this definition"></a></dt>
-<dd><p>Vista para mostrar una lista de usuarios.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – La solicitud HTTP.</p>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>La página de lista de usuarios.</p>
-</dd>
-</dl>
+<dd><p>Vista para mostrar una lista de usuarios.
+:param request: La solicitud HTTP.
+:return: La página de lista de usuarios.</p>
 </dd></dl>
 
 </section>
