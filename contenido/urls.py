@@ -21,4 +21,5 @@ urlpatterns = [
     path('reportes/', views.reportesView, name='reportes'),
     path('rechazar/<int:id>/', views.rechazar_contenido, name='rechazar_contenido'),
     path('deshabilitarContenido/<int:id>/', views.deshabilitar_contenido, name='deshabilitar_contenido'),
+    path('historial_cambios/<int:contenido_id>/', views.historial_cambios, name='historial_cambios'),
 ]

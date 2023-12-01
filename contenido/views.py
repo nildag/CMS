@@ -1,4 +1,9 @@
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
+from django.http import HttpResponse
+from django.urls import reverse
+
 from .models import Contenido
 from .models import Categoria
 from .models import tipoContenido
@@ -89,6 +94,15 @@ def crearContenido(request):
             contenido.autor = request.user
             contenido.tipo_contenido = form.cleaned_data['tipo_contenido']
             contenido.save()
+            # Registrar el cambio
+            LogEntry.objects.log_action(
+                user_id=request.user.id,
+                content_type_id=ContentType.objects.get_for_model(contenido).id,
+                object_id=contenido.id,
+                object_repr=str(contenido),
+                action_flag=ADDITION,
+            )
+
             return redirect('contenido:lista_contenido')
     else:
         form = ContenidoForm(categorias_autor=categorias_autor, autor=request.user)
@@ -120,6 +134,16 @@ def editarContenido(request, id):
             if (request.user).is_autor_in_categoria(contenido.categoria):
                 contenido.tipo_contenido = form.cleaned_data['tipo_contenido']
             form.save()
+
+            # Registrar el cambio
+            LogEntry.objects.log_action(
+                user_id=request.user.id,
+                content_type_id=ContentType.objects.get_for_model(contenido).id,
+                object_id=contenido.id,
+                object_repr=str(contenido),
+                action_flag=CHANGE,
+            )
+
             if (request.user).is_autor_in_categoria(contenido.categoria):
                 return redirect('contenido:lista_contenido')
             else:
@@ -186,8 +210,10 @@ def verContenido(request, id):
     if contenido.estado == 'Publicado':
         contenido.numero_vistas += 1
     contenido.save()
-    
-    return render(request, 'contenido/verContenido.html', {'contenido': contenido})
+
+    historial_url = reverse('contenido:historial_cambios', args=[contenido.id])
+
+    return render(request, 'contenido/verContenido.html', {'contenido': contenido, 'historial_url':historial_url})
 
 def listaTodos(request):
     """
@@ -422,7 +448,7 @@ def kanbanView(request):
 
     return render(request, 'contenido/kanban.html', {'tablero_kanban': tablero_kanban})
 
-login_required
+@login_required
 @user_passes_test(tiene_permiso_visualizar_kanban)
 def reportesView(request):
     """
@@ -644,3 +670,24 @@ def deshabilitar_contenido(request, id):
     contenido.estado = 'Deshabilitado'
     contenido.save()
     return redirect('contenido:lista_todos')
+
+def historialCambiosContenido(request, id):
+    contenido = get_object_or_404(Contenido, id=id)
+    historial_cambios = LogEntry.objects.filter(
+        content_type_id=ContentType.objects.get_for_model(contenido).id,
+        object_id=contenido.id
+    )
+
+    return render(request, 'contenido/historialCambiosContenido.html', {'contenido': contenido, 'historial_cambios': historial_cambios})
+
+@login_required
+@user_passes_test(tiene_permiso_editar_contenido)
+def historial_cambios(request, contenido_id):
+    contenido = get_object_or_404(Contenido, id=contenido_id)
+    historial_cambios = LogEntry.objects.filter(
+        content_type__app_label='contenido',
+        content_type__model='contenido',
+        object_id=contenido_id
+    )
+
+    return render(request, 'contenido/historialCambiosContenido.html', {'contenido': contenido, 'historial_cambios': historial_cambios})

@@ -91,6 +91,12 @@
         }
     }
 </script>
+<div class="content-actions text-center">
+    {% if user.tiene_permiso_editar_contenido %}
+        <a href="{{ historial_url }}">Ver historial de cambios</a>
+    {% endif %}
+</div>
+
 </body>
 </html>
 

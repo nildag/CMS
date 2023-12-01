@@ -1,0 +1,47 @@
+<!-- historialCambiosContenido.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Historial de Cambios para "{{ contenido.titulo }}"</h2>
+
+    <ul class="list-group mt-3">
+        {% for cambio in historial_cambios %}
+        <li class="list-group-item">
+            <p>
+                {{ cambio.action_time|date:"F j, Y g:i a" }} -
+                {{ cambio.user.get_full_name }} realizó
+                {% if cambio.get_action_flag_display == "Añadir" %}
+                {{ cambio.get_action_flag_display }} en "{{ cambio.object_repr }}"
+                {% elif cambio.get_action_flag_display == "Modificar" %}
+                {{ cambio.get_action_flag_display }} en "{{ cambio.object_repr }}":
+                {% for field, values in cambio.changes.items %}
+                    <p>
+                        {{ field }}:
+                        {% if values.0 is not None %}
+                            {{ values.0 }}
+                        {% else %}
+                            [Campo Agregado]
+                        {% endif %}
+                        a
+                        {% if values.1 is not None %}
+                            {{ values.1 }}
+                        {% else %}
+                            [Campo Eliminado]
+                        {% endif %}
+                    </p>
+                {% endfor %}
+                {% elif cambio.get_action_flag_display == "Eliminar" %}
+                {{ cambio.get_action_flag_display }} de "{{ cambio.object_repr }}"
+                {% endif %}
+            </p>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if not historial_cambios %}
+    <p class="mt-3">No hay cambios registrados para este contenido.</p>
+    {% endif %}
+</div>
+{% endblock %}
