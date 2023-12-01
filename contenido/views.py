@@ -555,7 +555,7 @@ def reportesView(request):
     img_base64 = base64.b64encode(img_data.read()).decode()
     img_src2 = f'data:image/png;base64,{img_base64}'
 
-
+    """ 
     # Reporte 3: Genera un reporte del contenido mejor valorado por categoria
     reporte3 = {}
     for contenido in contenidos:
@@ -563,7 +563,76 @@ def reportesView(request):
         if categoria not in reporte3:
             reporte3[categoria] = 0
         reporte3[categoria] = max(reporte3[categoria], contenido.puntuacion)
-    
+  """  
+    # Reporte 3: Genera un reporte del contenido mejor valorado por categoría
+    """ 
+    Se genera un reporte del contenido mejor y peor valorado por categoría, para esto
+    se calcula un puntaje del 1 al 10, donde 10 es el mejor valorado y 1 el peor valorado.
+    El puntaje se calcula como el promedio de la puntuación del contenido y el número de vistas relativas
+    (número de vistas del contenido / número de vistas de todos los contenidos de la categoría)
+    Donde la puntuación del contenido se calcula como el promedio de todas las valoraciones del contenido
+    y el número de vistas relativas se calcula como el número de vistas del contenido dividido entre el número
+    de vistas de todos los contenidos de la categoría. Tanto el puntaje como la cantidad de vistas relativas
+    tiene un peso del 50% en el cálculo del puntaje final.
+    Finalmente se representa el contenido mejor y peor valorado por categoría en un gráfico de barras.
+    """
+    reporte3 = {}
+
+    # Nuevo criterio de calidad (50% promedio de valoración + 50% vistas relativas)
+    for contenido in contenidos:
+        categoria = contenido.categoria.nombre
+        # Calcula el promedio de puntuación del contenido y conviértelo a float
+        promedio_puntuacion = float(contenido.puntuacion / reporte1[categoria]) if reporte1[categoria] != 0 else 0
+        # Calcula el número de vistas relativas
+        vistas_relativas = contenido.numero_vistas / sum(contenido.numero_vistas for c in contenidos if c.categoria == contenido.categoria)
+
+        # Calcula el puntaje de calidad
+        calidad = min(10,max(1, 10 * ( 0.5 * promedio_puntuacion + 0.5 * vistas_relativas)))
+
+        # Almacena el contenido con mayor y menor calidad por categoría
+        if categoria not in reporte3 or calidad > reporte3[categoria]['mejor_valorado']['calidad']:
+            reporte3[categoria] = {'mejor_valorado': {'titulo': contenido.titulo, 'calidad': calidad}}
+        if 'peor_valorado' not in reporte3[categoria] or calidad < reporte3[categoria]['peor_valorado']['calidad']:
+            reporte3[categoria]['peor_valorado'] = {'titulo': contenido.titulo, 'calidad': calidad}
+
+    # Genera un gráfico de barras similar al reporte 5
+    fig, ax = plt.subplots(figsize=(8, 8))
+    categorias = list(reporte3.keys())
+    mejor_valorado = [reporte3[categoria]['mejor_valorado']['calidad'] for categoria in categorias]
+    peor_valorado = [reporte3[categoria]['peor_valorado']['calidad'] for categoria in categorias]
+    columnas = np.arange(len(categorias))
+    anchobarra = 0.30
+
+    # Grafico de barras para el contenido mejor valorado
+    ax.bar(columnas - anchobarra / 2, mejor_valorado, anchobarra, label='Mejor Valorado', color='blue')
+
+    # Grafico de barras para el contenido peor valorado
+    ax.bar(columnas + anchobarra / 2, peor_valorado, anchobarra, label='Peor Valorado', color='orange')
+
+    ax.set_title('Contenido con mejor/peor puntuación general por categoría')
+    ax.set_xlabel('Categoría')
+    ax.set_ylabel('Calidad')
+    ax.set_xticks(columnas)
+    ax.set_xticklabels(categorias, rotation=45, ha='right', rotation_mode='anchor')
+    ax.set_yticks(np.arange(1, 11))
+    ax.legend()
+    ax.set_ylim(0, 10)
+    ax.grid(True)
+    fig.tight_layout()
+
+    # Mostrar el gráfico de barras
+    plt.tight_layout()
+    plt.show()
+
+    # Convierte el gráfico en una imagen para mostrar en el HTML
+    img_data = BytesIO()
+    fig.savefig(img_data, format='png')
+    img_data.seek(0)
+    img_base64 = base64.b64encode(img_data.read()).decode()
+    img_src3 = f'data:image/png;base64,{img_base64}'
+
+
+
     # Reporte 4: Cantidad total de vistas de los contenidos de cada categoría
     reporte4 = {}
     for contenido in contenidos:
@@ -571,6 +640,7 @@ def reportesView(request):
         if categoria not in reporte4:
             reporte4[categoria] = 0
         reporte4[categoria] += contenido.numero_vistas
+
 
     # Reporte 5: Rendimiento de los contenidos del Autor
     """ -Promedio de valoraciones de todos sus contenidos publicados
@@ -674,7 +744,7 @@ def reportesView(request):
     #return
     return render(request, 'contenido/reportes.html', {'reporte1': reporte1, 'img_src1': img_src1,'reporte_contenidos_por_categoria': dict(reporte_contenidos_por_categoria),
                                                         'reporte2': reporte2, 'img_src2': img_src2, 'promedio_puntuacion_por_categoria': promedio_puntuacion_por_categoria,
-                                                        'reporte3': reporte3,  
+                                                        'reporte3': reporte3,  'img_src3': img_src3,
                                                         'reporte4': reporte4,
                                                         'reporte5': reporte5, 'img_src5': img_src5, 'promedio_puntuacion_por_autor': promedio_puntuacion_por_autor
                                                         
