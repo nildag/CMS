@@ -183,7 +183,8 @@ def verContenido(request, id):
         HttpResponse: Respuesta HTTP que muestra la página del contenido específico.
     """
     contenido = Contenido.objects.get(id=id)
-    contenido.numero_vistas += 1
+    if contenido.estado == 'Publicado':
+        contenido.numero_vistas += 1
     contenido.save()
     
     return render(request, 'contenido/verContenido.html', {'contenido': contenido})
@@ -538,14 +539,78 @@ def reportesView(request):
             reporte4[categoria] = 0
         reporte4[categoria] += contenido.numero_vistas
 
+    # Reporte 5: Rendimiento de los contenidos del Autor
+    """ -Promedio de valoraciones de todos sus contenidos publicados
+    -Titulo, categoría, cantidad de vistas, fecha y valoración de su contenido más valorado/popular
+    -Titulo, categoría, cantidad de vistas, fecha y valoración de su contenido menos valorado/popular    
+    """
+    reporte5 = {}
+    for user in User.objects.all():
+        for contenido in contenidos:
+            if contenido.autor == user and contenido.estado == 'Publicado':
+                usuario=user.email
+                if usuario not in reporte5:
+                    reporte5[usuario] = {'total_puntuacion': 0, 'numero_contenidos': 0, 'mejor_valorado': {'titulo': '', 'categoria': '', 'cantidad_vistas': 0, 'fecha': '', 'valoracion': 0}, 'peor_valorado': {'titulo': '', 'categoria': '', 'cantidad_vistas': 0, 'fecha': '', 'valoracion': 0}}
+                reporte5[usuario]['total_puntuacion'] += contenido.puntuacion
+                reporte5[usuario]['numero_contenidos'] += 1
+                if contenido.puntuacion > reporte5[usuario]['mejor_valorado']['valoracion']:
+                    # Actualiza el mejor valorado
+                    reporte5[usuario]['mejor_valorado']['titulo'] = contenido.titulo
+                    reporte5[usuario]['mejor_valorado']['categoria'] = contenido.categoria.nombre
+                    reporte5[usuario]['mejor_valorado']['cantidad_vistas'] = contenido.numero_vistas
+                    reporte5[usuario]['mejor_valorado']['fecha'] = contenido.fecha_creacion
+                    reporte5[usuario]['mejor_valorado']['valoracion'] = contenido.puntuacion
 
+                if contenido.puntuacion < reporte5[usuario]['peor_valorado']['valoracion']:
+                    # Actualiza el peor valorado
+                    reporte5[usuario]['peor_valorado']['titulo'] = contenido.titulo
+                    reporte5[usuario]['peor_valorado']['categoria'] = contenido.categoria.nombre
+                    reporte5[usuario]['peor_valorado']['cantidad_vistas'] = contenido.numero_vistas
+                    reporte5[usuario]['peor_valorado']['fecha'] = contenido.fecha_creacion
+                    reporte5[usuario]['peor_valorado']['valoracion'] = contenido.puntuacion
+
+    #calcula el promedio de puntuacion de cada autor
+    promedio_puntuacion_por_autor = {}
+    for usuario in reporte5:
+        promedio_puntuacion_por_autor[usuario] = reporte5[usuario]['total_puntuacion'] / reporte5[usuario]['numero_contenidos']
+
+    # Genera un los indices para el grafico de barras
+    usuarios = list(map(str,promedio_puntuacion_por_autor.keys()))
+    promedios = list(promedio_puntuacion_por_autor.values())
+
+    # Genera un gráfico de barras
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.bar(usuarios, promedios)
+    ax.set_title('Promedio de Puntuación por Autor')
+    ax.set_xlabel('Autor')
+    ax.set_ylabel('Promedio de Puntuación')
+    ax.set_xticklabels(usuarios, rotation=45, ha='right')
+    ax.set_ylim(0, 5)
+    ax.set_yticks([0, 1, 2, 3, 4, 5])
+    ax.grid(True)
+    fig.tight_layout()
+    
+    # Mostrar el grafico de barras
+    plt.tight_layout()
+    plt.show()
+
+    # Convierte el gráfico en una imagen para mostrar en el HTML
+    img_data = BytesIO()
+    fig.savefig(img_data, format='png')
+    img_data.seek(0)
+    img_base64 = base64.b64encode(img_data.read()).decode()
+    img_src5 = f'data:image/png;base64,{img_base64}'
+
+   
     #return
-    return render(request, 'contenido/reportes.html', {'reporte1': reporte1,'img_src1': img_src1,'reporte_contenidos_por_categoria': dict(reporte_contenidos_por_categoria),
-                                                        'reporte2': reporte2,'img_src2': img_src2, 'promedio_puntuacion_por_categoria': promedio_puntuacion_por_categoria,
-                                                        'reporte3': reporte3,
+    return render(request, 'contenido/reportes.html', {'reporte1': reporte1, 'img_src1': img_src1,'reporte_contenidos_por_categoria': dict(reporte_contenidos_por_categoria),
+                                                        'reporte2': reporte2, 'img_src2': img_src2, 'promedio_puntuacion_por_categoria': promedio_puntuacion_por_categoria,
+                                                        'reporte3': reporte3,  
                                                         'reporte4': reporte4,
+                                                        'reporte5': reporte5, 'img_src5': img_src5, 'promedio_puntuacion_por_autor': promedio_puntuacion_por_autor
                                                         
                                                         })
+                                                        
 
 
 

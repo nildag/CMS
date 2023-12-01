@@ -19,6 +19,7 @@
             <option value="reporte2">Promedio de puntuacion de las valoraciones por categoría</option>
             <option value="reporte3">Valoracion promedio mas alta de un contenido por cada categoria</option>
             <option value="reporte4">Vistas por categoria</option>
+            <option value="reporte5">Rendimiento de los contenidos de cada autor</option>
                 <!-- Agrega más opciones según sea necesario -->
             </select>
             <button type="button" id="exportar-pdf-btn" class="btn-danger">Exportar a PDF</button>
@@ -96,6 +97,31 @@
             </ul>
             </div>
         </div>
+
+        <!-- Reporte 5: Rendimiento de los contenidos de cada autor -->
+        <div class="mt-4" id="reporte5" style="text-align: center;">
+            <h2>Rendimiento de los contenidos de cada autor</h2>
+            <p>
+                Descripción del reporte:
+                <br>-Promedio de valoraciones de todos sus contenidos publicados
+                <br>-Titulo, categoría, cantidad de vistas, fecha y valoración de su contenido más valorado/popular
+                <br>-Titulo, categoría, cantidad de vistas, fecha y valoración de su contenido menos valorado/popular
+            </p>
+            <div class="row" style="display: inline-block; text-align: center;">
+                <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+                    <ul>
+                        {% for autor, promedio in promedio_puntuacion_por_autor.items %}
+                            <li>
+                                <strong>{{ autor }}:</strong> {{ promedio|floatformat:2 }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-6" style="display: inline-block; margin-top: 10px;">
+                    <img src="{{ img_src5 }}" alt="Gráfico de Barras" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                </div>
+            </div>
+        </div>
         
 
     </div>
@@ -133,7 +159,7 @@
             var informeSeleccionado = document.getElementById("informe-selector").value;
 
             // Oculta todos los informes
-            var informes = ["reporte1", "reporte2", "reporte3", "reporte4"]; // Añade los reportes del 1 al 6
+            var informes = ["reporte1", "reporte2", "reporte3", "reporte4", "reporte5"]; // Añade los reportes del 1 al 6
             for (var i = 0; i < informes.length; i++) {
                 var informe = informes[i];
                 document.getElementById(informe).style.display = "none";
