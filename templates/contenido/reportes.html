@@ -46,7 +46,7 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="col-md-6" style="display: inline-block; margin-top: 10px;">
+                <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
                     <img src="{{ img_src1 }}" alt="Gráfico de Pastel" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
                 </div>
             </div>
@@ -69,7 +69,7 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="col-md-6" style="display: inline-block; margin-top: 10px;">
+                <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
                     <img src="{{ img_src2 }}" alt="Gráfico de Barras" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
                 </div>
             </div>
@@ -95,20 +95,27 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-md-6" style="display: inline-block; margin-top: 10px;">
+            <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
                 <img src="{{ img_src3 }}" alt="Gráfico de Barras" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
             </div>
         </div>
 
         <!-- Reporte 4: Cantidad total de vistas de los contenidos de cada categoría -->
         <div class="mt-4" id="reporte4" style="text-align: center;">
-            <h2>Promedio de Vistas por Categoría</h2>
+            <h2>Visualizaciones totales de contenidos de cada categoria</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra la cantidad total de vistas de los contenidos de cada categoría.<br>
+                Se representa con un gráfico de pastel mostrando el porcentaje de vistas por categoría.
+            </p>
             <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
             <ul>
                 {% for categoria, vistas in reporte4.items %}
                     <li>{{ categoria }}: {{ vistas }}</li>
                 {% endfor %}
             </ul>
+            </div>
+            <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
+                <img src="{{ img_src4 }}" alt="Gráfico de Pastel" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
             </div>
         </div>
 
@@ -133,7 +140,7 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="col-md-6" style="display: inline-block; margin-top: 10px;">
+                <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
                     <img src="{{ img_src5 }}" alt="Gráfico de Barras" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
                 </div>
             </div>
@@ -156,7 +163,7 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="col-md-6" style="display: inline-block; margin-top: 10px;">
+                <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
                     <img src="{{ img_src6 }}" alt="Gráfico de Barras" style="width: 100%; max-width: none; height: auto; display: block; margin: 0 auto;">
                 </div>
             </div>
@@ -179,11 +186,17 @@
             var contenidoDiv = document.getElementById(informeSeleccionado);
 
             if (contenidoDiv) {
+                // Ajustar tamaños de página para que coincidan con el contenido
+                //contenidoDiv.style.maxWidth = "100%";  // Ajusta el ancho del contenedor según sea necesario
+                //contenidoDiv.style.height = "auto";  // Ajusta la altura del contenedor según sea necesario
+
                 var contenidoHTML = contenidoDiv.innerHTML;
             
                 // Utiliza la función fromHTML con un callback
                 pdf.fromHTML(contenidoHTML, 15, 15, {}, function () {
                     // Guarda o descarga el PDF después de que la operación asincrónica esté completa
+                    //contenidoDiv.style.maxWidth = "100%";  // Restaura el ancho del contenedor
+                    //contenidoDiv.style.height = "auto";  // Restaura la altura del contenedor
                     pdf.save('reporte.pdf');
                 });
             } else {

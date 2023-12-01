@@ -484,7 +484,7 @@ def reportesView(request):
     
     # Genera un gráfico de pastel
     df = pd.DataFrame.from_dict(reporte1, orient='index', columns=['Cantidad'])
-    plt.figure(figsize=(8, 8))
+    plt.figure(figsize=(10, 10))
     plt.pie(df['Cantidad'], labels=df.index, autopct='%1.1f%%', startangle=90)
     plt.title('Número de Contenidos por Categoría')
     plt.axis('equal')  # Asegura que el gráfico de pastel sea un círculo.
@@ -526,7 +526,7 @@ def reportesView(request):
     promedios = list(promedio_puntuacion_por_categoria.values())
 
     # Genera un gráfico de barras
-    fig, ax = plt.subplots(figsize=(8, 8))
+    fig, ax = plt.subplots(figsize=(10, 10))
     anchobarra = 0.30
     barras = ax.bar(categorias, promedios,anchobarra)
 
@@ -554,15 +554,7 @@ def reportesView(request):
     img_base64 = base64.b64encode(img_data.read()).decode()
     img_src2 = f'data:image/png;base64,{img_base64}'
 
-    """ 
-    # Reporte 3: Genera un reporte del contenido mejor valorado por categoria
-    reporte3 = {}
-    for contenido in contenidos:
-        categoria = contenido.categoria.nombre
-        if categoria not in reporte3:
-            reporte3[categoria] = 0
-        reporte3[categoria] = max(reporte3[categoria], contenido.puntuacion)
-  """  
+
     # Reporte 3: Genera un reporte del contenido mejor valorado por categoría
     """ 
     Se genera un reporte del contenido mejor y peor valorado por categoría, para esto
@@ -598,7 +590,7 @@ def reportesView(request):
             reporte3[categoria]['peor_valorado'] = {'titulo': contenido.titulo, 'calidad': calidad}
 
     # Genera un gráfico de barras similar al reporte 5
-    fig, ax = plt.subplots(figsize=(8, 8))
+    fig, ax = plt.subplots(figsize=(10, 10))
     categorias = list(reporte3.keys())
     mejor_valorado = [reporte3[categoria]['mejor_valorado']['calidad'] for categoria in categorias]
     peor_valorado = [reporte3[categoria]['peor_valorado']['calidad'] for categoria in categorias]
@@ -643,6 +635,24 @@ def reportesView(request):
             reporte4[categoria] = 0
         reporte4[categoria] += contenido.numero_vistas
 
+    # Genera un gráfico de pastel
+    fig, ax = plt.subplots(figsize=(10, 10))
+    categorias = list(reporte4.keys())
+    vistas_totales = list(reporte4.values())
+
+    colores = plt.cm.Paired(range(len(categorias)))
+
+    ax.pie(vistas_totales, labels=categorias, autopct='%1.1f%%', startangle=90, colors=colores)
+    ax.axis('equal')
+    
+    ax.set_title('Cantidad total de vistas de los contenidos de cada categoría')
+    
+    # Convierte el gráfico en una imagen para mostrar en el HTML
+    img_data = BytesIO()
+    plt.savefig(img_data, format='png')
+    img_data.seek(0)
+    img_base64 = base64.b64encode(img_data.read()).decode()
+    img_src4 = f'data:image/png;base64,{img_base64}'
 
     # Reporte 5: Rendimiento de los contenidos del Autor
     """ -Promedio de valoraciones de todos sus contenidos publicados
@@ -697,7 +707,7 @@ def reportesView(request):
 
 
     # Genera un gráfico de barras
-    fig, ax = plt.subplots(figsize=(8, 8))
+    fig, ax = plt.subplots(figsize=(10, 10))
     columnas = np.arange(len(usuarios))
     anchobarra = 0.20
 
@@ -752,6 +762,7 @@ def reportesView(request):
 
     dataset = pd.DataFrame(reporte6, columns=['Autor', 'Contenidos Creados', 'Contenidos Publicados'])
     dataset = dataset.sort_values(by=['Contenidos Creados'], ascending=False)
+    fig, ax = plt.subplots(figsize=(10, 10))
     grafico = dataset.head(5).plot.bar(x='Autor')
     plt.title('Actividad de los Autores')
     grafico.set_xticklabels(grafico.get_xticklabels(), rotation=45, ha='right')
@@ -768,7 +779,7 @@ def reportesView(request):
     return render(request, 'contenido/reportes.html', {'reporte1': reporte1, 'img_src1': img_src1,'reporte_contenidos_por_categoria': dict(reporte_contenidos_por_categoria),
                                                         'reporte2': reporte2, 'img_src2': img_src2, 'promedio_puntuacion_por_categoria': promedio_puntuacion_por_categoria,
                                                         'reporte3': reporte3,  'img_src3': img_src3,
-                                                        'reporte4': reporte4,
+                                                        'reporte4': reporte4, 'img_src4': img_src4,
                                                         'reporte5': reporte5, 'img_src5': img_src5, 'promedio_puntuacion_por_autor': promedio_puntuacion_por_autor,
                                                         'reporte6': reporte6, 'img_src6': img_src6, 'dataset': dataset.to_html(index=False)
                                                         })
