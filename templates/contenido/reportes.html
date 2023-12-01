@@ -20,6 +20,7 @@
             <option value="reporte3">Valoracion promedio mas alta de un contenido por cada categoria</option>
             <option value="reporte4">Vistas por categoria</option>
             <option value="reporte5">Rendimiento de los contenidos de cada autor</option>
+            <option value="reporte6">Actividad de los autores</option>
                 <!-- Agrega más opciones según sea necesario -->
             </select>
             <button type="button" id="exportar-pdf-btn" class="btn-danger">Exportar a PDF</button>
@@ -137,7 +138,29 @@
                 </div>
             </div>
         </div>
-        
+
+        <!-- Reporte 6: Actividad de los autores -->
+        <div class="mt-4" id="reporte6" style="text-align: center;">
+            <h2>Actividad de los autores</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra la cantidad de contenidos publicados por cada autor.<br>
+                Se representa con un gráfico de barras mostrando la cantidad de contenidos creados y publicados por cada usuario.
+            </p>
+            <div class="row" style="display: inline-block; text-align: center;">
+                <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+                    <ul>
+                        {% for autor, cantidad in cantidad_contenidos_por_autor.items %}
+                            <li>
+                                <strong>{{ autor }}:</strong> {{ cantidad }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-6" style="display: inline-block; margin-top: 10px;">
+                    <img src="{{ img_src6 }}" alt="Gráfico de Barras" style="width: 100%; max-width: none; height: auto; display: block; margin: 0 auto;">
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -174,7 +197,7 @@
             var informeSeleccionado = document.getElementById("informe-selector").value;
 
             // Oculta todos los informes
-            var informes = ["reporte1", "reporte2", "reporte3", "reporte4", "reporte5"]; // Añade los reportes del 1 al 6
+            var informes = ["reporte1", "reporte2", "reporte3", "reporte4", "reporte5", "reporte6"]; // Añade los reportes del 1 al 6
             for (var i = 0; i < informes.length; i++) {
                 var informe = informes[i];
                 document.getElementById(informe).style.display = "none";

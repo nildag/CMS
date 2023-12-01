@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from django.urls import reverse
-
 from .models import Contenido
 from .models import Categoria
 from .models import tipoContenido
@@ -584,7 +583,10 @@ def reportesView(request):
         # Calcula el promedio de puntuación del contenido y conviértelo a float
         promedio_puntuacion = float(contenido.puntuacion / reporte1[categoria]) if reporte1[categoria] != 0 else 0
         # Calcula el número de vistas relativas
-        vistas_relativas = contenido.numero_vistas / sum(contenido.numero_vistas for c in contenidos if c.categoria == contenido.categoria)
+        if contenido.numero_vistas != 0:
+            vistas_relativas = contenido.numero_vistas / sum(contenido.numero_vistas for c in contenidos if c.categoria == contenido.categoria)
+        else:
+            vistas_relativas = 0
 
         # Calcula el puntaje de calidad
         calidad = min(10,max(1, 10 * ( 0.5 * promedio_puntuacion + 0.5 * vistas_relativas)))
@@ -740,14 +742,35 @@ def reportesView(request):
     img_base64 = base64.b64encode(img_data.read()).decode()
     img_src5 = f'data:image/png;base64,{img_base64}'
 
-   
+    # Reporte 6 : Actividad de los autores
+    reporte6 = []
+    for user in User.objects.all():
+        usuario = user.email
+        contenidos_creados = Contenido.objects.filter(autor=user).count()
+        contenidos_publicados = Contenido.objects.filter(autor=user, estado='Publicado').count()
+        reporte6.append([usuario, contenidos_creados, contenidos_publicados])
+
+    dataset = pd.DataFrame(reporte6, columns=['Autor', 'Contenidos Creados', 'Contenidos Publicados'])
+    dataset = dataset.sort_values(by=['Contenidos Creados'], ascending=False)
+    grafico = dataset.head(5).plot.bar(x='Autor')
+    plt.title('Actividad de los Autores')
+    grafico.set_xticklabels(grafico.get_xticklabels(), rotation=45, ha='right')
+    grafico.set_xlabel('')
+    plt.tight_layout()
+
+    img_data = BytesIO()
+    plt.savefig(img_data, format='png')
+    img_data.seek(0)
+    img_base64 = base64.b64encode(img_data.read()).decode()
+    img_src6 = f'data:image/png;base64,{img_base64}'
+
     #return
     return render(request, 'contenido/reportes.html', {'reporte1': reporte1, 'img_src1': img_src1,'reporte_contenidos_por_categoria': dict(reporte_contenidos_por_categoria),
                                                         'reporte2': reporte2, 'img_src2': img_src2, 'promedio_puntuacion_por_categoria': promedio_puntuacion_por_categoria,
                                                         'reporte3': reporte3,  'img_src3': img_src3,
                                                         'reporte4': reporte4,
-                                                        'reporte5': reporte5, 'img_src5': img_src5, 'promedio_puntuacion_por_autor': promedio_puntuacion_por_autor
-                                                        
+                                                        'reporte5': reporte5, 'img_src5': img_src5, 'promedio_puntuacion_por_autor': promedio_puntuacion_por_autor,
+                                                        'reporte6': reporte6, 'img_src6': img_src6, 'dataset': dataset.to_html(index=False)
                                                         })
                                                         
 
