@@ -56,7 +56,7 @@
             <h2>Promedio de puntuación de las valoraciones por categoría</h2>
             <p>
                 Descripción del reporte: Este reporte muestra el promedio de puntuación de las valoraciones por categoría.<br>
-                Se representa con un gráfico de pastel mostrando el porcentaje de contenidos por categoría.
+                Se representa con un gráfico de barras mostrando el porcentaje de contenidos por categoría.
             </p>
             <div class="row" style="display: inline-block; text-align: center;">
                 <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
@@ -76,7 +76,11 @@
 
         <!-- Reporte 3: Genera un reporte del contenido mejor valorado por categoria -->
         <div class="mt-4" id="reporte3" style="text-align: center;">
-            <h2>Contenido Más Valorado por Categoría</h2>
+            <h2>Contenido mejor valorado por categoría</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra el contenido mejor valorado por cada categoría.<br>
+                Se representa con un gráfico de barras que muestra la valoración promedio de cada categoría.
+            </p>
             <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
             <ul>
                 {% for categoria, valoracion in reporte3.items %}
@@ -102,23 +106,25 @@
         <div class="mt-4" id="reporte5" style="text-align: center;">
             <h2>Rendimiento de los contenidos de cada autor</h2>
             <p>
-                Descripción del reporte:
-                <br>-Promedio de valoraciones de todos sus contenidos publicados
-                <br>-Titulo, categoría, cantidad de vistas, fecha y valoración de su contenido más valorado/popular
-                <br>-Titulo, categoría, cantidad de vistas, fecha y valoración de su contenido menos valorado/popular
+                Descripción del reporte: Se calcula el promedio de valoraciones de todos los contenidos publicados de un usuario.<br>
+                Se representa con un gráfico de barras el mejor y peor puntaje promedio obtenido en algún contenido del usuario.<br>
+                Los usuarios que no tengan contenidos publicados no se muestran en el reporte.
+                
             </p>
             <div class="row" style="display: inline-block; text-align: center;">
                 <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
                     <ul>
                         {% for autor, promedio in promedio_puntuacion_por_autor.items %}
-                            <li>
-                                <strong>{{ autor }}:</strong> {{ promedio|floatformat:2 }}
-                            </li>
+                            {% if promedio != 0 %}    
+                                <li>
+                                    <strong>{{ autor }}:</strong> {{ promedio|floatformat:2 }}
+                                </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
                 <div class="col-md-6" style="display: inline-block; margin-top: 10px;">
-                    <img src="{{ img_src5 }}" alt="Gráfico de Barras" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                    <img src="{{ img_src5 }}" alt="Gráfico de Barras" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
                 </div>
             </div>
         </div>

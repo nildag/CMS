@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 from collections import defaultdict
+import numpy as np
 
 def tiene_permiso_visualizar_kanban(user):
     """
@@ -527,7 +528,13 @@ def reportesView(request):
 
     # Genera un gráfico de barras
     fig, ax = plt.subplots(figsize=(8, 8))
-    ax.bar(categorias, promedios)
+    anchobarra = 0.30
+    barras = ax.bar(categorias, promedios,anchobarra)
+
+    for barra in barras:
+        altura = barra.get_height()
+        ax.text(barra.get_x() + barra.get_width() / 2, altura, f'{altura:.2f}', ha='center', va='bottom')
+
     ax.set_title('Promedio de Puntuación por Categoría')
     ax.set_xlabel('Categoría')
     ax.set_ylabel('Promedio de Puntuación')
@@ -571,12 +578,17 @@ def reportesView(request):
     -Titulo, categoría, cantidad de vistas, fecha y valoración de su contenido menos valorado/popular    
     """
     reporte5 = {}
+
     for user in User.objects.all():
+        usuario=user.email
+        reporte5[usuario] = {'total_puntuacion': 0, 'numero_contenidos': 0,
+                         'mejor_valorado': {'titulo': '', 'categoria': '', 'cantidad_vistas': 0, 'fecha': '', 'valoracion': float('-inf')},
+                         'peor_valorado': {'titulo': '', 'categoria': '', 'cantidad_vistas': 0, 'fecha': '', 'valoracion': float('inf')}}
+
         for contenido in contenidos:
             if contenido.autor == user and contenido.estado == 'Publicado':
-                usuario=user.email
                 if usuario not in reporte5:
-                    reporte5[usuario] = {'total_puntuacion': 0, 'numero_contenidos': 0, 'mejor_valorado': {'titulo': '', 'categoria': '', 'cantidad_vistas': 0, 'fecha': '', 'valoracion': 0}, 'peor_valorado': {'titulo': '', 'categoria': '', 'cantidad_vistas': 0, 'fecha': '', 'valoracion': 0}}
+                    reporte5[usuario] = {'total_puntuacion': 0, 'numero_contenidos': 0, 'mejor_valorado': {'titulo': '', 'categoria': '', 'cantidad_vistas': 0, 'fecha': '', 'valoracion': float('-inf')}, 'peor_valorado': {'titulo': '', 'categoria': '', 'cantidad_vistas': 0, 'fecha': '', 'valoracion': float('inf')}}
                 reporte5[usuario]['total_puntuacion'] += contenido.puntuacion
                 reporte5[usuario]['numero_contenidos'] += 1
                 if contenido.puntuacion > reporte5[usuario]['mejor_valorado']['valoracion']:
@@ -598,19 +610,50 @@ def reportesView(request):
     #calcula el promedio de puntuacion de cada autor
     promedio_puntuacion_por_autor = {}
     for usuario in reporte5:
-        promedio_puntuacion_por_autor[usuario] = reporte5[usuario]['total_puntuacion'] / reporte5[usuario]['numero_contenidos']
+        total_puntuacion = reporte5[usuario]['total_puntuacion']
+        numero_contenidos = reporte5[usuario]['numero_contenidos']
 
-    # Genera un los indices para el grafico de barras
-    usuarios = list(map(str,promedio_puntuacion_por_autor.keys()))
-    promedios = list(promedio_puntuacion_por_autor.values())
+        # Verificación para evitar la división por cero
+        promedio_puntuacion_por_autor[usuario] = total_puntuacion / numero_contenidos if numero_contenidos != 0 else 0
+
+    # Filtra solo los usuarios que tienen contenido
+    usuarios_con_contenido = [usuario for usuario in promedio_puntuacion_por_autor.keys() if promedio_puntuacion_por_autor[usuario] != 0]
+    usuarios = list(map(str, usuarios_con_contenido))
+    promedios = [promedio_puntuacion_por_autor[usuario] for usuario in usuarios_con_contenido]
+    mejor_valorado = [reporte5[usuario]['mejor_valorado']['valoracion'] for usuario in usuarios_con_contenido]
+    peor_valorado = [reporte5[usuario]['peor_valorado']['valoracion'] for usuario in usuarios_con_contenido]
+
 
     # Genera un gráfico de barras
     fig, ax = plt.subplots(figsize=(8, 8))
-    ax.bar(usuarios, promedios)
-    ax.set_title('Promedio de Puntuación por Autor')
+    columnas = np.arange(len(usuarios))
+    anchobarra = 0.20
+
+    # Lista para almacenar las alturas de las barras para el contenido mejor valorado y peor valorado
+    alturas_mejor_valorado = []
+    alturas_peor_valorado = []
+
+    for usuario in usuarios:
+        alturas_mejor_valorado.append(reporte5[usuario]['mejor_valorado']['valoracion'])
+        alturas_peor_valorado.append(reporte5[usuario]['peor_valorado']['valoracion'])
+
+    # Llena con ceros para los autores que no tienen información de mejor o peor valorado
+    alturas_mejor_valorado = [0 if valor is None else valor for valor in alturas_mejor_valorado]
+    alturas_peor_valorado = [0 if valor is None else valor for valor in alturas_peor_valorado]
+
+    #grafico de barras para el contenido mejor valorado
+    ax.bar(columnas - anchobarra, alturas_mejor_valorado, anchobarra, label='Mejor Valorado', color='green')
+    
+    #grafico de barras para el contenido peor valorado
+    ax.bar(columnas, alturas_peor_valorado, anchobarra, label='Peor Valorado', color='red')
+
+    
+    ax.set_title('Contenido con mejor/peor promedio de valoraciones por autor')
     ax.set_xlabel('Autor')
     ax.set_ylabel('Promedio de Puntuación')
-    ax.set_xticklabels(usuarios, rotation=45, ha='right')
+    ax.set_xticks(columnas - anchobarra / 2)
+    ax.set_xticklabels(usuarios, rotation=45, ha='right', rotation_mode='anchor')
+    ax.legend()
     ax.set_ylim(0, 5)
     ax.set_yticks([0, 1, 2, 3, 4, 5])
     ax.grid(True)
