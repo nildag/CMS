@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>notify.utils.models &mdash; documentación de CMS web - 1.0</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=4936afed"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/translations.js?v=efdbd0b9"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">CMS</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Código de módulo</a></li>
+      <li class="breadcrumb-item active">notify.utils.models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Código fuente para notify.utils.models</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ContentType</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.fields</span> <span class="kn">import</span> <span class="n">ContentType</span>
+<span class="kn">from</span> <span class="nn">django.contrib.contenttypes.fields</span> <span class="kn">import</span> <span class="n">GenericForeignKey</span>
+<span class="c1"># --------</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">Group</span>
+<span class="kn">from</span> <span class="nn">django.db.models.query</span> <span class="kn">import</span> <span class="n">QuerySet</span>
+<span class="c1"># Timezone</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+<span class="c1"># load_model</span>
+<span class="kn">from</span> <span class="nn">swapper</span> <span class="kn">import</span> <span class="n">load_model</span>
+<span class="kn">from</span> <span class="nn">notify.signals</span> <span class="kn">import</span> <span class="n">notificar</span>
+<span class="kn">from</span> <span class="nn">usuario.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+
+<div class="viewcode-block" id="NotificationQueryset">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.NotificationQueryset">[documentos]</a>
+<span class="k">class</span> <span class="nc">NotificationQueryset</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">QuerySet</span><span class="p">):</span>
+<div class="viewcode-block" id="NotificationQueryset.leido">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.NotificationQueryset.leido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">leido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retorna las notificacion que hayan sido leidas en el actual Queryset</span>
+<span class="sd">        :param include_deleted:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">read</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NotificationQueryset.no_leido">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.NotificationQueryset.no_leido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">no_leido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retorna solo los items que no hayan sido leidos en el actual Queryset</span>
+<span class="sd">        :param include_deleted:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">read</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NotificationQueryset.marcar_todo_como_leido">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.NotificationQueryset.marcar_todo_como_leido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">marcar_todo_como_leido</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">destiny</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Marcar todas las notify como leidas en el actual queryset</span>
+<span class="sd">        :param destiny:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">destiny</span><span class="p">:</span>
+            <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">destiny</span><span class="o">=</span><span class="n">destiny</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">read</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NotificationQueryset.marcar_todo_como_no_leido">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.NotificationQueryset.marcar_todo_como_no_leido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">marcar_todo_como_no_leido</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">destiny</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Marcar todas las notify como no leidas en el actual queryset</span>
+<span class="sd">        :param destiny:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">destiny</span><span class="p">:</span>
+            <span class="n">qs</span> <span class="o">=</span> <span class="n">qs</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">destiny</span><span class="o">=</span><span class="n">destiny</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">qs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">read</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AbstractNotificationManager">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.AbstractNotificationManager">[documentos]</a>
+<span class="k">class</span> <span class="nc">AbstractNotificationManager</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Manager</span><span class="p">):</span>
+<div class="viewcode-block" id="AbstractNotificationManager.get_queryset">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.AbstractNotificationManager.get_queryset">[documentos]</a>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">NotificationQueryset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Models</span><span class="p">,</span> <span class="n">using</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AbstractNotificacion">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.AbstractNotificacion">[documentos]</a>
+<span class="k">class</span> <span class="nc">AbstractNotificacion</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+<div class="viewcode-block" id="AbstractNotificacion.Levels">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.AbstractNotificacion.Levels">[documentos]</a>
+    <span class="k">class</span> <span class="nc">Levels</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TextChoices</span><span class="p">):</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="s1">&#39;Success&#39;</span><span class="p">,</span> <span class="s1">&#39;success&#39;</span><span class="p">,</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;Info&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span>
+        <span class="n">wrong</span> <span class="o">=</span> <span class="s1">&#39;Wrong&#39;</span><span class="p">,</span> <span class="s1">&#39;wrong&#39;</span></div>
+
+
+    <span class="n">level</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">choices</span><span class="o">=</span><span class="n">Levels</span><span class="o">.</span><span class="n">choices</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">Levels</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+
+    <span class="n">destiny</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;notificacion&#39;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">actor_content_type</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">ContentType</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;notificar_actor&#39;</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">object_id_actor</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PositiveIntegerField</span><span class="p">()</span>
+    <span class="n">actor</span> <span class="o">=</span> <span class="n">GenericForeignKey</span><span class="p">(</span><span class="s1">&#39;actor_content_type&#39;</span><span class="p">,</span> <span class="s1">&#39;object_id_actor&#39;</span><span class="p">)</span>
+
+    <span class="n">verbo</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">220</span><span class="p">)</span>
+
+    <span class="n">read</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">publico</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">eliminado</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">tipo_accion</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">NotificationQueryset</span><span class="o">.</span><span class="n">as_manager</span><span class="p">()</span>
+
+<div class="viewcode-block" id="AbstractNotificacion.Meta">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.AbstractNotificacion.Meta">[documentos]</a>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">abstract</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Actor: </span><span class="si">{}</span><span class="s2"> ---- Destiny: </span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">destiny</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="notify_signals">
+<a class="viewcode-back" href="../../../notify.utils.html#notify.utils.models.notify_signals">[documentos]</a>
+<span class="k">def</span> <span class="nf">notify_signals</span><span class="p">(</span><span class="n">verb</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Funcion de controlador para crear una instancia de notificacion tras</span>
+<span class="sd">    una llamada de signal de accion</span>
+<span class="sd">    :param verb:</span>
+<span class="sd">    :param kwargs:</span>
+<span class="sd">    :return:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Notificación generada:&quot;</span><span class="p">,</span> <span class="n">verb</span><span class="p">)</span>
+    <span class="c1">#destiny = kwargs.pop(&#39;destiny&#39;)</span>
+    <span class="n">actor</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;sender&#39;</span><span class="p">)</span>
+
+    <span class="n">publico</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;publico&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;timestamp&#39;</span><span class="p">,</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+
+    <span class="n">Notify</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;notify&#39;</span><span class="p">,</span> <span class="s1">&#39;Notification&#39;</span><span class="p">)</span>
+    <span class="n">levels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;level&#39;</span><span class="p">,</span> <span class="n">Notify</span><span class="o">.</span><span class="n">Levels</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+
+    <span class="n">categoria_destino</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;categoria_destino&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">tipo_accion</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;tipo_accion&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">str_tipo_accion</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">tipo_accion</span><span class="o">==</span> <span class="s2">&quot;Edicion&quot;</span><span class="p">:</span>
+        <span class="n">str_tipo_accion</span> <span class="o">=</span> <span class="s2">&quot;Editor&quot;</span>
+    <span class="k">elif</span> <span class="n">tipo_accion</span> <span class="o">==</span> <span class="s2">&quot;Publicacion&quot;</span><span class="p">:</span>
+        <span class="n">str_tipo_accion</span> <span class="o">=</span> <span class="s2">&quot;Publicador&quot;</span>
+
+    <span class="k">if</span> <span class="n">categoria_destino</span><span class="p">:</span>
+        <span class="c1"># Obtén a los usuarios editores de la categoría</span>
+        <span class="n">users_with_editor_role</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+            <span class="n">usercategoria__rol__nombre</span><span class="o">=</span><span class="n">str_tipo_accion</span><span class="p">,</span>
+            <span class="n">usercategoria__categoria</span><span class="o">=</span><span class="n">categoria_destino</span>
+        <span class="p">)</span>
+
+        <span class="n">new_notify</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">user</span> <span class="ow">in</span> <span class="n">users_with_editor_role</span><span class="p">:</span>
+            <span class="n">notification</span> <span class="o">=</span> <span class="n">Notify</span><span class="p">(</span>
+                <span class="n">destiny</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                <span class="n">actor_content_type</span><span class="o">=</span><span class="n">ContentType</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get_for_model</span><span class="p">(</span><span class="n">actor</span><span class="p">),</span>
+                <span class="n">object_id_actor</span><span class="o">=</span><span class="n">actor</span><span class="o">.</span><span class="n">pk</span><span class="p">,</span>
+                <span class="n">verbo</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">verb</span><span class="p">),</span>
+                <span class="n">publico</span><span class="o">=</span><span class="n">publico</span><span class="p">,</span>
+                <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="n">levels</span><span class="p">,</span>
+                <span class="n">tipo_accion</span><span class="o">=</span><span class="n">tipo_accion</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">notification</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">new_notify</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">notification</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_notify</span></div>
+
+
+
+<span class="n">notificar</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">notify_signals</span><span class="p">,</span> <span class="n">dispatch_uid</span><span class="o">=</span><span class="s1">&#39;notify.models.Notification&#39;</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

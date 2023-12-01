@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rol package &mdash; documentación de CMS web - 1.0.0</title>
+  <title>rol package &mdash; documentación de CMS web - 1.0</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,7 +13,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="_static/documentation_options.js?v=4936afed"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/translations.js?v=efdbd0b9"></script>
@@ -45,12 +45,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">cms</a><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CMS</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="CMS.html">CMS package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="categorias.html">categorias package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contenido.html">contenido package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="home.html">home package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="manage.html">manage module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="notify.html">notify package</a></li>
 <li class="toctree-l2"><a class="reference internal" href="permiso.html">permiso package</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">rol package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
@@ -78,7 +79,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#rol.views.editar_rol"><code class="docutils literal notranslate"><span class="pre">editar_rol()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#rol.views.lista_permisos"><code class="docutils literal notranslate"><span class="pre">lista_permisos()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#rol.views.lista_roles"><code class="docutils literal notranslate"><span class="pre">lista_roles()</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#rol.views.user_admin_roles"><code class="docutils literal notranslate"><span class="pre">user_admin_roles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#rol.views.tiene_permiso_administrar_roles"><code class="docutils literal notranslate"><span class="pre">tiene_permiso_administrar_roles()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-rol">Module contents</a></li>
@@ -104,7 +105,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="modules.html">cms</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">CMS</a></li>
       <li class="breadcrumb-item active">rol package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/rol.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
@@ -368,49 +369,27 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 <dl class="py function">
 <dt class="sig sig-object py" id="rol.views.borrar_rol">
 <span class="sig-prename descclassname"><span class="pre">rol.views.</span></span><span class="sig-name descname"><span class="pre">borrar_rol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rol_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rol/views.html#borrar_rol"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#rol.views.borrar_rol" title="Link to this definition"></a></dt>
-<dd><p>Vista para eliminar un rol.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>request</strong> – La solicitud HTTP.</p></li>
-<li><p><strong>rol_id</strong> – El ID del rol a eliminar.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>La página de lista de roles o redirecciona a la lista de roles si se elimina con éxito.</p>
-</dd>
-</dl>
+<dd><p>Vista para eliminar un rol.
+:param request: La solicitud HTTP.
+:param rol_id: El ID del rol a eliminar.
+:return: La página de lista de roles o redirecciona a la lista de roles si se elimina con éxito.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="rol.views.crear_rol">
 <span class="sig-prename descclassname"><span class="pre">rol.views.</span></span><span class="sig-name descname"><span class="pre">crear_rol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rol/views.html#crear_rol"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#rol.views.crear_rol" title="Link to this definition"></a></dt>
-<dd><p>Vista para crear un nuevo rol.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – La solicitud HTTP.</p>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>La página de creación de roles o redirecciona a la lista de roles si se crea con éxito.</p>
-</dd>
-</dl>
+<dd><p>Vista para crear un nuevo rol.
+:param request: La solicitud HTTP.
+:return: La página de creación de roles o redirecciona a la lista de roles si se crea con éxito.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="rol.views.editar_rol">
 <span class="sig-prename descclassname"><span class="pre">rol.views.</span></span><span class="sig-name descname"><span class="pre">editar_rol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rol_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rol/views.html#editar_rol"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#rol.views.editar_rol" title="Link to this definition"></a></dt>
-<dd><p>Vista para editar un rol existente.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>request</strong> – La solicitud HTTP.</p></li>
-<li><p><strong>rol_id</strong> – El ID del rol a editar.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>La página de edición de roles o redirecciona a la lista de roles si se edita con éxito.</p>
-</dd>
-</dl>
+<dd><p>Vista para editar un rol existente.
+:param request: La solicitud HTTP.
+:param rol_id: El ID del rol a editar.
+:return: La página de edición de roles o redirecciona a la lista de roles si se edita con éxito.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -433,29 +412,17 @@ class built by <code class="docutils literal notranslate"><span class="pre">crea
 <dl class="py function">
 <dt class="sig sig-object py" id="rol.views.lista_roles">
 <span class="sig-prename descclassname"><span class="pre">rol.views.</span></span><span class="sig-name descname"><span class="pre">lista_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rol/views.html#lista_roles"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#rol.views.lista_roles" title="Link to this definition"></a></dt>
-<dd><p>Vista para mostrar la lista de roles.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>request</strong> – La solicitud HTTP.</p>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>La página de lista de roles.</p>
-</dd>
-</dl>
+<dd><p>Vista para mostrar la lista de roles.
+:param request: La solicitud HTTP.
+:return: La página de lista de roles.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="rol.views.user_admin_roles">
-<span class="sig-prename descclassname"><span class="pre">rol.views.</span></span><span class="sig-name descname"><span class="pre">user_admin_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rol/views.html#user_admin_roles"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#rol.views.user_admin_roles" title="Link to this definition"></a></dt>
-<dd><p>Función que comprueba si el usuario es administrador de roles (tiene el permiso «Administrar roles»).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parámetros<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>user</strong> – El usuario a comprobar (User).</p>
-</dd>
-<dt class="field-even">Devuelve<span class="colon">:</span></dt>
-<dd class="field-even"><p>True si es administrador de roles, False en caso contrario.</p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="rol.views.tiene_permiso_administrar_roles">
+<span class="sig-prename descclassname"><span class="pre">rol.views.</span></span><span class="sig-name descname"><span class="pre">tiene_permiso_administrar_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/rol/views.html#tiene_permiso_administrar_roles"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#rol.views.tiene_permiso_administrar_roles" title="Link to this definition"></a></dt>
+<dd><p>Función que comprueba si el usuario tiene el permiso «Administrar roles».
+:param user: El usuario a comprobar (User).
+:return: True si tiene el permiso, False en caso contrario.</p>
 </dd></dl>
 
 </section>

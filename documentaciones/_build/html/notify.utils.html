@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>notify.utils package &mdash; documentación de CMS web - 1.0</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=4936afed"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="_static/translations.js?v=efdbd0b9"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="permiso package" href="permiso.html" />
+    <link rel="prev" title="notify.migrations package" href="notify.migrations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            CMS web
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CMS</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="CMS.html">CMS package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="categorias.html">categorias package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contenido.html">contenido package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="home.html">home package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage.html">manage module</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="notify.html">notify package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="notify.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="notify.migrations.html">notify.migrations package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">notify.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="notify.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notify.html#module-notify.admin">notify.admin module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notify.html#module-notify.models">notify.models module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notify.html#module-notify.signals">notify.signals module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notify.html#module-notify.urls">notify.urls module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notify.html#module-notify.views">notify.views module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="notify.html#module-notify">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="permiso.html">permiso package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rol.html">rol package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tipoContenido.html">tipoContenido package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usuario.html">usuario package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CMS web</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">CMS</a></li>
+          <li class="breadcrumb-item"><a href="notify.html">notify package</a></li>
+      <li class="breadcrumb-item active">notify.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/notify.utils.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="notify-utils-package">
+<h1>notify.utils package<a class="headerlink" href="#notify-utils-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-notify.utils.admin">
+<span id="notify-utils-admin-module"></span><h2>notify.utils.admin module<a class="headerlink" href="#module-notify.utils.admin" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="notify.utils.admin.AbstractNotifyAdmin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">notify.utils.admin.</span></span><span class="sig-name descname"><span class="pre">AbstractNotifyAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/admin.html#AbstractNotifyAdmin"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.admin.AbstractNotifyAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="notify.utils.admin.AbstractNotifyAdmin.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/admin.html#AbstractNotifyAdmin.get_queryset"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.admin.AbstractNotifyAdmin.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Return a QuerySet of all model instances that can be edited by the
+admin site. This is used by changelist_view.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.admin.AbstractNotifyAdmin.list_display">
+<span class="sig-name descname"><span class="pre">list_display</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('destiny',</span> <span class="pre">'actor',</span> <span class="pre">'verbo',</span> <span class="pre">'read',</span> <span class="pre">'publico')</span></em><a class="headerlink" href="#notify.utils.admin.AbstractNotifyAdmin.list_display" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.admin.AbstractNotifyAdmin.list_filter">
+<span class="sig-name descname"><span class="pre">list_filter</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('level',</span> <span class="pre">'read')</span></em><a class="headerlink" href="#notify.utils.admin.AbstractNotifyAdmin.list_filter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="notify.utils.admin.AbstractNotifyAdmin.media">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#notify.utils.admin.AbstractNotifyAdmin.media" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.admin.AbstractNotifyAdmin.raw_id_fields">
+<span class="sig-name descname"><span class="pre">raw_id_fields</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('destiny',)</span></em><a class="headerlink" href="#notify.utils.admin.AbstractNotifyAdmin.raw_id_fields" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-notify.utils.models">
+<span id="notify-utils-models-module"></span><h2>notify.utils.models module<a class="headerlink" href="#module-notify.utils.models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">notify.utils.models.</span></span><span class="sig-name descname"><span class="pre">AbstractNotificacion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#AbstractNotificacion"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.AbstractNotificacion" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.Levels">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Levels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#AbstractNotificacion.Levels"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.Levels" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TextChoices</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.Levels.info">
+<span class="sig-name descname"><span class="pre">info</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Info'</span></em><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.Levels.info" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.Levels.success">
+<span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Success'</span></em><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.Levels.success" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.Levels.wrong">
+<span class="sig-name descname"><span class="pre">wrong</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Wrong'</span></em><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.Levels.wrong" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.Meta">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/notify/utils/models.html#AbstractNotificacion.Meta"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.Meta.abstract">
+<span class="sig-name descname"><span class="pre">abstract</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.Meta.abstract" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.actor">
+<span class="sig-name descname"><span class="pre">actor</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.actor" title="Link to this definition"></a></dt>
+<dd><p>Provide a generic many-to-one relation through the <code class="docutils literal notranslate"><span class="pre">content_type</span></code> and
+<code class="docutils literal notranslate"><span class="pre">object_id</span></code> fields.</p>
+<p>This class also doubles as an accessor to the related object (similar to
+ForwardManyToOneDescriptor) by adding itself as a model attribute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.actor_content_type">
+<span class="sig-name descname"><span class="pre">actor_content_type</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.actor_content_type" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.actor_content_type_id">
+<span class="sig-name descname"><span class="pre">actor_content_type_id</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.actor_content_type_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.destiny">
+<span class="sig-name descname"><span class="pre">destiny</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.destiny" title="Link to this definition"></a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.destiny_id">
+<span class="sig-name descname"><span class="pre">destiny_id</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.destiny_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.eliminado">
+<span class="sig-name descname"><span class="pre">eliminado</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.eliminado" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.get_level_display">
+<span class="sig-name descname"><span class="pre">get_level_display</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.CharField:</span> <span class="pre">level&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.get_level_display" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.get_next_by_timestamp">
+<span class="sig-name descname"><span class="pre">get_next_by_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">timestamp&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.get_next_by_timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.get_previous_by_timestamp">
+<span class="sig-name descname"><span class="pre">get_previous_by_timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field=&lt;django.db.models.fields.DateTimeField:</span> <span class="pre">timestamp&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_next=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.get_previous_by_timestamp" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.level">
+<span class="sig-name descname"><span class="pre">level</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.level" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.object_id_actor">
+<span class="sig-name descname"><span class="pre">object_id_actor</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.object_id_actor" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.objects">
+<span class="sig-name descname"><span class="pre">objects</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.objects" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.publico">
+<span class="sig-name descname"><span class="pre">publico</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.publico" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.read">
+<span class="sig-name descname"><span class="pre">read</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.read" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.timestamp" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.tipo_accion">
+<span class="sig-name descname"><span class="pre">tipo_accion</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.tipo_accion" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificacion.verbo">
+<span class="sig-name descname"><span class="pre">verbo</span></span><a class="headerlink" href="#notify.utils.models.AbstractNotificacion.verbo" title="Link to this definition"></a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificationManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">notify.utils.models.</span></span><span class="sig-name descname"><span class="pre">AbstractNotificationManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#AbstractNotificationManager"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.AbstractNotificationManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Manager</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="notify.utils.models.AbstractNotificationManager.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#AbstractNotificationManager.get_queryset"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.AbstractNotificationManager.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Return a new QuerySet object. Subclasses can override this method to
+customize the behavior of the Manager.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="notify.utils.models.NotificationQueryset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">notify.utils.models.</span></span><span class="sig-name descname"><span class="pre">NotificationQueryset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">using</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hints</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#NotificationQueryset"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.NotificationQueryset" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QuerySet</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="notify.utils.models.NotificationQueryset.leido">
+<span class="sig-name descname"><span class="pre">leido</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#NotificationQueryset.leido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.NotificationQueryset.leido" title="Link to this definition"></a></dt>
+<dd><p>Retorna las notificacion que hayan sido leidas en el actual Queryset
+:param include_deleted:
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="notify.utils.models.NotificationQueryset.marcar_todo_como_leido">
+<span class="sig-name descname"><span class="pre">marcar_todo_como_leido</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destiny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#NotificationQueryset.marcar_todo_como_leido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.NotificationQueryset.marcar_todo_como_leido" title="Link to this definition"></a></dt>
+<dd><p>Marcar todas las notify como leidas en el actual queryset
+:param destiny:
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="notify.utils.models.NotificationQueryset.marcar_todo_como_no_leido">
+<span class="sig-name descname"><span class="pre">marcar_todo_como_no_leido</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">destiny</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#NotificationQueryset.marcar_todo_como_no_leido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.NotificationQueryset.marcar_todo_como_no_leido" title="Link to this definition"></a></dt>
+<dd><p>Marcar todas las notify como no leidas en el actual queryset
+:param destiny:
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="notify.utils.models.NotificationQueryset.no_leido">
+<span class="sig-name descname"><span class="pre">no_leido</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#NotificationQueryset.no_leido"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.NotificationQueryset.no_leido" title="Link to this definition"></a></dt>
+<dd><p>Retorna solo los items que no hayan sido leidos en el actual Queryset
+:param include_deleted:
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="notify.utils.models.notify_signals">
+<span class="sig-prename descclassname"><span class="pre">notify.utils.models.</span></span><span class="sig-name descname"><span class="pre">notify_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verb</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/notify/utils/models.html#notify_signals"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#notify.utils.models.notify_signals" title="Link to this definition"></a></dt>
+<dd><p>Funcion de controlador para crear una instancia de notificacion tras
+una llamada de signal de accion
+:param verb:
+:param kwargs:
+:return:</p>
+</dd></dl>
+
+</section>
+<section id="module-notify.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-notify.utils" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="notify.migrations.html" class="btn btn-neutral float-left" title="notify.migrations package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="permiso.html" class="btn btn-neutral float-right" title="permiso package" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2023, Grupo 5 (M.A. - E.C. - N.G. - N.P.).</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
