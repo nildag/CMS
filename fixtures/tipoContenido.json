@@ -1,0 +1,58 @@
+[
+    {
+        "model": "tipoContenido.tipoContenido",
+        "pk": 1,
+        "fields": {
+            "nombre": "Wiki",
+            "descripcion": "Permite la creación, edición y colaboración de información de manera abierta y colaborativa por parte de múltiples usuarios"
+        }
+    },
+	{
+        "model": "tipoContenido.tipoContenido",
+        "pk": 2,
+        "fields": {
+            "nombre": "Ecommerce",
+            "descripcion": "Comercio electrónico, se refiere a la compra y venta de bienes y servicios a través de Internet"
+        }
+    },
+	{
+        "model": "tipoContenido.tipoContenido",
+        "pk": 3,
+        "fields": {
+            "nombre": "Blog",
+            "descripcion": "Artículos o entradas de texto regularmente actualizadas, a menudo centradas en un tema específico y presentadas en orden cronológico inverso"
+        }
+    },
+	{
+        "model": "tipoContenido.tipoContenido",
+        "pk": 4,
+        "fields": {
+            "nombre": "Cita bibliográfica",
+            "descripcion": "Referencia que proporciona detalles clave, como autor y título, para identificar una fuente de información"
+        }
+    },
+	{
+        "model": "tipoContenido.tipoContenido",
+        "pk": 5,
+        "fields": {
+            "nombre": "Artículo",
+            "descripcion": "Texto breve que aborda un tema específico, proporcionando información, análisis o opiniones"
+        }
+    },
+	{
+        "model": "tipoContenido.tipoContenido",
+        "pk": 6,
+        "fields": {
+            "nombre": "Artículo científico",
+            "descripcion": "Escrito académico que presenta investigaciones originales, métodos, resultados y conclusiones en una disciplina específica"
+        }
+    },
+	{
+        "model": "tipoContenido.tipoContenido",
+        "pk": 7,
+        "fields": {
+            "nombre": "Reseña",
+            "descripcion": "Breve análisis crítico o evaluación de un producto, obra o evento, destacando sus características principales y proporcionando una opinión sobre su calidad o importancia"
+        }
+    }
+]

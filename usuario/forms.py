@@ -1,8 +1,17 @@
 from django import forms
 from .models import UserCategoria
-
+from .models import Rol
 
 class UserCategoriaForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user_rol = kwargs.pop('user_rol', None)
+        super(UserCategoriaForm, self).__init__(*args, **kwargs)
+
+        # Filtra el queryset del campo 'rol' según el rol del usuario
+        if user_rol != "Administrador":
+            roles_disponibles = Rol.objects.exclude(permisos__nombre="Asignar roles").distinct().order_by('id')
+            self.fields['rol'].queryset = roles_disponibles
 
     class Meta:
 

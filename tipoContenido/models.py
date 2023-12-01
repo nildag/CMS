@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class tipoContenido(models.Model):
     """
     Esta clase representa un tipo de Contenido dentro del sistema.
@@ -11,7 +10,7 @@ class tipoContenido(models.Model):
                 descripcion: Contenido del tipo Wiki
     """
     nombre = models.CharField(max_length=30, unique=True)
-    descripcion = models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=200)
 
     def __str__(self):
 

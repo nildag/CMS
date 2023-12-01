@@ -43,9 +43,9 @@
         "model": "rol.Rol",
         "pk": 5,
         "fields": {
-            "nombre": "Administrador de categorias",
-            "descripcion": "Ecargado de la administracion y asignacion de los roles a los usuario en su categoria",
-            "permisos": [10],
+            "nombre": "Administrador de categoria",
+            "descripcion": "Encargado de la administracion y asignacion de los roles a los usuario en su categoria",
+            "permisos": [10, 14],
 			"last_modification": "2023-10-10T12:34:56.789012Z"
         }
     },
@@ -55,7 +55,7 @@
         "fields": {
             "nombre": "Administrador",
             "descripcion": "Encargado de las configuraciones generales del sistema",
-            "permisos": [8, 9, 10, 11],
+            "permisos": [8, 9, 10, 11, 12, 13],
 			"last_modification": "2023-10-10T12:34:56.789012Z"
         }
     }

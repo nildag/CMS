@@ -1,3 +1,5 @@
+from django.contrib.admin.models import LogEntry
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from usuario.models import User
 from categorias.models import Categoria
@@ -39,7 +41,16 @@ class Contenido(models.Model):
     numero_valoraciones = models.PositiveIntegerField(default=0)
     numero_vistas = models.PositiveIntegerField(default=0)
     estado = models.CharField(max_length=30, default="Borrador")
+    fecha_modificacion = models.DateTimeField(auto_now=True)
+    usuario_modificador = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='contenidos_modificados'
+    )
 
+    cambios = GenericRelation(LogEntry)
     def __str__(self):
         return f"{self.titulo} - {self.autor.first_name} {self.autor.last_name}"
 

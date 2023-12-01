@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>usuario.models &mdash; documentación de CMS web - 1.0.0</title>
+  <title>usuario.models &mdash; documentación de CMS web - 1.0</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,7 +12,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=36c4ab74"></script>
+        <script src="../../_static/documentation_options.js?v=4936afed"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="../../_static/translations.js?v=efdbd0b9"></script>
@@ -42,7 +42,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">cms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">CMS</a></li>
 </ul>
 
         </div>
@@ -75,6 +75,9 @@
 <span class="kn">from</span> <span class="nn">rol.models</span> <span class="kn">import</span> <span class="n">Rol</span>
 <span class="kn">from</span> <span class="nn">categorias.models</span> <span class="kn">import</span> <span class="n">Categoria</span>
 <span class="kn">from</span> <span class="nn">permiso.models</span> <span class="kn">import</span> <span class="n">Permiso</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
+<span class="kn">from</span> <span class="nn">notify.signals</span> <span class="kn">import</span> <span class="n">notificar</span>
 
 <div class="viewcode-block" id="User">
 <a class="viewcode-back" href="../../usuario.html#usuario.forms.User">[documentos]</a>
@@ -96,7 +99,7 @@
 <span class="sd">        :return: Se retorna un str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span>
-    
+
 <div class="viewcode-block" id="User.getAll">
 <a class="viewcode-back" href="../../usuario.html#usuario.forms.User.getAll">[documentos]</a>
     <span class="nd">@classmethod</span>
@@ -108,136 +111,179 @@
         <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
 
     
+<div class="viewcode-block" id="User.obtener_categorias_por_permiso">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.obtener_categorias_por_permiso">[documentos]</a>
+    <span class="k">def</span> <span class="nf">obtener_categorias_por_permiso</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">permiso</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna las categorías en las que el usuario tiene un permiso dado pasado como parámetro.</span>
+<span class="sd">        :param permiso: Permiso que se desea verificar (str)</span>
+<span class="sd">        :return: Se retorna un QuerySet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">categorias</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">categorias_con_permiso</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">categorias</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
+                <span class="n">categorias_con_permiso</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">categoria</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">categorias_con_permiso</span></div>
+
+    
+<div class="viewcode-block" id="User.is_autor_in_categoria">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.is_autor_in_categoria">[documentos]</a>
+    <span class="k">def</span> <span class="nf">is_autor_in_categoria</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el rol Autor en una categoría dada.</span>
+<span class="sd">        :param categoria: Categoría en la que se desea verificar si el usuario es autor (Categoria)</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">userCategorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">userCategoria</span> <span class="ow">in</span> <span class="n">userCategorias</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">userCategoria</span><span class="o">.</span><span class="n">categoria</span> <span class="o">==</span> <span class="n">categoria</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">userCategoria</span><span class="o">.</span><span class="n">rol</span><span class="o">.</span><span class="n">nombre</span> <span class="o">==</span> <span class="s2">&quot;Autor&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+    
 <div class="viewcode-block" id="User.tiene_permiso_en_categoria">
 <a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_en_categoria">[documentos]</a>
     <span class="k">def</span> <span class="nf">tiene_permiso_en_categoria</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">permiso</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Este método retorna si el usuario actual tiene un permiso dado en una categoría dada.</span>
+<span class="sd">        Este método retorna si el usuario actual tiene un permiso dado en una categoría dada. Si se recibe null en categoria, se verifica en todas las categorías.</span>
 <span class="sd">        :param permiso: Permiso que se desea verificar (str)</span>
 <span class="sd">        :param categoria: Categoría en la que se desea verificar el permiso (Categoria)</span>
 <span class="sd">        :return: Se retorna un bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">userCategorias</span> <span class="o">=</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">userCategoria</span> <span class="ow">in</span> <span class="n">userCategorias</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">userCategoria</span><span class="o">.</span><span class="n">categoria</span> <span class="o">==</span> <span class="n">categoria</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">userCategoria</span><span class="o">.</span><span class="n">rol</span><span class="o">.</span><span class="n">tiene_permiso</span><span class="p">(</span><span class="n">permiso</span><span class="p">):</span>
-                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">categoria</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">userCategoria</span><span class="o">.</span><span class="n">categoria</span> <span class="o">==</span> <span class="n">categoria</span><span class="p">:</span>
+                <span class="n">permisos</span> <span class="o">=</span> <span class="n">Permiso</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">rol</span><span class="o">=</span><span class="n">userCategoria</span><span class="o">.</span><span class="n">rol</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">permisoRol</span> <span class="ow">in</span> <span class="n">permisos</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">permisoRol</span><span class="o">.</span><span class="n">nombre</span> <span class="o">==</span> <span class="n">permiso</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
     
-<div class="viewcode-block" id="User.admin_roles">
-<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.admin_roles">[documentos]</a>
-    <span class="k">def</span> <span class="nf">admin_roles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+<div class="viewcode-block" id="User.obtener_usuarios_sin_permiso">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.obtener_usuarios_sin_permiso">[documentos]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">obtener_usuarios_sin_permiso</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">permiso</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Este método retorna si el usuario actual es administrador de roles.</span>
+<span class="sd">        Este método retorna los usuarios que no tienen un permiso dado.</span>
+<span class="sd">        :param permiso: Permiso que se desea verificar (str)</span>
+<span class="sd">        :return: Se retorna un QuerySet</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">usuarios</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="n">usuarios_sin_permiso</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">usuario</span> <span class="ow">in</span> <span class="n">usuarios</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">usuario</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">usuarios_sin_permiso</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">usuario</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">usuarios_sin_permiso</span></div>
+
+    
+<div class="viewcode-block" id="User.tiene_permiso_asignar_roles">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_asignar_roles">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_asignar_roles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Asignar roles&quot;</span>
 <span class="sd">        :return: Se retorna un bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Asignar roles&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
+    
+<div class="viewcode-block" id="User.tiene_permiso_administrar_tipoContenido">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_administrar_tipoContenido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_administrar_tipoContenido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Administrar tipo de contenido&quot; en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.</span>
+<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">system</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
-        <span class="n">permiso</span> <span class="o">=</span> <span class="s2">&quot;Administrar roles&quot;</span>
-        <span class="n">tiene_permiso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tiene_permiso</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Administrar tipo de contenido&quot;</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span></div>
 
     
-<div class="viewcode-block" id="User.admin_categorias">
-<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.admin_categorias">[documentos]</a>
-    <span class="k">def</span> <span class="nf">admin_categorias</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+<div class="viewcode-block" id="User.tiene_permiso_administrar_roles">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_administrar_roles">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_administrar_roles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Este método retorna si el usuario actual es administrador de categorías.</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Administrar roles&quot; en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.</span>
 <span class="sd">        :return: Se retorna un bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">system</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
-        <span class="n">permiso</span> <span class="o">=</span> <span class="s2">&quot;Administrar categorias&quot;</span>
-        <span class="n">tiene_permiso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tiene_permiso</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Administrar roles&quot;</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span></div>
 
     
-<div class="viewcode-block" id="User.admin_asigRoles">
-<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.admin_asigRoles">[documentos]</a>
-    <span class="k">def</span> <span class="nf">admin_asigRoles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+<div class="viewcode-block" id="User.tiene_permiso_administrar_categorias">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_administrar_categorias">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_administrar_categorias</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Este método retorna si el usuario actual es administrador de asignación de roles.</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Administrar categorías&quot; en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.</span>
 <span class="sd">        :return: Se retorna un bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">system</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
-        <span class="n">permiso</span> <span class="o">=</span> <span class="s2">&quot;Asignar roles&quot;</span>
-        <span class="n">tiene_permiso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tiene_permiso</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Administrar categorias&quot;</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span></div>
 
     
-<div class="viewcode-block" id="User.admin_tipo_contenido">
-<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.admin_tipo_contenido">[documentos]</a>
-    <span class="k">def</span> <span class="nf">admin_tipo_contenido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+<div class="viewcode-block" id="User.tiene_permiso_visualizar_kanban">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_visualizar_kanban">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_visualizar_kanban</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Este método retorna si el usuario actual es administrador de tipo de contenido.</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Visualizar kanban&quot; en la categoría System, atendiendo que dicho permiso solo tiene sentido en la categoría System.</span>
 <span class="sd">        :return: Se retorna un bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">system</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">nombre</span><span class="o">=</span><span class="s2">&quot;System&quot;</span><span class="p">)</span>
-        <span class="n">permiso</span> <span class="o">=</span> <span class="s2">&quot;Administrar tipo de contenido&quot;</span>
-        <span class="n">tiene_permiso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="n">permiso</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tiene_permiso</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Visualizar Kanban&quot;</span><span class="p">,</span> <span class="n">system</span><span class="p">)</span></div>
 
     
-<div class="viewcode-block" id="User.user_is_autor">
-<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.user_is_autor">[documentos]</a>
-    <span class="k">def</span> <span class="nf">user_is_autor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+<div class="viewcode-block" id="User.tiene_permiso_crear_contenido">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_crear_contenido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_crear_contenido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Este método retorna si el usuario actual es autor.</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Crear contenido&quot; en alguna categoría.</span>
 <span class="sd">        :return: Se retorna un bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">categorias</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">categorias</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">categoria</span><span class="o">.</span><span class="n">nombre</span> <span class="o">!=</span> <span class="s2">&quot;System&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Crear contenido&quot;</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Crear contenido&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
     
-<div class="viewcode-block" id="User.is_publicador">
-<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.is_publicador">[documentos]</a>
-    <span class="k">def</span> <span class="nf">is_publicador</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">            </span>
+<div class="viewcode-block" id="User.tiene_permiso_eliminar_contenido">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_eliminar_contenido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_eliminar_contenido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Este método retorna si el usuario actual es publicador.</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Eliminar contenido&quot; en alguna categoría.</span>
 <span class="sd">        :return: Se retorna un bool</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-    
-        <span class="n">categorias</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">categorias</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Publicar contenido&quot;</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Eliminar contenido&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
     
-<div class="viewcode-block" id="User.is_editor">
-<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.is_editor">[documentos]</a>
-    <span class="k">def</span> <span class="nf">is_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">                </span>
+<div class="viewcode-block" id="User.tiene_permiso_editar_contenido">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_editar_contenido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_editar_contenido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Este método retorna si el usuario actual es editor.</span>
-<span class="sd">        :return: Se retorna un bool</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Editar contenido&quot; en alguna categoría.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        
-        <span class="n">categorias</span> <span class="o">=</span> <span class="n">Categoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">categoria</span> <span class="ow">in</span> <span class="n">categorias</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Editar contenido&quot;</span><span class="p">,</span> <span class="n">categoria</span><span class="p">):</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Editar contenido&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="User.tiene_permiso_publicar_contenido">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_publicar_contenido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_publicar_contenido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Publicar contenido&quot; en alguna categoría.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Publicar contenido&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="User.tiene_permiso_deshabilitar_contenido">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.User.tiene_permiso_deshabilitar_contenido">[documentos]</a>
+    <span class="k">def</span> <span class="nf">tiene_permiso_deshabilitar_contenido</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Este método retorna si el usuario actual tiene el permiso &quot;Deshabilitar contenido&quot; en alguna categoría.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiene_permiso_en_categoria</span><span class="p">(</span><span class="s2">&quot;Deshabilitar contenido&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 </div>
 
 
 <div class="viewcode-block" id="UserCategoria">
 <a class="viewcode-back" href="../../usuario.html#usuario.forms.UserCategoria">[documentos]</a>
 <span class="k">class</span> <span class="nc">UserCategoria</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    
     <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
     <span class="n">rol</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Rol</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
     <span class="n">categoria</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Categoria</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
@@ -248,7 +294,7 @@
 <span class="sd">        :return: Se retorna un str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rol</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">categoria</span><span class="si">}</span><span class="s2">&quot;</span>
-    
+
 <div class="viewcode-block" id="UserCategoria.getByUser">
 <a class="viewcode-back" href="../../usuario.html#usuario.forms.UserCategoria.getByUser">[documentos]</a>
     <span class="nd">@classmethod</span>
@@ -260,6 +306,30 @@
         <span class="k">return</span> <span class="n">UserCategoria</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span></div>
 </div>
 
+
+
+<div class="viewcode-block" id="Post">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.Post">[documentos]</a>
+<span class="k">class</span> <span class="nc">Post</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s1">&#39;fotos&#39;</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">()</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">,</span> <span class="n">db_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span></div>
+
+
+
+<div class="viewcode-block" id="notify_post">
+<a class="viewcode-back" href="../../usuario.html#usuario.forms.notify_post">[documentos]</a>
+<span class="k">def</span> <span class="nf">notify_post</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">notificar</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">destiny</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">verb</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;success&#39;</span><span class="p">)</span></div>
+
+
+
+<span class="n">post_save</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">notify_post</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">Post</span><span class="p">)</span>
 </pre></div>
 
            </div>

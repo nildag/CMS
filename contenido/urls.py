@@ -18,4 +18,8 @@ urlpatterns = [
     path('aPublicacion/<int:id>/', views.aPublicacion, name='a_publicacion'),
     path('publicar/<int:id>/', views.publicarContenido, name='publicar_contenido'),
     path('kanban/', views.kanbanView, name='kanban'),
+    path('reportes/', views.reportesView, name='reportes'),
+    path('rechazar/<int:id>/', views.rechazar_contenido, name='rechazar_contenido'),
+    path('deshabilitarContenido/<int:id>/', views.deshabilitar_contenido, name='deshabilitar_contenido'),
+    path('historial_cambios/<int:contenido_id>/', views.historial_cambios, name='historial_cambios'),
 ]

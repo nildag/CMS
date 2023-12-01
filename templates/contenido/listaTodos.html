@@ -48,6 +48,11 @@
                             </td>
                             <td>
                                 <a href="{% url 'contenido:ver_contenido' contenido.id %}" class="btn btn-info btn-sm">Ver</a>
+                                {% if user and user.tiene_permiso_deshabilitar_contenido %}
+                                    {% if contenido.categoria in categorias_deshabilitar %}
+                                        <a href="{% url 'contenido:deshabilitar_contenido' contenido.id %}" class="btn btn-danger btn-sm">Deshabilitar</a>
+                                    {% endif %}
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}
@@ -86,7 +91,7 @@
                         <label for="fechaInicioFiltro" class="form-label">Fecha desde</label>
                         <input type="date" class="form-control" id="fechaInicioFiltro">
 
-                        <label for="fechaFinFiltro" class="form-label">Fecha hata</label>
+                        <label for="fechaFinFiltro" class="form-label">Fecha hasta</label>
                         <input type="date" class="form-control" id="fechaFinFiltro">
                     </div>
                     <!-- Botón para aplicar el filtro de rango de fechas -->

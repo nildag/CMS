@@ -44,6 +44,22 @@ tipoContenido.models module
    :undoc-members:
    :show-inheritance:
 
+tipoContenido.signals module
+----------------------------
+
+.. automodule:: tipoContenido.signals
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+tipoContenido.test\_tipo\_contenido module
+------------------------------------------
+
+.. automodule:: tipoContenido.test_tipo_contenido
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 tipoContenido.tests module
 --------------------------
 

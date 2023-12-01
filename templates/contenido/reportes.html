@@ -1,0 +1,234 @@
+<!-- Archivo: cms/templates/contenido/reportes.html -->
+{% extends 'base.html' %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-3">
+        <h1 class="text-center">Reportes</h1>
+
+        <!-- Agrega un elemento select (lista desplegable) -->
+        <div class="mt-4" id="elegirReporte" style="text-align: center;">
+            <label for="informe-selector" style="text-align: center;">Selecciona un informe:</label>
+            <select id="informe-selector">
+            <option value="reporte1">Cantidad total de contenidos publicados por categoría</option>
+            <option value="reporte2">Promedio de puntuacion de las valoraciones por categoría</option>
+            <option value="reporte3">Valoracion promedio mas alta de un contenido por cada categoria</option>
+            <option value="reporte4">Vistas por categoria</option>
+            <option value="reporte5">Rendimiento de los contenidos de cada autor</option>
+            <option value="reporte6">Actividad de los autores</option>
+                <!-- Agrega más opciones según sea necesario -->
+            </select>
+            <button type="button" id="exportar-pdf-btn" class="btn-danger">Exportar a PDF</button>
+            <!-- <button id="exportar-pdf-btn">Exportar a PDF</button> -->
+        </div>
+        <!-- Reporte 1: Número de contenidos por categoría con gráfico de pastel -->
+        <div class="mt-4" id="reporte1" style="text-align: center;">
+            <h2>Cantidad total de contenidos publicados por categoría</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra la cantidad total de contenidos publicados por categoría.<br>
+                Se representa con un gráfico de pastel mostrando el porcentaje de contenidos por categoría.
+            </p>
+            <div class="row" style="display: inline-block; text-align: center;">
+                <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+                    <ul>
+                        {% for categoria, contenidos in reporte_contenidos_por_categoria.items %}
+                            <h3>{{ categoria }}</h3>
+                            <ul>
+                                {% for contenido in contenidos %}
+                                    <li>{{ contenido }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
+                    <img src="{{ img_src1 }}" alt="Gráfico de Pastel" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
+                </div>
+            </div>
+        </div>
+
+       <!-- Reporte 2: Genera un reporte del promedio de puntuación de todos los contenidos de cada categoría -->
+        <div class="mt-4" id="reporte2" style="text-align: center;">
+            <h2>Promedio de puntuación de las valoraciones por categoría</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra el promedio de puntuación de las valoraciones por categoría.<br>
+                Se representa con un gráfico de barras mostrando el porcentaje de contenidos por categoría.
+            </p>
+            <div class="row" style="display: inline-block; text-align: center;">
+                <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+                    <ul>
+                        {% for categoria, promedio in promedio_puntuacion_por_categoria.items %}
+                            <li>
+                                <strong>{{ categoria }}:</strong> {{ promedio|floatformat:2 }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
+                    <img src="{{ img_src2 }}" alt="Gráfico de Barras" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporte 3: Genera un reporte del contenido mejor valorado por categoría -->
+        <div class="mt-4" id="reporte3" style="text-align: center;">
+            <h2>Contenido mejor valorado por categoría</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra el contenido mejor valorado y peor valorado por cada categoría.<br>
+                Se considera el contenido mejor y peor valorado en base a un sistema de valoración, donde se toma en cuenta la<br>
+                cantidad de vistas(que porcentaje de las vistas de su categoria tiene) y la valoración promedio dada por los usuarios.<br>
+                Se representa con un gráfico de barras que muestra la calidad del contenido en una escala del 1 al 10.
+            </p>
+            <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+                <ul>
+                    {% for categoria, valores in reporte3.items %}
+                        <li>
+                        <strong>{{ categoria }}</strong>:
+                                <li>Mejor Valorado = {{ valores.mejor_valorado.titulo }} (Calidad: {{ valores.mejor_valorado.calidad|floatformat:2 }})</li>
+                                <li>Peor Valorado = {{ valores.peor_valorado.titulo }} (Calidad: {{ valores.peor_valorado.calidad|floatformat:2 }})</li>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
+                <img src="{{ img_src3 }}" alt="Gráfico de Barras" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
+            </div>
+        </div>
+
+        <!-- Reporte 4: Cantidad total de vistas de los contenidos de cada categoría -->
+        <div class="mt-4" id="reporte4" style="text-align: center;">
+            <h2>Visualizaciones totales de contenidos de cada categoria</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra la cantidad total de vistas de los contenidos de cada categoría.<br>
+                Se representa con un gráfico de pastel mostrando el porcentaje de vistas por categoría.
+            </p>
+            <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+            <ul>
+                {% for categoria, vistas in reporte4.items %}
+                    <li>{{ categoria }}: {{ vistas }}</li>
+                {% endfor %}
+            </ul>
+            </div>
+            <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
+                <img src="{{ img_src4 }}" alt="Gráfico de Pastel" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
+            </div>
+        </div>
+
+        <!-- Reporte 5: Rendimiento de los contenidos de cada autor -->
+        <div class="mt-4" id="reporte5" style="text-align: center;">
+            <h2>Rendimiento de los contenidos de cada autor</h2>
+            <p>
+                Descripción del reporte: Se calcula el promedio de valoraciones de todos los contenidos publicados de un usuario.<br>
+                Se representa con un gráfico de barras el mejor y peor puntaje promedio obtenido en algún contenido del usuario.<br>
+                Los usuarios que no tengan contenidos publicados no se muestran en el reporte.
+                
+            </p>
+            <div class="row" style="display: inline-block; text-align: center;">
+                <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+                    <ul>
+                        {% for autor, promedio in promedio_puntuacion_por_autor.items %}
+                            {% if promedio != 0 %}    
+                                <li>
+                                    <strong>{{ autor }}:</strong> {{ promedio|floatformat:2 }}
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
+                    <img src="{{ img_src5 }}" alt="Gráfico de Barras" style="max-width: 70%; height: auto; display: block; margin: 0 auto;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Reporte 6: Actividad de los autores -->
+        <div class="mt-4" id="reporte6" style="text-align: center;">
+            <h2>Actividad de los autores</h2>
+            <p>
+                Descripción del reporte: Este reporte muestra la cantidad de contenidos publicados por cada autor.<br>
+                Se representa con un gráfico de barras mostrando la cantidad de contenidos creados y publicados por cada usuario.
+            </p>
+            <div class="row" style="display: inline-block; text-align: center;">
+                <div class="col-md-6" style="display: inline-block; text-align: left; margin: 0 auto;">
+                    <ul>
+                        {% for autor, cantidad in cantidad_contenidos_por_autor.items %}
+                            <li>
+                                <strong>{{ autor }}:</strong> {{ cantidad }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-6" style="max-width: 100%; margin-top: 10px;">
+                    <img src="{{ img_src6 }}" alt="Gráfico de Barras" style="width: 100%; max-width: none; height: auto; display: block; margin: 0 auto;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts de JavaScript y bibliotecas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Función para exportar el contenido a PDF
+        function exportarAPDF() { 
+            var pdf = new jsPDF();
+
+            var informeSeleccionado = document.getElementById("informe-selector").value;
+            var contenidoDiv = document.getElementById(informeSeleccionado);
+
+            if (contenidoDiv) {
+                // Ajustar tamaños de página para que coincidan con el contenido
+                //contenidoDiv.style.maxWidth = "100%";  // Ajusta el ancho del contenedor según sea necesario
+                //contenidoDiv.style.height = "auto";  // Ajusta la altura del contenedor según sea necesario
+
+                var contenidoHTML = contenidoDiv.innerHTML;
+            
+                // Utiliza la función fromHTML con un callback
+                pdf.fromHTML(contenidoHTML, 15, 15, {}, function () {
+                    // Guarda o descarga el PDF después de que la operación asincrónica esté completa
+                    //contenidoDiv.style.maxWidth = "100%";  // Restaura el ancho del contenedor
+                    //contenidoDiv.style.height = "auto";  // Restaura la altura del contenedor
+                    pdf.save('reporte.pdf');
+                });
+            } else {
+                console.error("El div seleccionado no existe");
+            }
+        }
+
+
+        // Función para mostrar el informe seleccionado
+        function mostrarInforme() {
+            var informeSeleccionado = document.getElementById("informe-selector").value;
+
+            // Oculta todos los informes
+            var informes = ["reporte1", "reporte2", "reporte3", "reporte4", "reporte5", "reporte6"]; // Añade los reportes del 1 al 6
+            for (var i = 0; i < informes.length; i++) {
+                var informe = informes[i];
+                document.getElementById(informe).style.display = "none";
+            }
+
+            // Muestra el informe seleccionado
+            document.getElementById(informeSeleccionado).style.display = "block";
+        }
+
+        // Asocia la función mostrarInforme al evento de cambio en la lista desplegable
+        document.getElementById("informe-selector").addEventListener("change", mostrarInforme);
+
+        // Asocia la función exportarAPDF al evento de clic en el botón
+        document.getElementById("exportar-pdf-btn").addEventListener("click", exportarAPDF);
+
+        mostrarInforme();
+    </script>
+</body>
+</html>
+
+{% endblock %}

@@ -75,5 +75,26 @@
 		"fields": {
 			"nombre": "Administrar tipo de contenido"
 		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 12,
+		"fields": {
+			"nombre": "Visualizar Kanban"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 13,
+		"fields": {
+			"nombre": "Generar y visualizar reportes"
+		}
+	},
+	{
+		"model": "permiso.Permiso",
+		"pk": 14,
+		"fields": {
+			"nombre": "Deshabilitar contenido"
+		}
 	}
 ]
